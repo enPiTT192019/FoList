@@ -33,7 +33,7 @@
         android:text="@string/plus_mark"
         android:textSize="18sp" />
 
-    <TextView
+    <ImageView
         android:id="@+id/slideDelete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:background="@android:color/holo_red_dark"
         android:gravity="center"
         android:text="" />
-    <TextView
+    <ImageView
         android:id="@+id/slideEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
