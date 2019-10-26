@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
+
+    <!--<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/nodeView">-->
+
+
+    <TextView android:layout_width="50dp"
+              android:layout_height="wrap_content"
+              android:id="@+id/slideDelete"
+              android:text="delete"
+              android:layout_alignParentEnd="true"
+              android:gravity="center"
+              android:background="@android:color/holo_red_dark" android:height="24dp"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/itemLinearLayout"
+
+                  android:orientation="horizontal"
+                  android:background="@android:color/white">
+        <Space
+                android:id="@+id/indentation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <FrameLayout
+                android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_width="0dp" android:id="@+id/itemFrameLayout">
+            <com.appli.folist.treeview.views.CheckBoxEx
+                    android:id="@+id/checkText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:button="@drawable/ic_check_box_button"
+                    tools:text="Text"
+            />
+            <View android:layout_marginStart="24dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="24dp"
+                  android:id="@+id/rightView"/>
+        </FrameLayout>
+    </LinearLayout>
+    <!--</LinearLayout>-->
+
+    <!--<com.appli.folist.treeview.views.ExpandToggleButton-->
+        <!--android:id="@+id/expandIndicator"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:contentDescription="@string/img_cd_expand_ic" />-->
+
+</RelativeLayout>

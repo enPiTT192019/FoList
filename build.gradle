@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.3.50'
+    ext.dokka_version = '0.9.18'
     repositories {
         google()
         jcenter()
@@ -12,6 +13,15 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.google.gms:google-services:4.3.2'
+
+        //for treeview
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$dokka_version"
+        classpath 'com.google.gms:google-services:4.3.2'
+
+        //for realm
+        classpath "io.realm:realm-gradle-plugin:5.15.1"
     }
 }
 
@@ -19,7 +29,9 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        //for treeview
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -9,6 +9,10 @@
         android:id="@+id/nav_timeline"
         android:name="com.appli.folist.ui.timeline.TimelineFragment"
         android:label="@string/menu_timeline" />
+    <fragment
+        android:id="@+id/nav_seeds"
+        android:name="com.appli.folist.ui.seeds.SeedsFragment"
+        android:label="@string/menu_seeds" />
 
     <fragment
         android:id="@+id/nav_node"
@@ -16,6 +20,11 @@
         android:label="@string/menu_node"
         tools:layout="@layout/fragment_node" />
 
+    <fragment
+        android:id="@+id/nav_create_task"
+        android:name="com.appli.folist.ui.createtask.CreateTaskFragment"
+        android:label="@string/menu_create_new_task"
+        tools:layout="@layout/fragment_create_task" />
 
     <fragment
         android:id="@+id/nav_store"
