@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
-
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
         sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
@@ -70,7 +69,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //ログインとナビのユーザー情報の更新
         sharedModel.login(this,"user@email.com","password")
-
         sharedModel.user.observe(this, Observer {
             if(it!=null) {
                 sharedModel.user.value?.setAttribute("name","TestUser")
