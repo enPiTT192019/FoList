@@ -3,7 +3,7 @@
 
 # 【重要】ライセンスについて
 https://help.github.com/ja/github/creating-cloning-and-archiving-repositories/licensing-a-repository
->ライセンスがない場合はデフォルトの著作権法が適用されます。つまり、ソースコードについては作者があらゆる権利を留保し、ソースコードの複製、配布、派生物の作成は誰にも**許可されない**ということです。
+>ライセンスがない場合はデフォルトの著作権法が適用されます。つまり、ソースコードについては作者があらゆる権利を留保し、ソースコードの**複製、配布、派生物の作成は誰にも許可されない**ということです。
 
 https://choosealicense.com/no-permission/
 (Translated by Google)
