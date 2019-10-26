@@ -1,23 +1,27 @@
 package com.appli.folist.treeview.views
 import android.app.Activity
 import android.content.Context
+import android.text.InputType
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.MainActivity
+import com.appli.folist.NodeTypes
 import com.appli.folist.R
 import com.appli.folist.Tags
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
-import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import io.realm.Realm
@@ -28,7 +32,7 @@ import kotlinx.android.synthetic.main.item_node.view.slideDelete
 import kotlinx.android.synthetic.main.item_node.view.slideEdit
 import kotlinx.android.synthetic.main.item_quick_create_node.view.*
 import java.util.*
-
+import kotlin.math.roundToInt
 
 
 private const val TAG = "SingleRecyclerView"
@@ -222,40 +226,122 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     str=inputStr
                                 }
                                 parent=viewParent.rawReference
+                                if(viewNode.parent!!.children.size<=1){
+                                    progress=viewNode.parent!!.rawReference!!.progress
+                                }
                             }
                             viewParent.rawReference?.children?.add((newNode))
-
-                            viewParent.children.remove(viewNode)
-                            viewNodes.removeAt(adapterPosition)
-                            notifyItemRemoved(adapterPosition+1)
-                            val newViewNode=ViewTreeNode(newNode!!,viewParent,null)
-                            viewParent.children.add(newViewNode)
-                            viewNodes.add(adapterPosition,newViewNode)
-                            viewParent.children.add(viewNode)
-                            viewNodes.add(adapterPosition+1,viewNode)
-                            notifyItemRangeInserted(adapterPosition+1,2)
-                            notifyItemChanged(adapterPosition-1)
-                            itemView.editText.setText("")
                         }
+                        viewParent.children.remove(viewNode)
+                        viewNodes.removeAt(adapterPosition)
+                        notifyItemRemoved(adapterPosition+1)
+                        val newViewNode=ViewTreeNode(newNode!!,viewParent,null)
+                        viewParent.children.add(newViewNode)
+                        viewNodes.add(adapterPosition,newViewNode)
+                        viewParent.children.add(viewNode)
+                        viewNodes.add(adapterPosition+1,viewNode)
+                        notifyItemRangeInserted(adapterPosition+1,2)
+//                        notifyItemChanged(adapterPosition-1)
+                        notifyItemRangeChanged(0,adapterPosition+1)
+                        itemView.editText.setText("")
                     }else{
                         Log.w(Tags.DEFAULT.name, "SingleRecyclerViewImpl:realm not set, or parent does not exist")
                     }
                 }
             }
         }
+        fun bindBinary(viewNode: ViewTreeNode){
+            itemView.nodeBinaryBox.isVisible=true
+            itemView.nodeBinaryBox.setImageResource(
+                if(viewNode.rawReference!!.progress>=100)R.drawable.ic_checked
+                else R.drawable.ic_unchecked
+            )
+        }
+        fun bindProgress(viewNode: ViewTreeNode){
+            itemView.nodeProgress.isVisible=true
+            itemView.nodeProgressText.isVisible=true
+            val progress=viewNode.rawReference!!.calcProgress()
+            val power=viewNode.rawReference!!.value!!.power
+            itemView.nodeProgress.max=100*power
+            itemView.nodeProgress.progress=progress.roundToInt()
+            itemView.nodeProgressText.text=when{
+                progress>=10000->(progress/1000).roundToInt().toString()+"k"
+                progress>=1000->progress.roundToInt().toString()
+                progress>=100->"%.1f".format(progress)
+                progress>=10->"%.2f".format(progress)
+                else->" %.2f".format(progress)
+            }
+        }
         fun bindNode(viewNode: ViewTreeNode){
             bindCommon(viewNode)
+            itemView.nodeProgress.isVisible=false
+            itemView.nodeProgressText.isVisible=false
+            itemView.nodeBinaryBox.isVisible=false
+            //TODO: add your bind here
+            when{
+                viewNode.rawReference!!.children.size>=1->{
+                    //tree node
+                    bindProgress(viewNode)
+                }
+                viewNode.rawReference!!.value!!.type==NodeTypes.BINARY_NODE.name->{
+                    bindBinary(viewNode)
+                }
+                viewNode.rawReference!!.value!!.type==NodeTypes.PROGRESS_NODE.name->{
+                    bindProgress(viewNode)
+                }
+                else->{
+                    bindBinary(viewNode)
+                }
+            }
+
             itemView.nodeToggle.setImageResource(when{
                 viewNode.children.size<=1->R.drawable.ic_leaf
                 viewNode.isExpanded->R.drawable.ic_down
                 else->R.drawable.ic_right
             })
             itemView.nodeTitle.text=viewNode.value.toString()
+            itemView.nodeSharedIcon.isVisible=viewNode.rawReference!!.sharedId!=null
+            itemView.nodeNoticeIcon.isVisible=viewNode.rawReference!!.notice!=null
 
-            itemView.rightView.setOnClickListener {
-                AppUtils().toast(recyclerView.context,"riiii")
+
+            itemView.middleView.setOnClickListener {
+                if(viewNode.children.size<=1){//only leaves can be adjusted
+                    //TODO:add your on-click event here
+                    when{
+                        viewNode.rawReference!!.children.size>=1->{
+                            //tree node, do nothing
+                        }
+                        viewNode.rawReference!!.value!!.type==NodeTypes.BINARY_NODE.name->{
+                            realm!!.executeTransaction {
+                                viewNode.rawReference!!.progress=if(viewNode.rawReference!!.progress>=100)0.0 else 100.0
+                            }
+                            notifyItemRangeChanged(0,adapterPosition+1)
+                        }
+                        viewNode.rawReference!!.value!!.type==NodeTypes.PROGRESS_NODE.name->{
+                            val input = EditText(recyclerView.context)
+                            input.inputType = InputType.TYPE_CLASS_TEXT
+                            AlertDialog.Builder(recyclerView.context).setView(input)
+                                .setTitle("input progress")
+                                .setPositiveButton("OK") { dialog, _ ->
+                                    val num = input.text.toString().toDoubleOrNull()
+                                    if(num!=null){
+                                        realm!!.executeTransaction {
+                                            viewNode.rawReference!!.progress=num
+                                        }
+                                        notifyItemRangeChanged(0,adapterPosition+1)
+                                    }
+                                }.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}.show()
+                        }
+                        else->{
+
+                        }
+                    }
+                }
             }
             itemView.leftView.setOnClickListener{
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.rightView.setOnClickListener{
                 expandCollapseToggleHandler(viewNode, this)
             }
 

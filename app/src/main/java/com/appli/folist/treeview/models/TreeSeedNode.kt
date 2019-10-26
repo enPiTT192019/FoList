@@ -44,7 +44,7 @@ class TreeSeedNode(
 
     data class SeedValueForFirebase(
         var str: String="",
-        var type:String= NodeTypes.NODE.name,
+        var type:String= NodeTypes.BINARY_NODE.name,
         var mediaUri:String?=null,
         var detail: MutableMap<String,String?>?= mutableMapOf(),
         var link:String?=null,

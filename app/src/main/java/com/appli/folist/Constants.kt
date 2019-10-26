@@ -16,7 +16,6 @@ enum class VariableNames{
 }
 
 enum class NodeTypes{
-    NODE,
     BINARY_NODE,
     PROGRESS_NODE,
     WEAK_NODE,

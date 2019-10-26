@@ -62,6 +62,14 @@
                 android:progress="70"
                 android:progressDrawable="@drawable/custom_progress" />
 
+            <ImageView
+                android:id="@+id/nodeBinaryBox"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="0dp"
+                app:srcCompat="@drawable/ic_unchecked" />
+
             <TextView
                 android:id="@+id/nodeProgressText"
                 android:layout_width="wrap_content"
@@ -76,25 +84,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="52dp"
+                android:layout_marginStart="49dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textColor="@android:color/background_dark"
                 android:textSize="18sp" />
 
+
             <View
                 android:id="@+id/leftView"
-                android:layout_width="64dp"
+                android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="0dp" />
+
+            <View
+                android:id="@+id/middleView"
+                android:layout_width="44dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="40dp" />
 
             <View
                 android:id="@+id/rightView"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginStart="48dp"
-                android:nextFocusLeft="@id/leftView" />
+                android:layout_marginStart="86dp" />
 
         </FrameLayout>
+
+        <ImageView
+            android:id="@+id/nodeSharedIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_shared" />
+
+        <ImageView
+            android:id="@+id/nodeNoticeIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_notice" />
     </LinearLayout>
 </RelativeLayout>

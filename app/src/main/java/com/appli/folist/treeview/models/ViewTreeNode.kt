@@ -5,7 +5,6 @@ import com.appli.folist.treeview.utils.IdGenerator
 import com.appli.folist.treeview.views.Expandable
 import com.appli.folist.treeview.views.HasId
 import com.appli.folist.treeview.views.NodeCheckedStatus
-import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import com.google.gson.annotations.Expose
 import io.realm.Realm
 
@@ -62,13 +61,13 @@ class ViewTreeNode(
         return stepUp(this)
     }
     fun setChecked(isChecked: Boolean,realm: Realm?,viewNode:ViewTreeNode) {
-        realm?.executeTransactionIfNotInTransaction{
-            viewNode.value.checked=rawReference?.progress?:0>0
-            viewNode.children.forEach {
-                it.rawReference?.progress=if(rawReference?.progress?:0>0)1 else 0
-                setChecked(isChecked,realm,it)
-            }
-        }
+//        realm?.executeTransactionIfNotInTransaction{
+//            viewNode.value.checked=rawReference?.progress?:0>0
+//            viewNode.children.forEach {
+//                it.rawReference?.progress=if(rawReference?.progress?:0>0)1 else 0
+//                setChecked(isChecked,realm,it)
+//            }
+//        }
     }
     fun getCheckedStatus(): NodeCheckedStatus {
         if(type==ViewNodeTypes.QUICK_CREATE_NODE) {

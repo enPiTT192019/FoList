@@ -1,6 +1,5 @@
 package com.appli.folist.treeview.models
 import com.appli.folist.NodeTypes
-import com.appli.folist.treeview.models.NodeDetailMap
 import com.appli.folist.treeview.views.Checkable
 import com.google.gson.annotations.Expose
 import io.realm.RealmObject
@@ -10,7 +9,7 @@ import java.util.*
 @RealmModule(allClasses = true)
 open class NodeValue(
     @Expose open var str: String="",
-    @Expose open var type:String= NodeTypes.NODE.name,
+    @Expose open var type:String= NodeTypes.BINARY_NODE.name,
     @Expose open var mediaUri:String?=null,
     @Expose open var detail: NodeDetailMap?=null,
     @Expose open var link:String?=null,
