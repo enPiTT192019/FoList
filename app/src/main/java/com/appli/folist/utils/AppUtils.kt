@@ -1,5 +1,6 @@
 package com.appli.folist.utils
 
+import android.content.Context
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 
 class AppUtils {
-    fun toast(activity: AppCompatActivity,str:String){
+    fun toast(activity: Context, str:String){
         Toast.makeText(activity,str,Toast.LENGTH_SHORT).show()
     }
     fun setSetting(activity: AppCompatActivity,key:String,value:String){

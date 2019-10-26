@@ -14,10 +14,10 @@ class ViewNodeUtils{
     fun getLayout(type:Int):Int{
         return when(type){
             //TODO: add your layout here
-            ViewNodeTypes.NODE.ordinal-> R.layout.item_checkable_text
+            ViewNodeTypes.NODE.ordinal-> R.layout.item_node
             ViewNodeTypes.QUICK_CREATE_NODE.ordinal->R.layout.item_quick_create_node
             ViewNodeTypes.PROGRESS_NODE.ordinal->R.layout.item_progress
-            else-> R.layout.item_checkable_text
+            else-> R.layout.item_node
         }
     }
 }

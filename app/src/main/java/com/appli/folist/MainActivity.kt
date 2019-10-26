@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setNavigationViewListener()
 
         //テスト用
-        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+//        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
