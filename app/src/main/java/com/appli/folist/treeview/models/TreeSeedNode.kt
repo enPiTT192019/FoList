@@ -15,6 +15,7 @@ class TreeSeedNode(
     @Expose var uuid:String= UUID.randomUUID().toString()
 ) {
     constructor():this(NodeValue(""), mutableListOf<TreeSeedNode>(),null)
+    constructor(raw: RawTreeNode):this(raw,null)
     constructor(raw: RawTreeNode, parent: TreeSeedNode?):this(){
         this.value=raw.value!!
         this.parent=parent

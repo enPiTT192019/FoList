@@ -11,11 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.Tags
-import com.appli.folist.treeview.models.NodeValue
-import com.appli.folist.treeview.models.RawTreeNode
-import com.appli.folist.treeview.models.ViewNodeTypes
-import com.appli.folist.treeview.models.ViewNodeUtils
-import com.appli.folist.treeview.models.ViewTreeNode
+import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
@@ -263,13 +259,13 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             bindIndentation(viewNode)
             //TODO: enter->create and hide keyboard
             itemView.createButton.setOnClickListener {
-                if(itemView.textView.text.toString().isEmpty()){
+                if(itemView.editText.text.toString().isEmpty()){
                     Toast.makeText(recyclerView.context,"Please input something",Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 if(viewNode.parent != null) {
                     //get variables
-                    val inputStr = itemView.textView.text.toString()
+                    val inputStr = itemView.editText.text.toString()
                     val viewParent=viewNode.parent as ViewTreeNode
                     var newNode: RawTreeNode?=null
                     if(viewNode.parent!=null && realm!=null) {
@@ -295,7 +291,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             viewParent.children.add(viewNode)
                             viewNodes.add(adapterPosition+1,viewNode)
                             notifyItemRangeInserted(adapterPosition+1,2)
-                            itemView.textView.setText("")
+                            itemView.editText.setText("")
                         }
                     }else{
                         Log.w(Tags.DEFAULT.name, "SingleRecyclerViewImpl:realm not set, or parent does not exist")

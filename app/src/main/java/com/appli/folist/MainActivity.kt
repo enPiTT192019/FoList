@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -18,8 +19,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.utils.AppUtils
+import com.appli.folist.utils.NodeUtils
+import com.appli.folist.utils.getAttribute
+import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController = findNavController(R.id.nav_host_fragment)
         sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
+        sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
 
         //メニュー初期化
         navNodesItems= mutableListOf()
@@ -62,6 +68,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
         functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
 
+        //ログインとナビのユーザー情報の更新
+        sharedModel.login(this,"user@email.com","password")
+
+        sharedModel.user.observe(this, Observer {
+            if(it!=null) {
+                sharedModel.user.value?.setAttribute("name","TestUser")
+                userEmail.text = "email:${it.email} uid:${it.uid}"
+                it.getAttribute("name") {
+                    userName.text = it?:"no name"
+                }
+            }
+        })
 
     }
 
