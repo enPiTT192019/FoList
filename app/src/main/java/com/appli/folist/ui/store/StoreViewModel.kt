@@ -1,10 +1,10 @@
-package com.appli.folist.ui.share
+package com.appli.folist.ui.store
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ShareViewModel : ViewModel() {
+class StoreViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is share Fragment"

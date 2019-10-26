@@ -1,4 +1,4 @@
-package com.appli.folist.ui.send
+package com.appli.folist.ui.store
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.R
 
-class SendFragment : Fragment() {
+class StoreFragment : Fragment() {
 
-    private lateinit var sendViewModel: SendViewModel
+    private lateinit var storeViewModel: StoreViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sendViewModel =
-            ViewModelProviders.of(this).get(SendViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_send, container, false)
-        val textView: TextView = root.findViewById(R.id.text_send)
-        sendViewModel.text.observe(this, Observer {
+        storeViewModel =
+            ViewModelProviders.of(this).get(StoreViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_store, container, false)
+        val textView: TextView = root.findViewById(R.id.text_share)
+        storeViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
