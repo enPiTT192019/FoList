@@ -1,4 +1,4 @@
-package com.appli.folist.models
+package com.appli.folist.treeview.models
 import com.appli.folist.NodeTypes
 import com.appli.folist.treeview.models.NodeDetailMap
 import com.appli.folist.treeview.views.Checkable

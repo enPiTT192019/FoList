@@ -1,7 +1,6 @@
-package com.appli.folist.models
+package com.appli.folist.treeview.models
 
 import com.appli.folist.NodeTypes
-import com.appli.folist.models.RawTreeNode
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,15 +20,15 @@ class TreeSeedNode(
         this.parent=parent
         this.children.clear()
         raw.children.forEach {
-            this.children.add(TreeSeedNode(it,this))
+            this.children.add(TreeSeedNode(it, this))
         }
     }
 
-    constructor(seed:SeedNodeForFirebase,parent: TreeSeedNode?):this() {
+    constructor(seed: SeedNodeForFirebase, parent: TreeSeedNode?):this() {
 
         this.value = NodeValue(
             seed.value.str, seed.value.type, seed.value.mediaUri,
-            null, seed.value.link, seed.value.power, seed.value.uuid,seed.value.checked
+            null, seed.value.link, seed.value.power, seed.value.uuid, seed.value.checked
         )
         seed.value.detail?.forEach { (key, value) ->
             this.value.setDetail(key, value)
@@ -53,7 +52,7 @@ class TreeSeedNode(
         var checked: Boolean=false
     ){
         constructor():this("")
-        constructor(nodeValue:NodeValue):this(){
+        constructor(nodeValue: NodeValue):this(){
             this.str=nodeValue.str
             this.type=nodeValue.type
             this.mediaUri=nodeValue.mediaUri
@@ -71,25 +70,37 @@ class TreeSeedNode(
         var children:MutableList<SeedNodeForFirebase>,
         var uuid:String= ""){
         constructor():this(SeedValueForFirebase(), mutableListOf())
-        constructor(seed:TreeSeedNode,parent: SeedNodeForFirebase?):this(SeedValueForFirebase(), mutableListOf()){
-            this.value=SeedValueForFirebase(seed.value)
+        constructor(seed: TreeSeedNode, parent: SeedNodeForFirebase?):this(
+            SeedValueForFirebase(), mutableListOf()){
+            this.value=
+                SeedValueForFirebase(seed.value)
             this.uuid=seed.uuid
             seed.children.forEach {
-                this.children.add(SeedNodeForFirebase(it,this))
+                this.children.add(
+                    SeedNodeForFirebase(
+                        it,
+                        this
+                    )
+                )
             }
         }
     }
     fun upload(){
         val ref = FirebaseDatabase.getInstance().getReference("seeds")
-        ref.push().setValue(SeedNodeForFirebase(this,null))
+        ref.push().setValue(
+            SeedNodeForFirebase(
+                this,
+                null
+            )
+        )
     }
 
-    fun download(key:String,callback:(TreeSeedNode?)->Unit, cancelled:(DatabaseError)->Unit={}){
+    fun download(key:String, callback:(TreeSeedNode?)->Unit, cancelled:(DatabaseError)->Unit={}){
         val ref=FirebaseDatabase.getInstance().getReference("seeds/$key")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val result=dataSnapshot.getValue(SeedNodeForFirebase::class.java)
-                callback(result?.let { TreeSeedNode(it,null) })
+                callback(result?.let { TreeSeedNode(it, null) })
             }
             override fun onCancelled(error: DatabaseError) {
                 cancelled(error)

@@ -1,7 +1,7 @@
 package com.appli.folist.treeview.utils
 import android.os.SystemClock
 import com.appli.folist.treeview.models.ViewTreeNode
-import com.appli.folist.models.NodeValue
+import com.appli.folist.treeview.models.NodeValue
 
 object IdGenerator {
 

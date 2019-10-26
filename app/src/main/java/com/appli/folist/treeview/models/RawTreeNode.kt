@@ -1,4 +1,4 @@
-package com.appli.folist.models
+package com.appli.folist.treeview.models
 
 import com.google.gson.annotations.Expose
 import io.realm.RealmList
@@ -18,8 +18,8 @@ open class RawTreeNode(
     @Expose @PrimaryKey open var uuid:String=UUID.randomUUID().toString()
 ):RealmObject(){
     constructor():this(children=RealmList<RawTreeNode>())
-    constructor(value:NodeValue):this(value,children=RealmList<RawTreeNode>())
-    constructor(value:NodeValue, parent:RawTreeNode?):this(value,children=RealmList<RawTreeNode>(),parent = parent)
+    constructor(value: NodeValue):this(value,children=RealmList<RawTreeNode>())
+    constructor(value: NodeValue, parent: RawTreeNode?):this(value,children=RealmList<RawTreeNode>(),parent = parent)
     constructor(seedRoot: TreeSeedNode, parent: RawTreeNode?=null):this(){
         this.value=seedRoot.value
         this.progress=0
@@ -29,7 +29,7 @@ open class RawTreeNode(
         this.uuid=UUID.randomUUID().toString()
         this.children.clear()
         seedRoot.children.forEach {
-            this.children.add(RawTreeNode(it,this))
+            this.children.add(RawTreeNode(it, this))
         }
     }
 

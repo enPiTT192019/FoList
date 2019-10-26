@@ -1,8 +1,6 @@
 package com.appli.folist.treeview.models
 
 import com.appli.folist.NodeTypes
-import com.appli.folist.models.NodeValue
-import com.appli.folist.models.RawTreeNode
 import com.appli.folist.treeview.utils.IdGenerator
 import com.appli.folist.treeview.views.Expandable
 import com.appli.folist.treeview.views.HasId
@@ -17,7 +15,7 @@ class ViewTreeNode(
     var parent: ViewTreeNode?,
     @Expose var children: MutableList<ViewTreeNode>,
     @Expose override var isExpanded: Boolean =false,
-    var rawReference:RawTreeNode?=null
+    var rawReference: RawTreeNode?=null
 ) : HasId, Expandable {
     override val id: Long by lazy {
         IdGenerator.generate()
@@ -29,7 +27,7 @@ class ViewTreeNode(
     // constructor for parent node
     constructor(value: NodeValue, children: MutableList<ViewTreeNode>) : this(value,ViewNodeTypes.NODE, null, children)
 
-    constructor(raw:RawTreeNode,parent:ViewTreeNode?=null,
+    constructor(raw: RawTreeNode, parent:ViewTreeNode?=null,
                 before:ViewTreeNode?=null):this(NodeValue()){
         this.parent=parent
         this.isExpanded=(before!=null && before.isExpanded)

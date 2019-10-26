@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.Tags
-import com.appli.folist.models.NodeValue
-import com.appli.folist.models.RawTreeNode
+import com.appli.folist.treeview.models.NodeValue
+import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.treeview.models.ViewNodeTypes
 import com.appli.folist.treeview.models.ViewNodeUtils
 import com.appli.folist.treeview.models.ViewTreeNode
@@ -275,7 +275,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     if(viewNode.parent!=null && realm!=null) {
                         //create new RawNode
                         realm.executeTransaction {
-                            newNode=realm.createObject(RawTreeNode::class.java,
+                            newNode=realm.createObject(
+                                RawTreeNode::class.java,
                                 UUID.randomUUID().toString()).apply {
                                 value=realm.createObject(NodeValue::class.java).apply {
                                     //set new node
