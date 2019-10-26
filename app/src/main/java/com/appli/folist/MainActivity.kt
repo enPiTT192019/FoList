@@ -18,6 +18,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.appli.folist.models.SharedViewModel
+import com.appli.folist.treeview.models.NodeValue
+import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.getAttribute
@@ -46,6 +48,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
+        //テスト用
+        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
         sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
@@ -55,12 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //メニュー初期化
         navNodesItems= mutableListOf()
         tasksMenu=nav_view.menu.addSubMenu(R.string.menu_tasks)
-        //TODO
-        for(i in 1..3){
-            navNodesItems.add(tasksMenu.add("item$i").setIcon(R.drawable.ic_node))
-        }
-        tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
-
+        refreshTasksMenu()
         functionsMenu=nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
 
         //ログインとナビのユーザー情報の更新
+        //TODO:ログインダイアログ
         sharedModel.login(this,"user@email.com","password")
         sharedModel.user.observe(this, Observer {
             if(it!=null) {
@@ -97,6 +98,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
     }
 
+    fun refreshTasksMenu(){
+        tasksMenu.clear()
+        sharedModel.root.value!!.children.forEach { tasksMenu.add(it.value!!.str).setIcon(R.drawable.ic_node) }
+        tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var doNotCloseDrawer=false
         navController.popBackStack()
@@ -105,34 +112,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
+
+            //新規Level2ノード（以下、タスク）
             getString(R.string.menu_create_new_task)->{
                 doNotCloseDrawer=true
                 val input = EditText(this)
                 input.inputType = InputType.TYPE_CLASS_TEXT
                 AlertDialog.Builder(this).setView(input)
                     .setTitle(R.string.menu_input_task_title)
-                    .setPositiveButton("OK") { _, _ ->
+                    .setPositiveButton("OK") { dialog, _ ->
                         val title = input.text.toString()
-                        AppUtils().toast(this,title)
-                        //TODO:Level2では同じく名前のタスクを不可とする
-
-                        tasksMenu.clear()
-                        //TODO:メニューの更新・データの更新
-                        for(i in 1..3){
-                            navNodesItems.add(tasksMenu.add("item$i").setIcon(R.drawable.ic_node))
+                        //同じ名前のタスクを不可とする
+                        if(title in sharedModel.root.value!!.children.map { it.value!!.str }){
+                            AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
+                        }else{
+                            sharedModel.realm.value!!.executeTransaction{
+                                sharedModel.root.value!!.children.add(RawTreeNode(NodeValue(title),sharedModel.root.value!!))
+                            }
+                            refreshTasksMenu()
                         }
-                        tasksMenu.add(title).setIcon(R.drawable.ic_node)
-                        tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                    }
-                    .show()
-
+                    }.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}.show()
             }
+            //タスク
             else->{
-                val bundle = bundleOf("nodeId" to item.title)//TODO
-                navController.navigate(R.id.nav_node,bundle)
+                val id= sharedModel.root.value!!.children.find { it.value!!.str==item.title }?.uuid
+                if(id!=null){
+                    val bundle = bundleOf("nodeId" to id)
+                    navController.navigate(R.id.nav_node,bundle)
+                }
             }
 
         }

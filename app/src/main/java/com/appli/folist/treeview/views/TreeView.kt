@@ -2,7 +2,7 @@ package com.appli.folist.treeview.views
 
 import com.appli.folist.treeview.models.ViewTreeNode
 
-private const val DEFAULT_INDENTATION_IN_DP = 16
+private const val DEFAULT_INDENTATION_IN_DP = 24
 
 interface TreeView<T : Checkable> {
 

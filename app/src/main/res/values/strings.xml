@@ -19,8 +19,10 @@
     <string name="menu_seeds">Seeds</string>
     <string name="menu_input_task_title">Input Task Title</string>
 
+    <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
+
 
     <string name="img_cd_expand_ic">expand</string>
-    <string name="create_a_new_node">Create a new viewNode</string>
+    <string name="create_a_new_node">Create a New Node</string>
     <string name="plus_mark">+</string>
 </resources>

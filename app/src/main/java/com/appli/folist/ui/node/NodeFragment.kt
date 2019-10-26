@@ -16,7 +16,7 @@ import com.appli.folist.utils.NodeUtils
 class NodeFragment : Fragment() {
 
     private lateinit var sharedModel: SharedViewModel
-    private var nodeId:String?=null
+    private lateinit var nodeId:String
     private lateinit var treeView: SingleRecyclerViewImpl
 
     override fun onCreateView(
@@ -31,11 +31,11 @@ class NodeFragment : Fragment() {
         treeView = view.findViewById(R.id.treeView)
         WeSwipe.attach(treeView)
         sharedModel.realm.observe(this, Observer { treeView.realm=it })
-        nodeId= arguments!!.getString("nodeId")
+        nodeId= arguments!!.getString("nodeId","")!!
 
         //木の表示
-        val root= NodeUtils().getRoot(sharedModel.realm.value!!)
-        NodeUtils().refreshView(treeView,root)
+        val node=NodeUtils().getNode(sharedModel.realm.value!!,nodeId)
+        NodeUtils().refreshView(treeView,node)
 
         return view
     }

@@ -1,4 +1,5 @@
 package com.appli.folist.treeview.views
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -7,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.UiThread
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
+import com.appli.folist.MainActivity
+import com.appli.folist.R
 import com.appli.folist.Tags
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
@@ -66,11 +70,13 @@ class SingleRecyclerViewImpl : RecyclerView,
         with(adapter) {
             val nodesList=mutableListOf<ViewTreeNode>()
             for(root in roots){
+                NodeUtils().expandAllExceptLeaves(root)
                 nodesList.addAll(treeToList(root))
             }
             val beforeCount=viewNodes.size
             viewNodes.clear()
             notifyItemRangeRemoved(0,beforeCount)
+
             viewNodes=nodesList
             notifyItemRangeInserted(0,viewNodes.size)
 //            notifyDataSetChanged()
@@ -193,7 +199,13 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         realm.executeTransactionIfNotInTransaction{
                             viewNode.rawReference!!.parent!!.children.remove(viewNode.rawReference)
                         }
-                        viewNode.parent!!.children.remove(viewNode)
+                        if(viewNode.parent!=null){
+                            viewNode.parent!!.children.remove(viewNode)
+                        }else{//level2 node
+                            //TODO: alert dialog
+                            findNavController((recyclerView.rootView.context as Activity),R.id.nav_host_fragment).navigate(R.id.nav_timeline)
+                            (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
+                        }
                     }
                     NodeUtils().refreshView(recyclerView,viewNode.getRoot().rawReference)
                 }else{

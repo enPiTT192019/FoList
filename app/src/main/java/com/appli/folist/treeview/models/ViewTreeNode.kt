@@ -37,7 +37,6 @@ class ViewTreeNode(
             NodeTypes.PROGRESS_NODE.name->ViewNodeTypes.PROGRESS_NODE
             else->ViewNodeTypes.NODE
         }
-        //TODO: delete
         this.rawReference=raw
         raw.children.forEach {
             val childBefore= before?.children?.findLast {it2->
