@@ -14,16 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/editText"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:height="48dp"
-        android:ems="10"
-        android:hint="@string/create_a_new_node"
-        android:imeOptions="actionDone"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+<!--    <EditText-->
+<!--        android:id="@+id/editText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="1"-->
+<!--        android:height="48dp"-->
+<!--        android:ems="10"-->
+<!--        android:hint="@string/create_a_new_node"-->
+<!--        android:imeOptions="actionDone"-->
+<!--        android:inputType="textPersonName" />-->
 
     <Button
         android:id="@+id/createButton"
