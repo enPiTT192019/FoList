@@ -3,41 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_timeline">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.appli.folist.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_timeline"
+        android:name="com.appli.folist.ui.timeline.TimelineFragment"
+        android:label="@string/menu_timeline" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.appli.folist.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_node"
+        android:name="com.appli.folist.ui.Node.NodeFragment"
+        android:label="@string/menu_node"
+        tools:layout="@layout/fragment_node" />
+
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.appli.folist.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_store"
+        android:name="com.appli.folist.ui.store.StoreFragment"
+        android:label="@string/menu_store"
+        tools:layout="@layout/fragment_store" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.appli.folist.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
-
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="com.appli.folist.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
-
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.appli.folist.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:id="@+id/nav_settings"
+        android:name="com.appli.folist.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

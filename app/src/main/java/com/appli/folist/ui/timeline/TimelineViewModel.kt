@@ -1,13 +1,13 @@
-package com.appli.folist.ui.send
+package com.appli.folist.ui.timeline
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SendViewModel : ViewModel() {
+class TimelineViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is send Fragment"
+        value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
 }
