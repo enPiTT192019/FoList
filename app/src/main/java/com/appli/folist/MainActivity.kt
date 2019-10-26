@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.appli.folist.models.SharedViewModel
 import com.appli.folist.utils.AppUtils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var createNodeMenu:SubMenu
     private lateinit var navController:NavController
     private lateinit var navNodesItems:MutableList<MenuItem>
+    private lateinit var sharedModel: SharedViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +44,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
-
+        sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedModel.realm.value=AppUtils().getRealm(this)
 
         //メニュー初期化
         navNodesItems= mutableListOf()
@@ -111,7 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             else->{
-                val bundle = bundleOf("nodeId" to item.itemId.toString())//TODO
+                val bundle = bundleOf("nodeId" to item.title)//TODO
                 navController.navigate(R.id.nav_node,bundle)
             }
 

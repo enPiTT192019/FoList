@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
 
-        android:id="@+id/itemLinearLayout"
-        android:layout_margin="16dp">
-
+    android:layout_margin="0dp"
+    android:background="#eeeeee"
+    android:orientation="horizontal">
 
     <Space
-            android:id="@+id/indentation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/textView" android:layout_weight="1"
-            android:imeOptions="actionDone" android:hint="@string/create_a_new_node"/>
-    <Button
-            android:text="@string/plus_mark"
-            android:layout_width="40dp"
-            android:layout_height="40dp" android:id="@+id/createButton" android:layout_weight="0.1" android:textSize="18sp"
-    />
+        android:id="@+id/indentation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <TextView android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:id="@+id/slideDelete"
-              android:text=""
-              android:gravity="center"
-              android:background="@android:color/holo_red_dark" android:height="24dp"/>
+    <EditText
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:height="48dp"
+        android:ems="10"
+        android:hint="@string/create_a_new_node"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_weight="0.1"
+        android:text="@string/plus_mark"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/slideDelete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:height="24dp"
+        android:background="@android:color/holo_red_dark"
+        android:gravity="center"
+        android:text="" />
+    <TextView
+        android:id="@+id/slideEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:height="24dp"
+        android:background="@android:color/holo_red_dark"
+        android:gravity="center"
+        android:text="" />
 
 </LinearLayout>

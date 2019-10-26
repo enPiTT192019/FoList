@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/nav_node"
-        android:name="com.appli.folist.ui.Node.NodeFragment"
+        android:name="com.appli.folist.ui.node.NodeFragment"
         android:label="@string/menu_node"
         tools:layout="@layout/fragment_node" />
 

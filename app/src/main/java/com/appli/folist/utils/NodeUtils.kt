@@ -1,11 +1,11 @@
 package com.appli.folist.utils
 
+import com.appli.folist.models.NodeValue
+import com.appli.folist.models.RawTreeNode
 import com.appli.folist.treeview.models.NodeDetailMap
 import com.appli.folist.treeview.models.ViewTreeNode
 import com.appli.folist.treeview.views.SingleRecyclerViewImpl
 import com.appli.folist.treeview.views.TreeAdapter
-import com.appli.folist.models.NodeValue
-import com.appli.folist.models.RawTreeNode
 import io.realm.Realm
 
 class NodeUtils {
@@ -20,6 +20,10 @@ class NodeUtils {
             }
         realm.commitTransaction()
         return result
+    }
+
+    fun getNode(root:RawTreeNode,id:String):RawTreeNode?{
+        return root.children.find { it.uuid==id }
     }
 
     fun refreshView(view: SingleRecyclerViewImpl, root:RawTreeNode?){

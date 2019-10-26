@@ -17,13 +17,14 @@ import com.appli.folist.treeview.models.ViewNodeTypes
 import com.appli.folist.treeview.models.ViewNodeUtils
 import com.appli.folist.treeview.models.ViewTreeNode
 import com.appli.folist.treeview.utils.px
-import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
+import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import io.realm.Realm
 import kotlinx.android.synthetic.main.item_checkable_text.view.*
 import kotlinx.android.synthetic.main.item_checkable_text.view.indentation
 import kotlinx.android.synthetic.main.item_checkable_text.view.itemLinearLayout
 import kotlinx.android.synthetic.main.item_checkable_text.view.slideDelete
+import kotlinx.android.synthetic.main.item_checkable_text.view.slideEdit
 import kotlinx.android.synthetic.main.item_progress.view.*
 import kotlinx.android.synthetic.main.item_quick_create_node.view.*
 import java.util.*
@@ -156,12 +157,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
     inner class ViewHolder(view: View, private val indentation: Int, recyclerView: SingleRecyclerViewImpl,val realm: Realm?)
         : RecyclerView.ViewHolder(view), WeSwipeHelper.SwipeLayoutTypeCallBack {
-//        : RecyclerView.ViewHolder(view) {
         //for slide
-
-
         override fun getSwipeWidth(): Float {
-            return itemView.slideDelete.width.toFloat()
+            return itemView.slideDelete.width.toFloat()+itemView.slideEdit.width.toFloat()
         }
 
         override fun needSwipeLayout(): View {
@@ -171,8 +169,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         override fun onScreenView(): View {
             return itemView.itemLinearLayout
         }
-
-
 
         private fun bindIndentation(viewNode: ViewTreeNode){
             itemView.indentation.minimumWidth = indentation * viewNode.getLevel()
@@ -198,7 +194,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                     //TODO:delete from realm, fix flash bug
                     if(viewNode.rawReference!!.parent!=null){
-                        AppUtils().executeTransactionIfNotInTransaction(realm){
+                        realm.executeTransactionIfNotInTransaction{
                             viewNode.rawReference!!.parent!!.children.remove(viewNode.rawReference)
                         }
                         viewNode.parent!!.children.remove(viewNode)

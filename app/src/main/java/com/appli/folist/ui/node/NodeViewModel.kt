@@ -1,4 +1,4 @@
-package com.appli.folist.ui.Node
+package com.appli.folist.ui.node
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
