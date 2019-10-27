@@ -43,4 +43,13 @@
     <string name="node_relative">Relative</string>
     <string name="node_info">Information</string>
     <string name="node_info_content">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
+    <string name="node_generate_seed">Generate Seed and Save Locally</string>
+
+
+    <string name="seed_upload">Upload</string>
+    <string name="seed_title">Title</string>
+    <string name="seed_description">Description</string>
+
+
+    <string name="copyright">©2019 Appli All Rights Reserved</string>
 </resources>

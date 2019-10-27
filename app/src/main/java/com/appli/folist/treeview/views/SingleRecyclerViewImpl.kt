@@ -2,6 +2,7 @@ package com.appli.folist.treeview.views
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.text.InputType
 import android.util.AttributeSet
 import android.util.Log
@@ -283,6 +284,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             nodeLinkEditor.setText(node.value!!.link)
                             nodeMediaUriEditor.setText(node.value!!.mediaUri)
 
+                            nodeGenerateAndSaveSeedButton.setOnClickListener {
+                                val seedRoot=NodeUtils().getSeedRoot(realm)
+                                realm.executeTransactionIfNotInTransaction {
+                                    seedRoot.children.add(TreeSeedNode(node))
+                                }
+                            }
                         }
                     AlertDialog.Builder(recyclerView.context).setView(dialogView).setTitle(com.appli.folist.R.string.edit_node)
                         .setPositiveButton("OK") { dialog, _ ->
@@ -436,6 +443,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     else -> com.appli.folist.R.drawable.ic_right
                 }
             )
+            if(viewNode.children.size<=1){
+                itemView.nodeToggle.setColorFilter(Color.argb(200,255,255,255))
+            }else{
+                itemView.nodeToggle.setColorFilter(null)
+            }
             itemView.nodeTitle.text = viewNode.value.toString()
             itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
             itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
