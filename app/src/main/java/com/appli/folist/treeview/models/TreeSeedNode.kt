@@ -6,15 +6,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.annotations.Expose
+import io.realm.RealmList
+import io.realm.RealmObject
 import java.util.*
 
-class TreeSeedNode(
-    @Expose var value: NodeValue,
-    @Expose var children:MutableList<TreeSeedNode>,
-    @Expose var parent: TreeSeedNode?,
-    @Expose var uuid:String= UUID.randomUUID().toString()
-) {
-    constructor():this(NodeValue(""), mutableListOf<TreeSeedNode>(),null)
+open class TreeSeedNode(
+    @Expose open var value: NodeValue?=null,
+    @Expose open var children: RealmList<TreeSeedNode>,
+    @Expose open var parent: TreeSeedNode?,
+    @Expose open var uuid:String= UUID.randomUUID().toString()
+): RealmObject()  {
+    constructor():this(NodeValue(""), RealmList<TreeSeedNode>(),null)
     constructor(raw: RawTreeNode):this(raw,null)
     constructor(raw: RawTreeNode, parent: TreeSeedNode?):this(){
         this.value=raw.value!!
@@ -32,7 +34,7 @@ class TreeSeedNode(
             null, seed.value.link, seed.value.power, seed.value.uuid, seed.value.checked
         )
         seed.value.detail?.forEach { (key, value) ->
-            this.value.setDetail(key, value)
+            this.value?.setDetail(key, value)
         }
         this.uuid = seed.uuid
         this.parent = parent
@@ -74,7 +76,7 @@ class TreeSeedNode(
         constructor(seed: TreeSeedNode, parent: SeedNodeForFirebase?):this(
             SeedValueForFirebase(), mutableListOf()){
             this.value=
-                SeedValueForFirebase(seed.value)
+                SeedValueForFirebase(seed.value!!)
             this.uuid=seed.uuid
             seed.children.forEach {
                 this.children.add(

@@ -23,6 +23,24 @@
 
 
     <string name="img_cd_expand_ic">expand</string>
-    <string name="create_a_new_node">Create a New Node</string>
+    <string name="create_a_new_node">Create a New Node or Select from Seeds</string>
     <string name="plus_mark">+</string>
+    <string name="edit_node">Edit Node</string>
+    <string name="node_title">Title</string>
+    <string name="node_value_type">Value Type</string>
+    <string name="node_type_tree">TREE</string>
+    <string name="node_media_uri">Media URI</string>
+    <string name="node_detail">Detail</string>
+    <string name="node_link">Link</string>
+    <string name="node_power">Power</string>
+    <string name="node_value_uuid">Value ID</string>
+    <string name="node_children_number">Subtask Number</string>
+    <string name="node_parent">Parent</string>
+    <string name="node_progress">Progress</string>
+    <string name="node_notice">Notice</string>
+    <string name="node_shared_id">shared ID</string>
+    <string name="node_uuid">Node ID</string>
+    <string name="node_relative">Relative</string>
+    <string name="node_info">Information</string>
+    <string name="node_info_content">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
 </resources>

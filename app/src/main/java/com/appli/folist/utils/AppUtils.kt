@@ -1,7 +1,9 @@
 package com.appli.folist.utils
 
+import android.app.Activity
 import android.content.Context
 import android.preference.PreferenceManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -9,6 +11,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.realm.Realm
 import io.realm.RealmConfiguration
+
+
 
 class AppUtils {
     fun toast(activity: Context, str:String){
@@ -35,6 +39,14 @@ class AppUtils {
         return Realm.getDefaultInstance()!!
     }
 
+    fun hideKeyboard(mActivity: Activity) {
+        // Check if no view has focus:
+        val view = mActivity.currentFocus
+        if (view != null) {
+            val inputManager = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 
 
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.appli.folist.treeview.models.RawTreeNode
+import com.appli.folist.treeview.models.TreeSeedNode
 import com.appli.folist.utils.UserUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -15,6 +16,7 @@ class SharedViewModel : ViewModel() {
     private val auth =  FirebaseAuth.getInstance()
     val user=MutableLiveData<FirebaseUser>()
     val root=MutableLiveData<RawTreeNode>()
+    val seedRoot=MutableLiveData<TreeSeedNode>()
 
     fun login(activity: AppCompatActivity,email:String,password:String ) {
         UserUtils(activity, auth).login(email,password,

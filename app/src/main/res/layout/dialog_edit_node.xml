@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+        <TextView
+            android:id="@+id/nodeTitleLabel"
+            android:layout_marginStart="24dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/node_title"
+            android:layout_gravity="center_vertical"/>
+        <EditText
+            android:id="@+id/nodeTitleEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:nextFocusDown="@id/nodeProgressEditor"
+            android:text="@string/node_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeInfoLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_info" />
+
+        <TextView
+            android:id="@+id/nodeInfoTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="@string/node_info" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeTypeLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_value_type" />
+
+        <EditText
+            android:id="@+id/nodeTypeEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/node_value_type" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeProgressLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_progress" />
+
+        <EditText
+            android:id="@+id/nodeProgressEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@string/node_progress" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="%" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodePowerLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_power" />
+
+        <EditText
+            android:id="@+id/nodePowerEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@string/node_power" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeNoticeLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_notice" />
+
+        <EditText
+            android:id="@+id/nodeNoticeEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="datetime"
+            android:text="@string/node_notice" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeSharedIdLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_shared_id" />
+
+        <EditText
+            android:id="@+id/nodeSharedIdEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/node_shared_id" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+        <TextView
+            android:id="@+id/nodeLinkLabel"
+            android:layout_marginStart="24dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/node_link"
+            android:layout_gravity="center_vertical"/>
+        <EditText
+            android:id="@+id/nodeLinkEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/node_link" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+        <TextView
+            android:id="@+id/nodeMediaUriLabel"
+            android:layout_marginStart="24dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/node_media_uri"
+            android:layout_gravity="center_vertical"/>
+        <EditText
+            android:id="@+id/nodeMediaUriEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/node_media_uri" />
+    </LinearLayout>
+
+
+</LinearLayout>

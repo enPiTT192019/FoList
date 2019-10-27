@@ -27,6 +27,7 @@ import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -100,7 +101,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun refreshTasksMenu(){
         tasksMenu.clear()
-        sharedModel.root.value!!.children.forEach { tasksMenu.add(it.value!!.str).setIcon(R.drawable.ic_node) }
+        sharedModel.root.value!!.children.forEach {
+            val progress=it.calcProgress()
+            val progressText=when{
+                progress>=10000->(progress/1000).roundToInt().toString()+"k"
+                progress>=1000->progress.roundToInt().toString()
+                progress>=100->"%.1f".format(progress)
+                progress>=10->"%.2f".format(progress)
+                else->"%.3f".format(progress)
+            }
+            tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
+        }
         tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
     }
 
@@ -122,8 +133,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setTitle(R.string.menu_input_task_title)
                     .setPositiveButton("OK") { dialog, _ ->
                         val title = input.text.toString()
-                        //同じ名前のタスクを不可とする
-                        if(title in sharedModel.root.value!!.children.map { it.value!!.str }){
+                        //同じ名前のタスク・空の入力を不可とする
+                        if(title.isBlank()||title in sharedModel.root.value!!.children.map { it.value!!.str }){
                             AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
                         }else{
                             sharedModel.realm.value!!.executeTransaction{
@@ -135,7 +146,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             //タスク
             else->{
-                val id= sharedModel.root.value!!.children.find { it.value!!.str==item.title }?.uuid
+                //[...%]ThisIsATitle -> ThisIsATitle
+                val title= """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
+                val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
                 if(id!=null){
                     val bundle = bundleOf("nodeId" to id)
                     navController.navigate(R.id.nav_node,bundle)

@@ -124,4 +124,12 @@ class ViewTreeNode(
         }
         return result
     }
+
+    fun getDisplayedNodeNumber():Int{
+        if(!isExpanded){
+            return 1
+        }else{
+            return 1+children.sumBy { it.getDisplayedNodeNumber() }
+        }
+    }
 }
