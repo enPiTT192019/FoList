@@ -8,13 +8,14 @@ import com.google.firebase.database.ValueEventListener
 import com.google.gson.annotations.Expose
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.util.*
 
 open class TreeSeedNode(
     @Expose open var value: NodeValue?=null,
     @Expose open var children: RealmList<TreeSeedNode>,
     @Expose open var parent: TreeSeedNode?,
-    @Expose open var uuid:String= UUID.randomUUID().toString()
+    @Expose @PrimaryKey open var uuid:String= UUID.randomUUID().toString()
 ): RealmObject()  {
     constructor():this(NodeValue(""), RealmList<TreeSeedNode>(),null)
     constructor(raw: RawTreeNode):this(raw,null)

@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
+        sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
 
         //メニュー初期化
         navNodesItems= mutableListOf()
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 input.inputType = InputType.TYPE_CLASS_TEXT
                 AlertDialog.Builder(this).setView(input)
                     .setTitle(R.string.menu_input_task_title)
-                    .setPositiveButton("OK") { dialog, _ ->
+                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
                         val title = input.text.toString()
                         //同じ名前のタスク・空の入力を不可とする
                         if(title.isBlank()||title in sharedModel.root.value!!.children.map { it.value!!.str }){
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             }
                             refreshTasksMenu()
                         }
-                    }.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}.show()
+                    }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
             //タスク
             else->{

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.MainActivity
 import com.appli.folist.NodeTypes
-import com.appli.folist.R
 import com.appli.folist.Tags
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
@@ -39,6 +38,8 @@ import kotlinx.android.synthetic.main.item_node.view.slideEdit
 import kotlinx.android.synthetic.main.item_quick_create_node.view.*
 import java.util.*
 import kotlin.math.roundToInt
+
+
 
 
 
@@ -248,8 +249,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             //TODO: confirm dialog
                             findNavController(
                                 (recyclerView.rootView.context as Activity),
-                                R.id.nav_host_fragment
-                            ).navigate(R.id.nav_timeline)
+                                com.appli.folist.R.id.nav_host_fragment
+                            ).navigate(com.appli.folist.R.id.nav_timeline)
                             (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
                         }
                     }
@@ -266,14 +267,15 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     val node=viewNode.rawReference!!
                     val dialogView=((recyclerView.context as Activity)
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                        .inflate(R.layout.dialog_edit_node, null).apply {
+                        .inflate(com.appli.folist.R.layout.dialog_edit_node, null).apply {
                             //TODO:complete editor
                             nodeTitleEditor.setText(node.value!!.str)
-                            nodeInfoTextView.text=recyclerView.context.getString(R.string.node_info_content,
+                            nodeInfoTextView.text=recyclerView.context.getString(
+                                com.appli.folist.R.string.node_info_content,
                                 node.parent!!.value!!.toString(),node.children.size,node.uuid,node.value!!.uuid)
                             nodeTypeEditor.setText(node.value!!.type)
                             if(node.children.size>0){
-                                nodeTypeEditor.setText(R.string.node_type_tree)
+                                nodeTypeEditor.setText(com.appli.folist.R.string.node_type_tree)
                                 nodeTypeEditor.isEnabled=false
 
                             }
@@ -286,13 +288,34 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                             nodeGenerateAndSaveSeedButton.setOnClickListener {
                                 val seedRoot=NodeUtils().getSeedRoot(realm)
-                                realm.executeTransactionIfNotInTransaction {
-                                    seedRoot.children.add(TreeSeedNode(node))
+                                fun addSeed(){
+                                    realm.executeTransactionIfNotInTransaction {
+                                        seedRoot.children.add(TreeSeedNode(node))
+                                    }
+                                    AppUtils().toast(recyclerView.context,recyclerView.context.getString(
+                                        com.appli.folist.R.string.action_done))
+                                }
+                                //check duplicate
+                                if(node.value!!.toString() in seedRoot.children.map { it.value.toString() }){
+                                    AlertDialog.Builder(recyclerView.context)
+                                        .setTitle(recyclerView.context.getString(com.appli.folist.R.string.action_confirm))
+                                        .setMessage(recyclerView.context.getString(com.appli.folist.R.string.msg_duplicated_seed_confirm_question))
+                                        .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                                            realm.executeTransactionIfNotInTransaction {
+                                                seedRoot.children.removeAll {
+                                                    it.value.toString()==node.value!!.toString()
+                                                }
+                                            }
+                                            addSeed()
+                                        }
+                                        .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
+                                }else{
+                                    addSeed()
                                 }
                             }
                         }
                     AlertDialog.Builder(recyclerView.context).setView(dialogView).setTitle(com.appli.folist.R.string.edit_node)
-                        .setPositiveButton("OK") { dialog, _ ->
+                        .setPositiveButton(recyclerView.context.getString(com.appli.folist.R.string.action_ok)) { dialog, _ ->
                             //TODO:complete editor
 //                            val title = input.text.toString()
 //                            if (!title.isBlank()) {
@@ -301,7 +324,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 //                                }
 //                            }
                             notifyItemRangeChanged(0, adapterPosition + 1)
-                        }.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }.show()
+                        }.setNegativeButton(recyclerView.context.getString(com.appli.folist.R.string.action_cancel)) { dialog, _ -> dialog.cancel() }.show()
                 }
             }
         }
