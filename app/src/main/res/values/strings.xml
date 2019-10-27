@@ -47,9 +47,10 @@
     <string name="node_generate_seed">Generate Seed and Save Locally</string>
 
 
-    <string name="seed_upload">Upload</string>
+    <string name="seed_upload">Publish</string>
     <string name="seed_title">Title</string>
     <string name="seed_description">Description</string>
+    <string name="seed_content">Content</string>
 
 
     <string name="copyright">©2019 Appli All Rights Reserved</string>
@@ -59,5 +60,6 @@
     <string name="action_confirm">Confirm</string>
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
+    <string name="action_delete">Delete</string>
 
 </resources>

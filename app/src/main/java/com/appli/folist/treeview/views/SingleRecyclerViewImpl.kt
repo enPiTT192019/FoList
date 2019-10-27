@@ -104,6 +104,8 @@ class SingleRecyclerViewImpl : RecyclerView,
         }
     }
 
+
+
     fun setItemOnClick(click: (ViewTreeNode, TreeAdapter.ViewHolder) -> Unit) {
         adapter.setItemOnClick(click)
     }
@@ -437,6 +439,34 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             (recyclerView.context as MainActivity).refreshTasksMenu()
         }
 
+        private fun bindNodeToggle(viewNode: ViewTreeNode){
+            itemView.nodeToggle.setImageResource(
+                when {
+                    viewNode.children.size <= 1 -> com.appli.folist.R.drawable.ic_leaf
+                    viewNode.isExpanded -> com.appli.folist.R.drawable.ic_down
+                    else -> com.appli.folist.R.drawable.ic_right
+                }
+            )
+            if(viewNode.children.size<=1){
+                itemView.nodeToggle.setColorFilter(Color.argb(200,255,255,255))
+            }else{
+                itemView.nodeToggle.setColorFilter(null)
+            }
+        }
+        private fun bindOnlyText(viewNode: ViewTreeNode){
+            bindCommon(viewNode)
+            bindNodeToggle(viewNode)
+            itemView.nodeTitle.text = viewNode.value.toString()
+            itemView.leftView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.middleView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.rightView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+        }
         private fun bindNode(viewNode: ViewTreeNode) {
             bindCommon(viewNode)
             itemView.nodeProgress.isVisible = false
@@ -459,18 +489,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 }
             }
 
-            itemView.nodeToggle.setImageResource(
-                when {
-                    viewNode.children.size <= 1 -> com.appli.folist.R.drawable.ic_leaf
-                    viewNode.isExpanded -> com.appli.folist.R.drawable.ic_down
-                    else -> com.appli.folist.R.drawable.ic_right
-                }
-            )
-            if(viewNode.children.size<=1){
-                itemView.nodeToggle.setColorFilter(Color.argb(200,255,255,255))
-            }else{
-                itemView.nodeToggle.setColorFilter(null)
-            }
+            bindNodeToggle(viewNode)
+
             itemView.nodeTitle.text = viewNode.value.toString()
             itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
             itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
@@ -530,6 +550,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         internal fun bind(viewNode: ViewTreeNode) {
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
+                ViewNodeTypes.ONLY_TEXT->bindOnlyText(viewNode)
                 else -> bindNode(viewNode)
             }
         }

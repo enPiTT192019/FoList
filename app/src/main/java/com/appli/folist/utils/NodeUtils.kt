@@ -68,6 +68,21 @@ class NodeUtils {
         }
     }
 
+    fun refreshViewWithOnlyText(view: SingleRecyclerViewImpl, root: RawTreeNode?){
+        if (root != null) {
+            view.setRoots(
+                mutableListOf(
+                    ViewTreeNode(
+                        root,
+                        null,
+                        (view.adapter as TreeAdapter).viewNodes.firstOrNull(),
+                        onlyText = true
+                    )
+                )
+            )
+        }
+    }
+
     fun expandAll(node: ViewTreeNode) {
         node.isExpanded = true
         node.children.forEach { expandAll(it) }

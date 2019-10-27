@@ -27,7 +27,7 @@ class ViewTreeNode(
     constructor(value: NodeValue, children: MutableList<ViewTreeNode>) : this(value,ViewNodeTypes.NODE, null, children)
 
     constructor(raw: RawTreeNode, parent:ViewTreeNode?=null,
-                before:ViewTreeNode?=null):this(NodeValue()){
+                before:ViewTreeNode?=null,onlyText:Boolean=false):this(NodeValue()){
         this.parent=parent
         this.isExpanded=(before!=null && before.isExpanded)
         this.value=raw.value!!
@@ -36,14 +36,15 @@ class ViewTreeNode(
             NodeTypes.PROGRESS_NODE.name->ViewNodeTypes.PROGRESS_NODE
             else->ViewNodeTypes.NODE
         }
+        if(onlyText)this.type=ViewNodeTypes.ONLY_TEXT
         this.rawReference=raw
         raw.children.forEach {
             val childBefore= before?.children?.findLast {it2->
                 it2.value.uuid== it.value?.uuid
             }
-            this.children.add(ViewTreeNode(it,this,childBefore))
+            this.children.add(ViewTreeNode(it,this,childBefore,onlyText=onlyText))
         }
-        this.children.add(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
+        if(!onlyText)this.children.add(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
     }
 
     fun isTop(): Boolean {

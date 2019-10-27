@@ -21,6 +21,7 @@ open class RawTreeNode(
     constructor():this(children=RealmList<RawTreeNode>())
     constructor(value: NodeValue):this(value,children=RealmList<RawTreeNode>())
     constructor(value: NodeValue, parent: RawTreeNode?):this(value,children=RealmList<RawTreeNode>(),parent = parent)
+    constructor(seedRoot: TreeSeedNode):this(seedRoot,null)
     constructor(seedRoot: TreeSeedNode, parent: RawTreeNode?=null):this(){
         this.value=seedRoot.value
         this.progress=0.0
