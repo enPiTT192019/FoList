@@ -20,6 +20,7 @@
     <string name="menu_input_task_title">Input Task Title</string>
 
     <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
+    <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
     <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite?</string>
 
 

@@ -89,14 +89,18 @@ open class TreeSeedNode(
             }
         }
     }
-    fun upload(){
+    fun upload(title:String="",description:String="",callback: (String?) -> Unit={}){
         val ref = FirebaseDatabase.getInstance().getReference("seeds")
-        ref.push().setValue(
+        val newRef=ref.push()
+        newRef.child("title").setValue(title)
+        newRef.child("description").setValue(description)
+        newRef.child("data").setValue(
             SeedNodeForFirebase(
                 this,
                 null
             )
         )
+        callback(newRef.key)
     }
 
     fun download(key:String, callback:(TreeSeedNode?)->Unit, cancelled:(DatabaseError)->Unit={}){

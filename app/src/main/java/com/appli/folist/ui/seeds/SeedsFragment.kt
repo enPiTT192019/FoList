@@ -15,9 +15,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.R
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.RawTreeNode
+import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
+import com.appli.folist.utils.getAttribute
 import kotlinx.android.synthetic.main.dialog_show_seed.view.*
+import kotlinx.android.synthetic.main.dialog_upload_seed.view.*
 import kotlinx.android.synthetic.main.fragment_seeds.*
 
 class SeedsFragment : Fragment() {
@@ -80,12 +83,34 @@ class SeedsFragment : Fragment() {
                     .inflate(R.layout.dialog_show_seed,null).apply {
                             setBackgroundColor(Color.rgb(238,238,238))
                             NodeUtils().refreshViewWithOnlyText(seedContentTreeView, RawTreeNode(seed))
-                            seedUploadButton.setOnClickListener {
-                                //TODO
-                            }
                         }
-                    AlertDialog.Builder(context).setView(dialogView).setTitle(seed.value.toString())
-                        .setNegativeButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
+                    AlertDialog.Builder(context).setView(dialogView)
+                        .setNegativeButton(context.getString(R.string.seed_upload)) { dialog, _ ->
+                            val dialogView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                                .inflate(R.layout.dialog_upload_seed,null).apply {
+                                    seedTitleEditor.setText(seed.value.toString())
+                                    sharedModel.user.value?.getAttribute("name"){
+                                        seedDescriptionEditor.setText("created by ${it?:"anonym"}")
+                                    }
+
+                                }
+                            AlertDialog.Builder(context).setView(dialogView).setTitle(seed.value.toString())
+                                .setPositiveButton(context.getString(R.string.seed_upload)) { dialog, _ ->
+                                    if(dialogView.seedTitleEditor.text.toString().isBlank()
+                                        || dialogView.seedDescriptionEditor.text.toString().isBlank()){
+                                        AppUtils().toast(context,context.getString(R.string.msg_field_blank))
+                                    }else{
+                                        seed.upload(dialogView.seedTitleEditor.text.toString(),
+                                            dialogView.seedDescriptionEditor.text.toString()){
+                                            //TODO
+                                            AppUtils().toast(context,"done. id:${it}")
+                                        }
+                                    }
+                                }
+                                .setNegativeButton(context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                                .show()
+                        }
+                        .setPositiveButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
                         .show()
                 }
 
