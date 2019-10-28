@@ -27,7 +27,7 @@ open class TreeSeedNode(
             this.children.add(TreeSeedNode(it, this))
         }
     }
-
+    constructor(seed: SeedNodeForFirebase):this(seed,null)
     constructor(seed: SeedNodeForFirebase, parent: TreeSeedNode?):this() {
 
         this.value = NodeValue(
@@ -37,7 +37,9 @@ open class TreeSeedNode(
         seed.value.detail?.forEach { (key, value) ->
             this.value?.setDetail(key, value)
         }
-        this.uuid = seed.uuid
+        //TODO: right?
+//        this.uuid = seed.uuid
+        this.uuid=UUID.randomUUID().toString()
         this.parent = parent
         seed.children.forEach {
             this.children.add(TreeSeedNode(it, this))
@@ -103,12 +105,14 @@ open class TreeSeedNode(
         callback(newRef.key)
     }
 
-    fun download(key:String, callback:(TreeSeedNode?)->Unit, cancelled:(DatabaseError)->Unit={}){
-        val ref=FirebaseDatabase.getInstance().getReference("seeds/$key")
+    fun download(key:String, cancelled:(DatabaseError)->Unit={},
+                 callback:(TreeSeedNode?)->Unit){
+        val ref=FirebaseDatabase.getInstance().getReference("seeds/$key/data")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val result=dataSnapshot.getValue(SeedNodeForFirebase::class.java)
                 callback(result?.let { TreeSeedNode(it, null) })
+//                callback(result)
             }
             override fun onCancelled(error: DatabaseError) {
                 cancelled(error)

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.R
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.RawTreeNode
+import com.appli.folist.treeview.models.TreeSeedNode
 import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
@@ -41,6 +42,13 @@ class SeedsFragment : Fragment() {
         return root
     }
 
+    fun saveSeedToRealm(seed:TreeSeedNode){
+        sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
+            sharedModel.seedRoot.value!!.children.add(seed)
+            sharedModel.realm.value!!.copyToRealmOrUpdate(seed)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -49,6 +57,24 @@ class SeedsFragment : Fragment() {
             arrayAdapter.add(ListItem(it.value.toString()))
         }
         seedListView.adapter = arrayAdapter
+        seedDownloadButton.setOnClickListener {
+            TreeSeedNode().download("-LsEAZ7GP1jHokPz8F37"){seed->
+                if(seed!=null) {
+                    if(seed.value.toString() in sharedModel.seedRoot.value!!.children.map { it.value.toString() }){
+                        AlertDialog.Builder(context!!)
+                            .setTitle(getString(R.string.action_confirm))
+                            .setMessage(getString(R.string.msg_duplicated_seed_confirm_question))
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                saveSeedToRealm(seed)
+                            }
+                            .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
+
+                    }else{
+                        saveSeedToRealm(seed)
+                    }
+                }
+            }
+        }
     }
 
     class ListItem(val title : String)
