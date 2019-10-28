@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     android:focusable="true" android:focusableInTouchMode="true">
@@ -24,6 +24,7 @@
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:text="@string/seed_title"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="18sp" />
 
         <ImageView
@@ -70,6 +71,23 @@
         <!--            android:layout_height="42dp"-->
         <!--            android:text="@string/action_delete" />-->
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/seedContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
     </LinearLayout>
 
 

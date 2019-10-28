@@ -36,12 +36,13 @@ class SeedsFragment : Fragment() {
     ): View? {
         seedsViewModel = ViewModelProviders.of(this).get(SeedsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_seeds, container, false)
-        sharedModel = activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
+        sharedModel =
+            activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
 
         return root
     }
 
-    fun saveSeedToRealm(seed:TreeSeedNode){
+    fun saveSeedToRealm(seed: TreeSeedNode) {
         sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
             sharedModel.seedRoot.value!!.children.add(seed)
             sharedModel.realm.value!!.copyToRealmOrUpdate(seed)
@@ -53,7 +54,7 @@ class SeedsFragment : Fragment() {
 
         activity!!.setTitle(R.string.menu_seeds)
 
-        val arrayAdapter = MyArrayAdapter(context!!, 0,sharedModel)
+        val arrayAdapter = MyArrayAdapter(context!!, 0, sharedModel)
         sharedModel.seedRoot.value!!.children.forEach {
             arrayAdapter.add(ListItem(it.value.toString()))
         }
@@ -78,21 +79,40 @@ class SeedsFragment : Fragment() {
 //        }
     }
 
-    class ListItem(val title : String)
-    data class ViewHolder(val titleView: TextView,val seedDeleteButton: View,val seedPublishButton:View,val seedAddToTaskButton:View)
+    class ListItem(val title: String)
+    data class ViewHolder(
+        val titleView: TextView,
+        val seedDeleteButton: View,
+        val seedPublishButton: View,
+        val seedAddToTaskButton: View,
+        val seedContent: TextView
+    )
+
     class MyArrayAdapter : ArrayAdapter<ListItem> {
-        private var inflater : LayoutInflater? = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
-        var sharedModel:SharedViewModel
-        constructor(context : Context, resource : Int,sharedModel: SharedViewModel) : super(context, R.layout.seed_list_item){
-            this.sharedModel=sharedModel
+        private var inflater: LayoutInflater? =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+        var sharedModel: SharedViewModel
+
+        constructor(context: Context, resource: Int, sharedModel: SharedViewModel) : super(
+            context,
+            R.layout.seed_list_item
+        ) {
+            this.sharedModel = sharedModel
         }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var viewHolder : ViewHolder? = null
+            var viewHolder: ViewHolder? = null
             var view = convertView
 
             if (view == null) {
                 view = inflater!!.inflate(R.layout.seed_list_item, parent, false)
-                viewHolder = ViewHolder(view.findViewById(R.id.item_title), view.findViewById(R.id.seedDeleteButton), view.findViewById(R.id.seedPublishButton), view.findViewById(R.id.seedAddToTaskButton))
+                viewHolder = ViewHolder(
+                    view.findViewById(R.id.item_title),
+                    view.findViewById(R.id.seedDeleteButton),
+                    view.findViewById(R.id.seedPublishButton),
+                    view.findViewById(R.id.seedAddToTaskButton),
+                    view.findViewById(R.id.seedContent)
+                )
                 view.tag = viewHolder
             } else {
                 viewHolder = view.tag as ViewHolder
@@ -101,13 +121,18 @@ class SeedsFragment : Fragment() {
             val listItem = getItem(position)
             viewHolder.titleView.text = listItem!!.title
             viewHolder.titleView.setOnClickListener {
-                val seed=sharedModel.seedRoot.value!!.children.find { it.value.toString()== viewHolder.titleView.text}
-                if(seed!=null){
-                    val dialogView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                    .inflate(R.layout.dialog_show_seed,null).apply {
-                            setBackgroundColor(Color.rgb(238,238,238))
-                            NodeUtils().refreshViewWithOnlyText(seedContentTreeView, RawTreeNode(seed))
-                        }
+                val seed =
+                    sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder.titleView.text }
+                if (seed != null) {
+                    val dialogView =
+                        (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                            .inflate(R.layout.dialog_show_seed, null).apply {
+                                setBackgroundColor(Color.rgb(238, 238, 238))
+                                NodeUtils().refreshViewWithOnlyText(
+                                    seedContentTreeView,
+                                    RawTreeNode(seed)
+                                )
+                            }
                     AlertDialog.Builder(context).setView(dialogView)
                         .setTitle(context.getString(R.string.title_seed_content))
                         .setPositiveButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
@@ -121,7 +146,7 @@ class SeedsFragment : Fragment() {
                     context,
                     context.getString(R.string.title_confirm),
                     context.getString(R.string.msg_confirm_delete, title)
-                ) {_,_->
+                ) { _, _ ->
                     this.remove(listItem)
                     this.notifyDataSetChanged()
                     sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
@@ -137,24 +162,25 @@ class SeedsFragment : Fragment() {
                     context,
                     context.getString(R.string.title_confirm),
                     context.getString(R.string.msg_confirm_add_to_task, title)
-                ) {_,_->
-                    val seed=sharedModel.seedRoot.value!!.children.find { it.value.toString()== viewHolder.titleView.text}
-                    if(seed!=null) {
+                ) { _, _ ->
+                    val seed =
+                        sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder.titleView.text }
+                    if (seed != null) {
                         val newNode = RawTreeNode(seed)
-                        val realm=sharedModel.realm.value!!
-                        if(seed.value.toString() in sharedModel.root.value!!.children.map { it.value!!.str }){
+                        val realm = sharedModel.realm.value!!
+                        if (seed.value.toString() in sharedModel.root.value!!.children.map { it.value!!.str }) {
                             AppUtils().confirmDialog(
                                 context,
                                 context.getString(R.string.title_confirm),
                                 context.getString(R.string.msg_confirm_overwrite_task, title)
-                            ){_,_->
+                            ) { _, _ ->
                                 realm.executeTransactionIfNotInTransaction {
-                                    sharedModel.root.value!!.children.removeAll { it.value.toString()==newNode.value.toString() }
+                                    sharedModel.root.value!!.children.removeAll { it.value.toString() == newNode.value.toString() }
                                     sharedModel.root.value!!.children.add((newNode))
                                     realm.copyToRealmOrUpdate(newNode)
                                 }
                             }
-                        }else{
+                        } else {
                             realm.executeTransactionIfNotInTransaction {
                                 sharedModel.root.value!!.children.add((newNode))
                                 realm.copyToRealmOrUpdate(newNode)
@@ -170,9 +196,10 @@ class SeedsFragment : Fragment() {
                     context,
                     context.getString(R.string.title_confirm),
                     context.getString(R.string.msg_confirm_publish, title)
-                ) {_,_->
-                    val seed=sharedModel.seedRoot.value!!.children.find { it.value.toString()== viewHolder.titleView.text}
-                    if(seed!=null) {
+                ) { _, _ ->
+                    val seed =
+                        sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder.titleView.text }
+                    if (seed != null) {
                         val dialogView =
                             (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                                 .inflate(R.layout.dialog_upload_seed, null).apply {
@@ -212,7 +239,9 @@ class SeedsFragment : Fragment() {
                     }
                 }
             }
-
+            val seed = sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder.titleView.text }
+            val content= seed?.children?.map { it.value.toString() }?.joinToString()?:""
+            viewHolder.seedContent.text=content.substring(0, content.length.coerceAtMost(50))
 
             return view!!
         }
