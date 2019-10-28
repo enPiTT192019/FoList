@@ -120,7 +120,7 @@ class SeedsFragment : Fragment() {
 
             val listItem = getItem(position)
             viewHolder.titleView.text = listItem!!.title
-            viewHolder.titleView.setOnClickListener {
+            fun showSeedContent(){
                 val seed =
                     sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder.titleView.text }
                 if (seed != null) {
@@ -138,7 +138,12 @@ class SeedsFragment : Fragment() {
                         .setPositiveButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
                         .show()
                 }
-
+            }
+            viewHolder.titleView.setOnClickListener {
+                showSeedContent()
+            }
+            viewHolder.seedContent.setOnClickListener {
+                showSeedContent()
             }
             viewHolder.seedDeleteButton.setOnClickListener {
                 val title = listItem.title
@@ -228,7 +233,9 @@ class SeedsFragment : Fragment() {
                                         dialogView.seedDescriptionEditor.text.toString(),
                                         sharedModel.user.value!!.uid,
                                         dialogView.seedPriceEditor.text.toString().toIntOrNull()
-                                            ?: 0
+                                            ?: 0,
+                                        dialogView.seedPasswordEditor.text.toString(),
+                                        algolia = sharedModel.algolia.value!!
                                     ) {
                                         AppUtils().toast(context, "done. id:${it}")
                                     }

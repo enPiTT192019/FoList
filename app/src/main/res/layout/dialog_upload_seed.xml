@@ -27,7 +27,7 @@
             android:ems="10"
             android:inputType="text"
             android:nextFocusDown="@id/nodeProgressEditor"
-            android:text="@string/seed_title" />
+            android:hint="@string/seed_title" />
 
     </LinearLayout>
 
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:minLines="4"
-            android:text="@string/seed_description" />
+            android:hint="@string/seed_description" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,10 +76,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:minLines="4"
             android:inputType="number"
             android:text="0" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
 
+        <TextView
+            android:id="@+id/seedPasswordLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/seed_password" />
+
+        <EditText
+            android:id="@+id/seedPasswordEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/seed_password" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -3,9 +3,14 @@
 buildscript {
     ext.kotlin_version = '1.3.50'
     ext.dokka_version = '0.9.18'
+    ext.kotlin_client_version='1.1.4'
+    ext.ktor_version='1.2.4'
+
     repositories {
         google()
         jcenter()
+
+        maven { url "https://kotlin.bintray.com/kotlinx" }
         
     }
     dependencies {
@@ -22,6 +27,10 @@ buildscript {
 
         //for realm
         classpath "io.realm:realm-gradle-plugin:5.15.1"
+
+        //serialization
+
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 
@@ -31,6 +40,7 @@ allprojects {
         jcenter()
         //for treeview
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://dl.bintray.com/algolia/maven" }
         maven { url 'https://jitpack.io' }
     }
 }

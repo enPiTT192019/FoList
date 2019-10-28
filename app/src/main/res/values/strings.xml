@@ -62,6 +62,7 @@
     <string name="seed_title">Title</string>
     <string name="seed_description">Description</string>
     <string name="seed_price">Price</string>
+    <string name="seed_password">Password</string>
     <string name="seed_content">Content</string>
 
 

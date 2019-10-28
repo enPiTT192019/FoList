@@ -6,9 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.appli.folist.R
+import com.algolia.search.helper.deserialize
+import com.algolia.search.model.IndexName
+import com.algolia.search.model.search.Query
 import com.appli.folist.models.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_store.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+
 
 class StoreFragment : Fragment() {
 
@@ -20,9 +25,8 @@ class StoreFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        storeViewModel =
-            ViewModelProviders.of(this).get(StoreViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_store, container, false)
+        storeViewModel = ViewModelProviders.of(this).get(StoreViewModel::class.java)
+        val root = inflater.inflate(com.appli.folist.R.layout.fragment_store, container, false)
         sharedModel = activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
 
         return root
@@ -30,7 +34,34 @@ class StoreFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity!!.setTitle(R.string.menu_store)
-        testText.text="111"
+        activity!!.setTitle(com.appli.folist.R.string.menu_store)
+
+
+        @Serializable
+        data class SeedResult(
+            val title: String,
+            val description: String,
+            val key:String,
+            val price:Int
+        )
+        val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
+        val query =  Query().apply {
+            query="カレー"
+        }
+        runBlocking {
+
+            val result = index.search(query)
+            val seeds=result.hits.deserialize(SeedResult.serializer())
+
+            testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
+
+
+        }
+
+
+
+
+
     }
 }
+

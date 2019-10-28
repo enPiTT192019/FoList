@@ -331,7 +331,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             if (node.children.size > 0) {
                                 nodeTypeEditor.setText(R.string.node_type_tree)
                                 nodeTypeEditor.isEnabled = false
-
+                                nodeProgressEditor.isEnabled=false
                             }
                             nodeProgressEditor.setText(node.progress.toString())
                             nodePowerEditor.setText(node.value!!.power.toString())
@@ -549,6 +549,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             bindCommon(viewNode)
             bindNodeToggle(viewNode, false)
             itemView.nodeTitle.text = viewNode.value.toString()
+
             itemView.leftView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)
             }
@@ -585,6 +586,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             bindNodeToggle(viewNode)
 
             itemView.nodeTitle.text = viewNode.value.toString()
+            itemView.nodeTitle.setTextColor(if(viewNode.rawReference!!.children.size >= 1)Color.rgb(100,100,100) else Color.rgb(0,0,0))
             itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
             itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
 

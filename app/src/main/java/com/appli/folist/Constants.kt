@@ -1,7 +1,7 @@
 package com.appli.folist
 
 val ALGOLIA_APP_ID="2HDQPZXROG"
-val ALGOLIA_API_KEY="7753f5baafa71f454399c45fd50d0d4d"//read only
+val ALGOLIA_API_KEY="3cd584b8253847a23a50cbaf50afb2cc"//read only
 
 
 

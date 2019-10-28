@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import com.algolia.search.saas.Client
+import com.algolia.search.client.ClientSearch
+import com.algolia.search.model.APIKey
+import com.algolia.search.model.ApplicationID
 import com.appli.folist.ALGOLIA_API_KEY
 import com.appli.folist.ALGOLIA_APP_ID
 import com.google.gson.Gson
@@ -52,8 +54,10 @@ class AppUtils {
         }
     }
 
-    fun getAlgolia():Client{
-        val client = Client(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+    fun getAlgolia(): ClientSearch {
+        val appID = ApplicationID(ALGOLIA_APP_ID)
+        val apiKey = APIKey(ALGOLIA_API_KEY)
+        val client = ClientSearch(appID, apiKey)
         return client
     }
 

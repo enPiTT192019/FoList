@@ -1,5 +1,7 @@
 package com.appli.folist.treeview.models
 
+import com.algolia.search.client.ClientSearch
+import com.algolia.search.model.IndexName
 import com.appli.folist.NodeTypes
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -9,6 +11,8 @@ import com.google.gson.annotations.Expose
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.json
 import java.util.*
 
 open class TreeSeedNode(
@@ -91,8 +95,8 @@ open class TreeSeedNode(
             }
         }
     }
-    fun upload(title:String="",description:String="",authorUid:String="",price:Int=0,
-               password:String="",
+    fun upload(title:String="", description:String="", authorUid:String="", price:Int=0,
+               password:String="", algolia: ClientSearch?,
                callback: (String?) -> Unit={}){
         val ref = FirebaseDatabase.getInstance().getReference("seeds")
         val newRef=ref.push()
@@ -100,13 +104,28 @@ open class TreeSeedNode(
         newRef.child("description").setValue(description)
         newRef.child("authorUid").setValue(authorUid)
         newRef.child("price").setValue(price)
+        newRef.child("password").setValue(password)
         newRef.child("data").setValue(
             SeedNodeForFirebase(
                 this,
                 null
             )
         )
-        //for search
+        //for algolia search
+        //TODO
+        if(algolia!=null){
+            val index=algolia.initIndex(IndexName("seeds"))
+            val json = json {
+                "title" to title
+                "description" to description
+                "key" to newRef.key
+                "price" to price
+            }
+
+            runBlocking {
+                index.saveObject(json)
+            }
+        }
 
         callback(newRef.key)
     }
