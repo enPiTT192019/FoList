@@ -34,5 +34,6 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
+        activity!!.setTitle(R.string.menu_settings)
     }
 }

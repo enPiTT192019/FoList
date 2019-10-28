@@ -52,6 +52,8 @@ class SeedsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        activity!!.setTitle(R.string.menu_seeds)
+
         val arrayAdapter = MyArrayAdapter(context!!, 0,sharedModel)
         sharedModel.seedRoot.value!!.children.forEach {
             arrayAdapter.add(ListItem(it.value.toString()))
@@ -115,8 +117,9 @@ class SeedsFragment : Fragment() {
                             val dialogView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                                 .inflate(R.layout.dialog_upload_seed,null).apply {
                                     seedTitleEditor.setText(seed.value.toString())
+                                    seedDescriptionEditor.setText("Created by anonym")
                                     sharedModel.user.value?.getAttribute("name"){
-                                        seedDescriptionEditor.setText("created by ${it?:"anonym"}")
+                                        seedDescriptionEditor.setText("Created by ${it?:"anonym"}")
                                     }
 
                                 }
@@ -128,9 +131,9 @@ class SeedsFragment : Fragment() {
                                     }else{
                                         seed.upload(dialogView.seedTitleEditor.text.toString(),
                                             dialogView.seedDescriptionEditor.text.toString()){
-                                            //TODO
-                                            AppUtils().toast(context,"done. id:${it}")
-                                        }
+                                                //TODO: after upload
+                                                AppUtils().toast(context,"done. id:${it}")
+                                            }
                                     }
                                 }
                                 .setNegativeButton(context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }

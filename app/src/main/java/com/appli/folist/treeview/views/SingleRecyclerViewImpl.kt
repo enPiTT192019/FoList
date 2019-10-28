@@ -439,15 +439,16 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             (recyclerView.context as MainActivity).refreshTasksMenu()
         }
 
-        private fun bindNodeToggle(viewNode: ViewTreeNode){
+        private fun bindNodeToggle(viewNode: ViewTreeNode,hasCreateNode:Boolean=true){
+            val minChildrenNumber=if(hasCreateNode)1 else 0
             itemView.nodeToggle.setImageResource(
                 when {
-                    viewNode.children.size <= 1 -> com.appli.folist.R.drawable.ic_leaf
+                    viewNode.children.size <= minChildrenNumber -> com.appli.folist.R.drawable.ic_leaf
                     viewNode.isExpanded -> com.appli.folist.R.drawable.ic_down
                     else -> com.appli.folist.R.drawable.ic_right
                 }
             )
-            if(viewNode.children.size<=1){
+            if(viewNode.children.size<=minChildrenNumber){
                 itemView.nodeToggle.setColorFilter(Color.argb(200,255,255,255))
             }else{
                 itemView.nodeToggle.setColorFilter(null)
@@ -455,7 +456,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun bindOnlyText(viewNode: ViewTreeNode){
             bindCommon(viewNode)
-            bindNodeToggle(viewNode)
+            bindNodeToggle(viewNode,false)
             itemView.nodeTitle.text = viewNode.value.toString()
             itemView.leftView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)

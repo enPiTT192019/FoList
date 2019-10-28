@@ -28,4 +28,10 @@ class TimelineFragment : Fragment() {
         })
         return root
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        activity!!.setTitle(R.string.menu_timeline)
+    }
 }

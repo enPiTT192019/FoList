@@ -39,4 +39,9 @@ class NodeFragment : Fragment() {
 
         return view
     }
+
+    override fun onStart() {
+        super.onStart()
+        activity!!.setTitle(R.string.menu_node)
+    }
 }

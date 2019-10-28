@@ -91,7 +91,8 @@ open class TreeSeedNode(
             }
         }
     }
-    fun upload(title:String="",description:String="",callback: (String?) -> Unit={}){
+    fun upload(title:String="",description:String=""
+               ,callback: (String?) -> Unit={}){
         val ref = FirebaseDatabase.getInstance().getReference("seeds")
         val newRef=ref.push()
         newRef.child("title").setValue(title)

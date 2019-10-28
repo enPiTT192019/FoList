@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
+
         //テスト用
 //        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
 
@@ -142,6 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 sharedModel.root.value!!.children.add(RawTreeNode(NodeValue(title),sharedModel.root.value!!))
                             }
                             refreshTasksMenu()
+                            AppUtils().hideKeyboard(this@MainActivity)
                         }
                     }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
