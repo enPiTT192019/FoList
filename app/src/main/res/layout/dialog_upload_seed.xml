@@ -55,6 +55,31 @@
             android:minLines="4"
             android:text="@string/seed_description" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/seedPriceLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/seed_price" />
+
+        <EditText
+            android:id="@+id/seedPriceEditor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:minLines="4"
+            android:inputType="number"
+            android:text="0" />
+    </LinearLayout>
 
 
 </LinearLayout>

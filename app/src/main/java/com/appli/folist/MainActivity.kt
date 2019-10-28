@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
+        sharedModel.algolia.value=AppUtils().getAlgolia()
 
         //メニュー初期化
         navNodesItems= mutableListOf()

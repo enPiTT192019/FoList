@@ -111,4 +111,8 @@ class NodeUtils {
         realm.commitTransaction()
         return result
     }
+
+    fun searchSeedByName(){
+        //TODO
+    }
 }

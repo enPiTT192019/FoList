@@ -1,5 +1,10 @@
 package com.appli.folist
 
+val ALGOLIA_APP_ID="2HDQPZXROG"
+val ALGOLIA_API_KEY="7753f5baafa71f454399c45fd50d0d4d"//read only
+
+
+
 enum class Constants(str:String?){
 //    RAW_TREE_ROOT_UUID(null)
 }

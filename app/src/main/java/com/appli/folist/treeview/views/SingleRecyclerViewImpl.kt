@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -342,22 +343,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             //TODO: enter->create and hide keyboard
 
             //TODO:シードリスト取得・Spinner更新
-            val COUNTRIES = mutableListOf<String>("Belgium", "France", "Italy", "Germany", "Spain")
-            val adapter = ArrayAdapter<String>(
-                recyclerView.context,
-                android.R.layout.simple_dropdown_item_1line, COUNTRIES
-            )
+            val seedTitles=NodeUtils().getSeedRoot(realm!!).children.map { it.value.toString() }
+            val adapter = ArrayAdapter<String>(recyclerView.context, android.R.layout.simple_dropdown_item_1line, seedTitles)
             itemView.editText.setAdapter<ArrayAdapter<String>>(adapter)
             itemView.editText.setOnClickListener { (it as AutoCompleteTextView).showDropDown() }
+            //hide seed button unless a seed title is inputted
+            itemView.seedButton.isVisible=false
+            itemView.editText.addTextChangedListener {text->
+                itemView.seedButton.isVisible=(NodeUtils().getSeedRoot(realm).children.find { it.value.toString()==text.toString() }!=null)
+            }
 
             //新規ノード
             itemView.createButton.setOnClickListener {
                 if (itemView.editText.text.toString().isBlank()) {
-                    Toast.makeText(
-                        recyclerView.context,
-                        "Please input something",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(recyclerView.context, "Please input something", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 if (viewNode.parent != null) {
@@ -406,9 +405,51 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 AppUtils().hideKeyboard(recyclerView.context as Activity)
             }
 
+
             //TODO:シードから生成する
             itemView.seedButton.setOnClickListener {
+                if (itemView.editText.text.toString().isBlank()) {
+                    Toast.makeText(recyclerView.context, "Please input something", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (viewNode.parent != null) {
+                    //get variables
+                    val inputStr = itemView.editText.text.toString()
+                    val viewParent = viewNode.parent as ViewTreeNode
+                    var newNode: RawTreeNode? = null
 
+                    if (viewNode.parent != null && realm != null) {
+                        //create new RawNode
+                        val seed=NodeUtils().getSeedRoot(realm).children.find { it.value.toString()==inputStr }
+                        if(seed==null){
+                            Toast.makeText(recyclerView.context, "Not found in seed list", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                        newNode=RawTreeNode(seed)
+
+                        realm.executeTransactionIfNotInTransaction {
+                            viewParent.rawReference?.children?.add((newNode))
+                            realm.copyToRealmOrUpdate(newNode)
+                        }
+                        //adjust view nodes list
+                        //remove old create-node
+                        viewParent.children.remove(viewNode)
+                        viewNodes.removeAt(adapterPosition)
+                        notifyItemRemoved(adapterPosition + 1)
+                        //create new view-node of new-node, update ui
+                        val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
+                        viewParent.children.add(newViewNode)
+                        viewNodes.add(adapterPosition, newViewNode)
+                        //add create-node
+                        viewParent.children.add(viewNode)
+                        viewNodes.add(adapterPosition + 1, viewNode)
+                        notifyItemRangeInserted(adapterPosition + 1, 2)
+                        notifyItemRangeChanged(0, adapterPosition + 1)
+                        //reset editor
+                        itemView.editText.setText("")
+                    } else { Log.w(Tags.DEFAULT.name, "SingleRecyclerViewImpl:realm not set, or parent does not exist") }
+                }
+                AppUtils().hideKeyboard(recyclerView.context as Activity)
             }
 
 //            itemView.

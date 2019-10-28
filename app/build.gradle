@@ -15,6 +15,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -47,4 +48,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "io.reactivex.rxjava2:rxjava:2.2.12"
     implementation 'com.github.WangcWj:WeSwipe:1.0.1'
+    implementation 'com.algolia:algoliasearch-android:3.27.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

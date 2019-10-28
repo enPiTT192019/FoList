@@ -130,7 +130,10 @@ class SeedsFragment : Fragment() {
                                         AppUtils().toast(context,context.getString(R.string.msg_field_blank))
                                     }else{
                                         seed.upload(dialogView.seedTitleEditor.text.toString(),
-                                            dialogView.seedDescriptionEditor.text.toString()){
+                                            dialogView.seedDescriptionEditor.text.toString(),
+                                            sharedModel.user.value!!.uid,
+                                            dialogView.seedPriceEditor.text.toString().toIntOrNull()?:0
+                                            ) {
                                                 //TODO: after upload
                                                 AppUtils().toast(context,"done. id:${it}")
                                             }

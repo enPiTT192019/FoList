@@ -7,6 +7,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import com.algolia.search.saas.Client
+import com.appli.folist.ALGOLIA_API_KEY
+import com.appli.folist.ALGOLIA_APP_ID
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.realm.Realm
@@ -48,5 +51,9 @@ class AppUtils {
         }
     }
 
+    fun getAlgolia():Client{
+        val client = Client(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+        return client
+    }
 
 }

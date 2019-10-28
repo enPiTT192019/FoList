@@ -51,7 +51,15 @@
     <string name="seed_upload">Publish</string>
     <string name="seed_title">Title</string>
     <string name="seed_description">Description</string>
+    <string name="seed_price">Price</string>
     <string name="seed_content">Content</string>
+
+
+    <string name="shop_title">Title</string>
+    <string name="shop_description">Description</string>
+    <string name="shop_seed_id">Seed ID</string>
+    <string name="shop_author_id">Author UID</string>
+    <string name="shop_price">Price</string>
 
 
     <string name="copyright">©2019 Appli All Rights Reserved</string>
