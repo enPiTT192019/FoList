@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -9,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:orientation="horizontal"
-        android:layout_marginEnd="24dp"
         android:paddingStart="20dp"
         android:paddingBottom="5dp">
 
@@ -20,15 +21,54 @@
             android:layout_height="36dp"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="@string/node_media_uri"
+            android:text="@string/seed_title"
             android:textSize="18sp" />
 
-        <Button
+        <ImageView
+            android:id="@+id/seedAddToTaskButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="1dp"
+            android:tint="@android:color/holo_green_light"
+            app:srcCompat="@drawable/ic_create" />
+        <ImageView
+            android:id="@+id/seedPublishButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="1dp"
+            android:tint="@android:color/holo_blue_light"
+            app:srcCompat="@drawable/ic_publish" />
+        <ImageView
             android:id="@+id/seedDeleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:text="@string/action_delete" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="1dp"
+            android:tint="@android:color/holo_red_light"
+            app:srcCompat="@drawable/ic_delete" />
+
+
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/seedDeleteButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="42dp"-->
+        <!--            android:text="@string/action_delete" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/seedDeleteButton2"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="42dp"-->
+        <!--            android:text="@string/action_delete" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/seedDeleteButton3"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="42dp"-->
+        <!--            android:text="@string/action_delete" />-->
 
     </LinearLayout>
 

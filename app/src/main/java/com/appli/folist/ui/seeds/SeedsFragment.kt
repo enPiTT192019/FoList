@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.appli.folist.MainActivity
 import com.appli.folist.R
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.RawTreeNode
@@ -34,8 +34,7 @@ class SeedsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        seedsViewModel =
-            ViewModelProviders.of(this).get(SeedsViewModel::class.java)
+        seedsViewModel = ViewModelProviders.of(this).get(SeedsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_seeds, container, false)
         sharedModel = activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
 
@@ -59,28 +58,28 @@ class SeedsFragment : Fragment() {
             arrayAdapter.add(ListItem(it.value.toString()))
         }
         seedListView.adapter = arrayAdapter
-        seedDownloadButton.setOnClickListener {
-            TreeSeedNode().download("-LsEAZ7GP1jHokPz8F37"){seed->
-                if(seed!=null) {
-                    if(seed.value.toString() in sharedModel.seedRoot.value!!.children.map { it.value.toString() }){
-                        AlertDialog.Builder(context!!)
-                            .setTitle(getString(R.string.action_confirm))
-                            .setMessage(getString(R.string.msg_duplicated_seed_confirm_question))
-                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                saveSeedToRealm(seed)
-                            }
-                            .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
-
-                    }else{
-                        saveSeedToRealm(seed)
-                    }
-                }
-            }
-        }
+//        seedDownloadButton.setOnClickListener {
+//            TreeSeedNode().download("-LsEAZ7GP1jHokPz8F37"){seed->
+//                if(seed!=null) {
+//                    if(seed.value.toString() in sharedModel.seedRoot.value!!.children.map { it.value.toString() }){
+//                        AlertDialog.Builder(context!!)
+//                            .setTitle(getString(R.string.action_confirm))
+//                            .setMessage(getString(R.string.msg_duplicated_seed_confirm_question))
+//                            .setPositiveButton(android.R.string.yes) { _, _ ->
+//                                saveSeedToRealm(seed)
+//                            }
+//                            .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
+//
+//                    }else{
+//                        saveSeedToRealm(seed)
+//                    }
+//                }
+//            }
+//        }
     }
 
     class ListItem(val title : String)
-    data class ViewHolder(val titleView: TextView,val seedDeleteButton: Button)
+    data class ViewHolder(val titleView: TextView,val seedDeleteButton: View,val seedPublishButton:View,val seedAddToTaskButton:View)
     class MyArrayAdapter : ArrayAdapter<ListItem> {
         private var inflater : LayoutInflater? = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         var sharedModel:SharedViewModel
@@ -93,10 +92,7 @@ class SeedsFragment : Fragment() {
 
             if (view == null) {
                 view = inflater!!.inflate(R.layout.seed_list_item, parent, false)
-                viewHolder = ViewHolder(
-                    view.findViewById(R.id.item_title),
-                    view.findViewById(R.id.seedDeleteButton)
-                )
+                viewHolder = ViewHolder(view.findViewById(R.id.item_title), view.findViewById(R.id.seedDeleteButton), view.findViewById(R.id.seedPublishButton), view.findViewById(R.id.seedAddToTaskButton))
                 view.tag = viewHolder
             } else {
                 viewHolder = view.tag as ViewHolder
@@ -113,50 +109,111 @@ class SeedsFragment : Fragment() {
                             NodeUtils().refreshViewWithOnlyText(seedContentTreeView, RawTreeNode(seed))
                         }
                     AlertDialog.Builder(context).setView(dialogView)
-                        .setNegativeButton(context.getString(R.string.seed_upload)) { dialog, _ ->
-                            val dialogView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                                .inflate(R.layout.dialog_upload_seed,null).apply {
-                                    seedTitleEditor.setText(seed.value.toString())
-                                    seedDescriptionEditor.setText("Created by anonym")
-                                    sharedModel.user.value?.getAttribute("name"){
-                                        seedDescriptionEditor.setText("Created by ${it?:"anonym"}")
-                                    }
-
-                                }
-                            AlertDialog.Builder(context).setView(dialogView).setTitle(seed.value.toString())
-                                .setPositiveButton(context.getString(R.string.seed_upload)) { dialog, _ ->
-                                    if(dialogView.seedTitleEditor.text.toString().isBlank()
-                                        || dialogView.seedDescriptionEditor.text.toString().isBlank()){
-                                        AppUtils().toast(context,context.getString(R.string.msg_field_blank))
-                                    }else{
-                                        seed.upload(dialogView.seedTitleEditor.text.toString(),
-                                            dialogView.seedDescriptionEditor.text.toString(),
-                                            sharedModel.user.value!!.uid,
-                                            dialogView.seedPriceEditor.text.toString().toIntOrNull()?:0
-                                            ) {
-                                                //TODO: after upload
-                                                AppUtils().toast(context,"done. id:${it}")
-                                            }
-                                    }
-                                }
-                                .setNegativeButton(context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
-                                .show()
-                        }
+                        .setTitle(context.getString(R.string.title_seed_content))
                         .setPositiveButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
                         .show()
                 }
 
             }
             viewHolder.seedDeleteButton.setOnClickListener {
-                val title=listItem.title
-                this.remove(listItem)
-                this.notifyDataSetChanged()
-                sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
-                    sharedModel.seedRoot.value!!.children.removeAll {
-                        it.value.toString()==title
+                val title = listItem.title
+                AppUtils().confirmDialog(
+                    context,
+                    context.getString(R.string.title_confirm),
+                    context.getString(R.string.msg_confirm_delete, title)
+                ) {_,_->
+                    this.remove(listItem)
+                    this.notifyDataSetChanged()
+                    sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
+                        sharedModel.seedRoot.value!!.children.removeAll {
+                            it.value.toString() == title
+                        }
                     }
                 }
             }
+            viewHolder.seedAddToTaskButton.setOnClickListener {
+                val title = listItem.title
+                AppUtils().confirmDialog(
+                    context,
+                    context.getString(R.string.title_confirm),
+                    context.getString(R.string.msg_confirm_add_to_task, title)
+                ) {_,_->
+                    val seed=sharedModel.seedRoot.value!!.children.find { it.value.toString()== viewHolder.titleView.text}
+                    if(seed!=null) {
+                        val newNode = RawTreeNode(seed)
+                        val realm=sharedModel.realm.value!!
+                        if(seed.value.toString() in sharedModel.root.value!!.children.map { it.value!!.str }){
+                            AppUtils().confirmDialog(
+                                context,
+                                context.getString(R.string.title_confirm),
+                                context.getString(R.string.msg_confirm_overwrite_task, title)
+                            ){_,_->
+                                realm.executeTransactionIfNotInTransaction {
+                                    sharedModel.root.value!!.children.removeAll { it.value.toString()==newNode.value.toString() }
+                                    sharedModel.root.value!!.children.add((newNode))
+                                    realm.copyToRealmOrUpdate(newNode)
+                                }
+                            }
+                        }else{
+                            realm.executeTransactionIfNotInTransaction {
+                                sharedModel.root.value!!.children.add((newNode))
+                                realm.copyToRealmOrUpdate(newNode)
+                            }
+                        }
+                        (context as MainActivity).refreshTasksMenu()
+                    }
+                }
+            }
+            viewHolder.seedPublishButton.setOnClickListener {
+                val title = listItem.title
+                AppUtils().confirmDialog(
+                    context,
+                    context.getString(R.string.title_confirm),
+                    context.getString(R.string.msg_confirm_publish, title)
+                ) {_,_->
+                    val seed=sharedModel.seedRoot.value!!.children.find { it.value.toString()== viewHolder.titleView.text}
+                    if(seed!=null) {
+                        val dialogView =
+                            (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                                .inflate(R.layout.dialog_upload_seed, null).apply {
+                                    seedTitleEditor.setText(seed.value.toString())
+                                    seedDescriptionEditor.setText("Created by anonym")
+                                    sharedModel.user.value?.getAttribute("name") {
+                                        seedDescriptionEditor.setText(
+                                            "Created by ${it ?: "anonym"}"
+                                        )
+                                    }
+
+                                }
+                        AlertDialog.Builder(context).setView(dialogView)
+                            .setTitle(seed.value.toString())
+                            .setPositiveButton(context.getString(R.string.seed_upload)) { dialog, _ ->
+                                if (dialogView.seedTitleEditor.text.toString().isBlank()
+                                    || dialogView.seedDescriptionEditor.text.toString().isBlank()
+                                ) {
+                                    AppUtils().toast(
+                                        context,
+                                        context.getString(R.string.msg_field_blank)
+                                    )
+                                } else {
+                                    seed.upload(
+                                        dialogView.seedTitleEditor.text.toString(),
+                                        dialogView.seedDescriptionEditor.text.toString(),
+                                        sharedModel.user.value!!.uid,
+                                        dialogView.seedPriceEditor.text.toString().toIntOrNull()
+                                            ?: 0
+                                    ) {
+                                        AppUtils().toast(context, "done. id:${it}")
+                                    }
+                                }
+                            }
+                            .setNegativeButton(context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                            .show()
+                    }
+                }
+            }
+
+
             return view!!
         }
     }

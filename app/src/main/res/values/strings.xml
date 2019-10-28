@@ -19,6 +19,14 @@
     <string name="menu_seeds">Seeds</string>
     <string name="menu_input_task_title">Input Task Title</string>
 
+
+
+    <string name="title_confirm">Confirm</string>
+    <string name="title_seed_content">Seed Content</string>
+    <string name="msg_confirm_delete">Delete %1$s?</string>
+    <string name="msg_confirm_add_to_task">Add %1$s to Top-Level Task?</string>
+    <string name="msg_confirm_overwrite_task">Task exists, Overwrite %1$s?</string>
+    <string name="msg_confirm_publish">Publish %1$s?</string>
     <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
     <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
     <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite?</string>
@@ -71,6 +79,8 @@
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
     <string name="action_delete">Delete</string>
+    <string name="action_add_to_task">New Task</string>
+    <string name="action_publish">Publish</string>
 
 
 </resources>
