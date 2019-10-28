@@ -2,9 +2,11 @@ package com.appli.folist.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.preference.PreferenceManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.algolia.search.saas.Client
@@ -14,7 +16,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.realm.Realm
 import io.realm.RealmConfiguration
-
 
 
 class AppUtils {
@@ -54,6 +55,23 @@ class AppUtils {
     fun getAlgolia():Client{
         val client = Client(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
         return client
+    }
+
+    fun confirmDialog(context:Context,
+                      title:String="Title",
+                      message:String="",
+                      cancelCallback:(DialogInterface,Int)->Unit={dialog, _ ->dialog.cancel()},
+                      okCallback:(DialogInterface,Int)->Unit){
+        AlertDialog.Builder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                okCallback(dialog,whichButton)
+            }
+            .setNegativeButton(android.R.string.no){dialog, whichButton ->
+                cancelCallback(dialog,whichButton)
+            }.show()
+
     }
 
 }

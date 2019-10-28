@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.MainActivity
 import com.appli.folist.NodeTypes
+import com.appli.folist.R
 import com.appli.folist.Tags
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
@@ -36,13 +37,10 @@ import kotlinx.android.synthetic.main.item_node.view.indentation
 import kotlinx.android.synthetic.main.item_node.view.itemLinearLayout
 import kotlinx.android.synthetic.main.item_node.view.slideDelete
 import kotlinx.android.synthetic.main.item_node.view.slideEdit
+import kotlinx.android.synthetic.main.item_node.view.slideSeed
 import kotlinx.android.synthetic.main.item_quick_create_node.view.*
 import java.util.*
 import kotlin.math.roundToInt
-
-
-
-
 
 
 private const val TAG = "SingleRecyclerView"
@@ -104,7 +102,6 @@ class SingleRecyclerViewImpl : RecyclerView,
 //            notifyDataSetChanged()
         }
     }
-
 
 
     fun setItemOnClick(click: (ViewTreeNode, TreeAdapter.ViewHolder) -> Unit) {
@@ -196,9 +193,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
     }
 
-    companion object{
+    companion object {
         //ごめんなさい！！！！！！！！！！！！
-        private var editCalledTime=0
+        private var slideButtonCalledTime = 0
     }
 
     inner class ViewHolder(
@@ -211,7 +208,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         //for slide
         override fun getSwipeWidth(): Float {
-            return itemView.slideDelete.width.toFloat() + itemView.slideEdit.width.toFloat()
+            return itemView.slideDelete.width.toFloat() + itemView.slideEdit.width.toFloat() + itemView.slideSeed.width.toFloat()
         }
 
         override fun needSwipeLayout(): View {
@@ -228,7 +225,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         private fun bindDelete(viewNode: ViewTreeNode) {
             itemView.slideDelete.setOnClickListener {
-                if (realm != null && viewNode.rawReference !=null) {
+                if (realm != null && viewNode.rawReference != null) {
                     //TODO:delete from realm
                     if (viewNode.rawReference!!.parent != null) {
                         realm.executeTransactionIfNotInTransaction {
@@ -252,9 +249,46 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             //TODO: confirm dialog
                             findNavController(
                                 (recyclerView.rootView.context as Activity),
-                                com.appli.folist.R.id.nav_host_fragment
-                            ).navigate(com.appli.folist.R.id.nav_timeline)
+                                R.id.nav_host_fragment
+                            ).navigate(R.id.nav_timeline)
                             (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun bindGenerateSeed(viewNode: ViewTreeNode) {
+            itemView.slideSeed.setOnClickListener {
+                if (slideButtonCalledTime++ % 2 == 0) {
+                    AppUtils().confirmDialog(
+                        recyclerView.context,
+                        recyclerView.context.getString(R.string.node_generate_seed_title),
+                        recyclerView.context.getString(R.string.node_generate_seed_msg)
+                    ) { _, _ ->
+                        if (realm != null) {
+                            val node = viewNode.rawReference!!
+                            val seedRoot = NodeUtils().getSeedRoot(realm)
+                            fun addSeed() {
+                                realm.executeTransactionIfNotInTransaction { seedRoot.children.add(TreeSeedNode(node)) }
+                                AppUtils().toast(recyclerView.context, recyclerView.context.getString(R.string.action_done))
+                            }
+                            //check duplicate
+                            if (node.value!!.toString() in seedRoot.children.map { it.value.toString() }) {
+                                AppUtils().confirmDialog(recyclerView.context,
+                                    recyclerView.context.getString(R.string.action_confirm),
+                                    recyclerView.context.getString(R.string.msg_duplicated_seed_confirm_question)
+                                    ){ _, _ ->
+                                        realm.executeTransactionIfNotInTransaction {
+                                            seedRoot.children.removeAll {
+                                                it.value.toString() == node.value!!.toString()
+                                            }
+                                        }
+                                        addSeed()
+                                    }
+                            } else {
+                                addSeed()
+                            }
                         }
                     }
                 }
@@ -266,59 +300,37 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 //ごめんなさい！！！！！！！！！！！！！
                 //原因：WeSwipe
                 //TODO:誰か直してくれ
-                if (editCalledTime++%2==0 && realm != null) {
-                    val node=viewNode.rawReference!!
-                    val dialogView=((recyclerView.context as Activity)
+                if (slideButtonCalledTime++ % 2 == 0 && realm != null) {
+                    val node = viewNode.rawReference!!
+                    val dialogView = ((recyclerView.context as Activity)
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                        .inflate(com.appli.folist.R.layout.dialog_edit_node, null).apply {
+                        .inflate(R.layout.dialog_edit_node, null).apply {
                             //TODO:complete editor
                             nodeTitleEditor.setText(node.value!!.str)
-                            nodeInfoTextView.text=recyclerView.context.getString(
-                                com.appli.folist.R.string.node_info_content,
-                                node.parent!!.value!!.toString(),node.children.size,node.uuid,node.value!!.uuid)
+                            nodeInfoTextView.text = recyclerView.context.getString(
+                                R.string.node_info_content,
+                                node.parent!!.value!!.toString(),
+                                node.children.size,
+                                node.uuid,
+                                node.value!!.uuid
+                            )
                             nodeTypeEditor.setText(node.value!!.type)
-                            if(node.children.size>0){
-                                nodeTypeEditor.setText(com.appli.folist.R.string.node_type_tree)
-                                nodeTypeEditor.isEnabled=false
+                            if (node.children.size > 0) {
+                                nodeTypeEditor.setText(R.string.node_type_tree)
+                                nodeTypeEditor.isEnabled = false
 
                             }
                             nodeProgressEditor.setText(node.progress.toString())
                             nodePowerEditor.setText(node.value!!.power.toString())
-                            nodeNoticeEditor.setText(node.notice?.toString()?:"")
+                            nodeNoticeEditor.setText(node.notice?.toString() ?: "")
                             nodeSharedIdEditor.setText(node.sharedId)
                             nodeLinkEditor.setText(node.value!!.link)
                             nodeMediaUriEditor.setText(node.value!!.mediaUri)
 
-                            nodeGenerateAndSaveSeedButton.setOnClickListener {
-                                val seedRoot=NodeUtils().getSeedRoot(realm)
-                                fun addSeed(){
-                                    realm.executeTransactionIfNotInTransaction {
-                                        seedRoot.children.add(TreeSeedNode(node))
-                                    }
-                                    AppUtils().toast(recyclerView.context,recyclerView.context.getString(
-                                        com.appli.folist.R.string.action_done))
-                                }
-                                //check duplicate
-                                if(node.value!!.toString() in seedRoot.children.map { it.value.toString() }){
-                                    AlertDialog.Builder(recyclerView.context)
-                                        .setTitle(recyclerView.context.getString(com.appli.folist.R.string.action_confirm))
-                                        .setMessage(recyclerView.context.getString(com.appli.folist.R.string.msg_duplicated_seed_confirm_question))
-                                        .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
-                                            realm.executeTransactionIfNotInTransaction {
-                                                seedRoot.children.removeAll {
-                                                    it.value.toString()==node.value!!.toString()
-                                                }
-                                            }
-                                            addSeed()
-                                        }
-                                        .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
-                                }else{
-                                    addSeed()
-                                }
-                            }
                         }
-                    AlertDialog.Builder(recyclerView.context).setView(dialogView).setTitle(com.appli.folist.R.string.edit_node)
-                        .setPositiveButton(recyclerView.context.getString(com.appli.folist.R.string.action_ok)) { dialog, _ ->
+                    AlertDialog.Builder(recyclerView.context).setView(dialogView)
+                        .setTitle(R.string.edit_node)
+                        .setPositiveButton(recyclerView.context.getString(R.string.action_ok)) { dialog, _ ->
                             //TODO:complete editor
 //                            val title = input.text.toString()
 //                            if (!title.isBlank()) {
@@ -327,7 +339,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 //                                }
 //                            }
                             notifyItemRangeChanged(0, adapterPosition + 1)
-                        }.setNegativeButton(recyclerView.context.getString(com.appli.folist.R.string.action_cancel)) { dialog, _ -> dialog.cancel() }.show()
+                        }
+                        .setNegativeButton(recyclerView.context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                        .show()
                 }
             }
         }
@@ -335,28 +349,36 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindCommon(viewNode: ViewTreeNode) {
             bindIndentation(viewNode)
             bindDelete(viewNode)
+            bindGenerateSeed(viewNode)
             bindEdit(viewNode)
         }
 
         private fun bindQuickCreateNode(viewNode: ViewTreeNode) {
             bindIndentation(viewNode)
-            //TODO: enter->create and hide keyboard
-
-            //TODO:シードリスト取得・Spinner更新
-            val seedTitles=NodeUtils().getSeedRoot(realm!!).children.map { it.value.toString() }
-            val adapter = ArrayAdapter<String>(recyclerView.context, android.R.layout.simple_dropdown_item_1line, seedTitles)
+            //シードリスト取得・Spinner更新
+            val seedTitles = NodeUtils().getSeedRoot(realm!!).children.map { it.value.toString() }
+            val adapter = ArrayAdapter<String>(
+                recyclerView.context,
+                android.R.layout.simple_dropdown_item_1line,
+                seedTitles
+            )
             itemView.editText.setAdapter<ArrayAdapter<String>>(adapter)
             itemView.editText.setOnClickListener { (it as AutoCompleteTextView).showDropDown() }
             //hide seed button unless a seed title is inputted
-            itemView.seedButton.isVisible=false
-            itemView.editText.addTextChangedListener {text->
-                itemView.seedButton.isVisible=(NodeUtils().getSeedRoot(realm).children.find { it.value.toString()==text.toString() }!=null)
+            itemView.seedButton.isVisible = false
+            itemView.editText.addTextChangedListener { text ->
+                itemView.seedButton.isVisible =
+                    (NodeUtils().getSeedRoot(realm).children.find { it.value.toString() == text.toString() } != null)
             }
 
             //新規ノード
             itemView.createButton.setOnClickListener {
                 if (itemView.editText.text.toString().isBlank()) {
-                    Toast.makeText(recyclerView.context, "Please input something", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        recyclerView.context,
+                        "Please input something",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
                 if (viewNode.parent != null) {
@@ -406,10 +428,14 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
 
 
-            //TODO:シードから生成する
+            //シードから生成する
             itemView.seedButton.setOnClickListener {
                 if (itemView.editText.text.toString().isBlank()) {
-                    Toast.makeText(recyclerView.context, "Please input something", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        recyclerView.context,
+                        "Please input something",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
                 if (viewNode.parent != null) {
@@ -420,12 +446,17 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                     if (viewNode.parent != null && realm != null) {
                         //create new RawNode
-                        val seed=NodeUtils().getSeedRoot(realm).children.find { it.value.toString()==inputStr }
-                        if(seed==null){
-                            Toast.makeText(recyclerView.context, "Not found in seed list", Toast.LENGTH_SHORT).show()
+                        val seed = NodeUtils().getSeedRoot(realm)
+                            .children.find { it.value.toString() == inputStr }
+                        if (seed == null) {
+                            Toast.makeText(
+                                recyclerView.context,
+                                "Not found in seed list",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@setOnClickListener
                         }
-                        newNode=RawTreeNode(seed)
+                        newNode = RawTreeNode(seed)
 
                         realm.executeTransactionIfNotInTransaction {
                             viewParent.rawReference?.children?.add((newNode))
@@ -447,19 +478,22 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         notifyItemRangeChanged(0, adapterPosition + 1)
                         //reset editor
                         itemView.editText.setText("")
-                    } else { Log.w(Tags.DEFAULT.name, "SingleRecyclerViewImpl:realm not set, or parent does not exist") }
+                    } else {
+                        Log.w(
+                            Tags.DEFAULT.name,
+                            "SingleRecyclerViewImpl:realm not set, or parent does not exist"
+                        )
+                    }
                 }
                 AppUtils().hideKeyboard(recyclerView.context as Activity)
             }
-
-//            itemView.
         }
 
         private fun bindBinary(viewNode: ViewTreeNode) {
             itemView.nodeBinaryBox.isVisible = true
             itemView.nodeBinaryBox.setImageResource(
-                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) com.appli.folist.R.drawable.ic_checked
-                else com.appli.folist.R.drawable.ic_unchecked
+                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
+                else R.drawable.ic_unchecked
             )
         }
 
@@ -480,24 +514,25 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             (recyclerView.context as MainActivity).refreshTasksMenu()
         }
 
-        private fun bindNodeToggle(viewNode: ViewTreeNode,hasCreateNode:Boolean=true){
-            val minChildrenNumber=if(hasCreateNode)1 else 0
+        private fun bindNodeToggle(viewNode: ViewTreeNode, hasCreateNode: Boolean = true) {
+            val minChildrenNumber = if (hasCreateNode) 1 else 0
             itemView.nodeToggle.setImageResource(
                 when {
-                    viewNode.children.size <= minChildrenNumber -> com.appli.folist.R.drawable.ic_leaf
-                    viewNode.isExpanded -> com.appli.folist.R.drawable.ic_down
-                    else -> com.appli.folist.R.drawable.ic_right
+                    viewNode.children.size <= minChildrenNumber -> R.drawable.ic_leaf
+                    viewNode.isExpanded -> R.drawable.ic_down
+                    else -> R.drawable.ic_right
                 }
             )
-            if(viewNode.children.size<=minChildrenNumber){
-                itemView.nodeToggle.setColorFilter(Color.argb(200,255,255,255))
-            }else{
+            if (viewNode.children.size <= minChildrenNumber) {
+                itemView.nodeToggle.setColorFilter(Color.argb(200, 255, 255, 255))
+            } else {
                 itemView.nodeToggle.setColorFilter(null)
             }
         }
-        private fun bindOnlyText(viewNode: ViewTreeNode){
+
+        private fun bindOnlyText(viewNode: ViewTreeNode) {
             bindCommon(viewNode)
-            bindNodeToggle(viewNode,false)
+            bindNodeToggle(viewNode, false)
             itemView.nodeTitle.text = viewNode.value.toString()
             itemView.leftView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)
@@ -509,6 +544,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 expandCollapseToggleHandler(viewNode, this)
             }
         }
+
         private fun bindNode(viewNode: ViewTreeNode) {
             bindCommon(viewNode)
             itemView.nodeProgress.isVisible = false
@@ -592,7 +628,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         internal fun bind(viewNode: ViewTreeNode) {
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
-                ViewNodeTypes.ONLY_TEXT->bindOnlyText(viewNode)
+                ViewNodeTypes.ONLY_TEXT -> bindOnlyText(viewNode)
                 else -> bindNode(viewNode)
             }
         }

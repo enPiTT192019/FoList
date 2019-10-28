@@ -75,5 +75,14 @@
         android:background="@android:color/holo_red_dark"
         android:gravity="center"
         android:text="" />
+    <ImageView
+        android:id="@+id/slideSeed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:height="24dp"
+        android:background="@android:color/holo_red_dark"
+        android:gravity="center"
+        android:text="" />
+
 
 </LinearLayout>

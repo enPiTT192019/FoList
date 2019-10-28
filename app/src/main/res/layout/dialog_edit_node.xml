@@ -237,23 +237,6 @@
             android:text="@string/node_media_uri" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginEnd="24dp"
-        android:paddingBottom="20dp">
-
-        <Button
-            android:id="@+id/nodeGenerateAndSaveSeedButton"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/node_generate_seed" />
-
-    </LinearLayout>
-
 
 </LinearLayout>
 
