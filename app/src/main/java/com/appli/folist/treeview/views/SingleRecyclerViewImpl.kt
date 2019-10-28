@@ -225,37 +225,42 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         private fun bindDelete(viewNode: ViewTreeNode) {
             itemView.slideDelete.setOnClickListener {
-                if (realm != null && viewNode.rawReference != null) {
-                    //TODO:delete from realm
-                    if (viewNode.rawReference!!.parent != null) {
-                        realm.executeTransactionIfNotInTransaction {
-                            viewNode.rawReference!!.parent!!.children.remove(viewNode.rawReference)
-                        }
-                        if (viewNode.parent != null) {
-                            viewNode.parent!!.children.remove(viewNode)
-                            fun deleteFromViewNodes(viewNode: ViewTreeNode) {
-                                if (viewNode.children.size > 0) {
-                                    viewNode.children.forEach { deleteFromViewNodes(it) }
-                                }
-                                if (viewNode in viewNodes) viewNodes.remove(viewNode)
-                            }
-                            deleteFromViewNodes(viewNode)
-                            notifyItemRangeRemoved(
-                                adapterPosition,
-                                viewNode.getDisplayedNodeNumber()
-                            )
-                            notifyDataSetChanged()
-                        } else {//level2 node
-                            //TODO: confirm dialog
-                            findNavController(
-                                (recyclerView.rootView.context as Activity),
-                                R.id.nav_host_fragment
-                            ).navigate(R.id.nav_timeline)
-                            (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
-                        }
+                if (realm == null || viewNode.rawReference == null) return@setOnClickListener
+                //TODO:confirm?
+                if (viewNode.parent != null) {
+                    realm.executeTransactionIfNotInTransaction {
+                        viewNode.rawReference!!.parent!!.children.remove(viewNode.rawReference)
                     }
+                    if (viewNode.parent != null) {
+                        viewNode.parent!!.children.remove(viewNode)
+                        fun deleteFromViewNodes(viewNode: ViewTreeNode) {
+                            if (viewNode.children.size > 0) {
+                                viewNode.children.forEach { deleteFromViewNodes(it) }
+                            }
+                            if (viewNode in viewNodes) viewNodes.remove(viewNode)
+                        }
+                        deleteFromViewNodes(viewNode)
+                        notifyItemRangeRemoved(
+                            adapterPosition,
+                            viewNode.getDisplayedNodeNumber()
+                        )
+                        notifyDataSetChanged()
+                    }
+                } else {//level2 node
+                    realm.executeTransactionIfNotInTransaction {
+                        NodeUtils().getRoot(realm).children.remove(viewNode.rawReference)
+                    }
+
+                    val navController=findNavController(
+                        (recyclerView.rootView.context as Activity),
+                        R.id.nav_host_fragment
+                    )
+                    navController.popBackStack()
+                    navController.navigate(R.id.nav_timeline)
+                    (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
                 }
             }
+
         }
 
         private fun bindGenerateSeed(viewNode: ViewTreeNode) {
@@ -270,22 +275,30 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             val node = viewNode.rawReference!!
                             val seedRoot = NodeUtils().getSeedRoot(realm)
                             fun addSeed() {
-                                realm.executeTransactionIfNotInTransaction { seedRoot.children.add(TreeSeedNode(node)) }
-                                AppUtils().toast(recyclerView.context, recyclerView.context.getString(R.string.action_done))
+                                realm.executeTransactionIfNotInTransaction {
+                                    seedRoot.children.add(
+                                        TreeSeedNode(node)
+                                    )
+                                }
+                                AppUtils().toast(
+                                    recyclerView.context,
+                                    recyclerView.context.getString(R.string.action_done)
+                                )
                             }
                             //check duplicate
                             if (node.value!!.toString() in seedRoot.children.map { it.value.toString() }) {
-                                AppUtils().confirmDialog(recyclerView.context,
+                                AppUtils().confirmDialog(
+                                    recyclerView.context,
                                     recyclerView.context.getString(R.string.action_confirm),
                                     recyclerView.context.getString(R.string.msg_duplicated_seed_confirm_question)
-                                    ){ _, _ ->
-                                        realm.executeTransactionIfNotInTransaction {
-                                            seedRoot.children.removeAll {
-                                                it.value.toString() == node.value!!.toString()
-                                            }
+                                ) { _, _ ->
+                                    realm.executeTransactionIfNotInTransaction {
+                                        seedRoot.children.removeAll {
+                                            it.value.toString() == node.value!!.toString()
                                         }
-                                        addSeed()
                                     }
+                                    addSeed()
+                                }
                             } else {
                                 addSeed()
                             }
@@ -309,7 +322,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             nodeTitleEditor.setText(node.value!!.str)
                             nodeInfoTextView.text = recyclerView.context.getString(
                                 R.string.node_info_content,
-                                node.parent!!.value!!.toString(),
+                                node.parent?.value?.toString() ?: "root",
                                 node.children.size,
                                 node.uuid,
                                 node.value!!.uuid
@@ -500,16 +513,18 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindProgress(viewNode: ViewTreeNode) {
             itemView.nodeProgress.isVisible = true
             itemView.nodeProgressText.isVisible = true
-            val progress = viewNode.rawReference!!.calcProgress()
-            val power = viewNode.rawReference!!.value!!.power
-            itemView.nodeProgress.max = 100 * power
-            itemView.nodeProgress.progress = progress.roundToInt()
-            itemView.nodeProgressText.text = when {
-                progress >= 10000 -> (progress / 1000).roundToInt().toString() + "k"
-                progress >= 1000 -> progress.roundToInt().toString()
-                progress >= 100 -> "%.1f".format(progress)
-                progress >= 10 -> "%.2f".format(progress)
-                else -> " %.2f".format(progress)
+            realm!!.executeTransaction {
+                val progress = viewNode.rawReference!!.calcProgress()
+                val power = viewNode.rawReference!!.value!!.power
+                itemView.nodeProgress.max = 100 * power
+                itemView.nodeProgress.progress = progress.roundToInt()
+                itemView.nodeProgressText.text = when {
+                    progress >= 10000 -> (progress / 1000).roundToInt().toString() + "k"
+                    progress >= 1000 -> progress.roundToInt().toString()
+                    progress >= 100 -> "%.1f".format(progress)
+                    progress >= 10 -> "%.2f".format(progress)
+                    else -> " %.2f".format(progress)
+                }
             }
             (recyclerView.context as MainActivity).refreshTasksMenu()
         }

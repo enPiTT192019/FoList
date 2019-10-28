@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun refreshTasksMenu(){
         tasksMenu.clear()
+        sharedModel.realm.value!!.executeTransaction {
         sharedModel.root.value!!.children.forEach {
             val progress=it.calcProgress()
             val progressText=when{
@@ -114,6 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 else->"%.3f".format(progress)
             }
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
+        }
         }
         tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
     }
@@ -145,7 +147,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             }
                             refreshTasksMenu()
                             AppUtils().hideKeyboard(this@MainActivity)
+                            val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
+                            if(id!=null){
+                                val bundle = bundleOf("nodeId" to id)
+                                navController.navigate(R.id.nav_node,bundle)
+                                (nav_view.parent as DrawerLayout).closeDrawer(nav_view)
+                            }
                         }
+                        AppUtils().hideKeyboard(this)
                     }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
             //タスク

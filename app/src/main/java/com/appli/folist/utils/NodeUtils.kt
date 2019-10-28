@@ -7,7 +7,8 @@ import io.realm.Realm
 
 class NodeUtils {
     fun getRoot(realm: Realm): RawTreeNode {
-        realm.beginTransaction()
+        val inTransaction=realm.isInTransaction
+        if(!inTransaction)realm.beginTransaction()
         val result = realm.where(RawTreeNode::class.java).findFirst()
         //取得できない場合（初めて起動するとき）、Rootノードを作る
             ?: realm.createObject(
@@ -19,7 +20,7 @@ class NodeUtils {
                     detail = realm.createObject(NodeDetailMap::class.java)
                 }
             }
-        realm.commitTransaction()
+        if(!inTransaction)realm.commitTransaction()
         return result
     }
 

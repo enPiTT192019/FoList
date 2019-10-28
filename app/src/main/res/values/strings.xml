@@ -9,6 +9,7 @@
 
     <string name="menu_timeline">Timeline</string>
     <string name="menu_node">Node</string>
+    <string name="menu_task">Task</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_store">Store</string>

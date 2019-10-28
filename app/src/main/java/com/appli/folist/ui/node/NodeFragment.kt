@@ -1,5 +1,6 @@
 package com.appli.folist.ui.node
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import cn.we.swipe.helper.WeSwipe
 import com.appli.folist.R
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.views.SingleRecyclerViewImpl
+import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 
 class NodeFragment : Fragment() {
@@ -42,6 +44,7 @@ class NodeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity!!.setTitle(R.string.menu_node)
+        activity!!.setTitle(R.string.menu_task)
+        AppUtils().hideKeyboard(context as Activity)
     }
 }

@@ -36,11 +36,12 @@ open class RawTreeNode(
     }
 
     fun calcProgress():Double{
-        return if(children.size>=1){
+        this.progress=if(children.size>=1){
             (children.sumByDouble { it.calcProgress() })/(children.size)
         }else{
             this.progress
         }
+        return this.progress
     }
 
     fun getRoot(): RawTreeNode {
