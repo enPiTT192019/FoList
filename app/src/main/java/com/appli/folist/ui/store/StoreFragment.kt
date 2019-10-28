@@ -10,6 +10,7 @@ import com.algolia.search.helper.deserialize
 import com.algolia.search.model.IndexName
 import com.algolia.search.model.search.Query
 import com.appli.folist.models.SharedViewModel
+import com.appli.folist.utils.AppUtils
 import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
@@ -44,19 +45,26 @@ class StoreFragment : Fragment() {
             val key:String,
             val price:Int
         )
-        val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
-        val query =  Query().apply {
-            query="カレー"
+
+
+        testButton.setOnClickListener {
+            val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
+            val query =  Query().apply {
+                query=testEditor.text.toString()
+            }
+            runBlocking {
+                try {
+
+                    val result = index.search(query)
+                    val seeds=result.hits.deserialize(SeedResult.serializer())
+
+                    testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
+                }catch (e:RuntimeException){
+                    AppUtils().toast(context!!,"search failed.")//TODO
+                }
+            }
         }
-        runBlocking {
 
-            val result = index.search(query)
-            val seeds=result.hits.deserialize(SeedResult.serializer())
-
-            testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
-
-
-        }
 
 
 

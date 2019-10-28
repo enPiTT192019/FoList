@@ -231,7 +231,7 @@ class SeedsFragment : Fragment() {
                                     seed.upload(
                                         dialogView.seedTitleEditor.text.toString(),
                                         dialogView.seedDescriptionEditor.text.toString(),
-                                        sharedModel.user.value!!.uid,
+                                        sharedModel.user.value?.uid?:"",
                                         dialogView.seedPriceEditor.text.toString().toIntOrNull()
                                             ?: 0,
                                         dialogView.seedPasswordEditor.text.toString(),

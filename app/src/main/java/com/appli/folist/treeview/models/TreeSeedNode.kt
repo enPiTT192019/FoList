@@ -123,7 +123,11 @@ open class TreeSeedNode(
             }
 
             runBlocking {
-                index.saveObject(json)
+                try {
+                    index.saveObject(json)
+                }catch (e:RuntimeException){
+                    //TODO
+                }
             }
         }
 
