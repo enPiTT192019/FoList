@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.algolia.search.helper.deserialize
-import com.algolia.search.model.IndexName
 import com.algolia.search.model.search.Query
+import com.appli.folist.R
+import com.appli.folist.STORE_SHOW_LATEST_NUM
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.utils.AppUtils
 import kotlinx.coroutines.runBlocking
@@ -33,50 +34,52 @@ class StoreFragment : Fragment() {
         return root
     }
 
+    @Serializable data class SeedResult(
+        val title: String,
+        val description: String,
+        val key: String,
+        val price: Int
+    )
+
+    fun setList(seeds:List<SeedResult>){
+
+    }
+
+    fun search(
+        str: String, num: Int? = null,
+        failed: () -> Unit = {
+            AppUtils().toast(
+                context!!,
+                getString(R.string.store_search_failed_msg)
+            )
+        },
+        callback: (List<SeedResult>) -> Unit={setList(it)}
+    ) {
+        val index = sharedModel.seedsIndex.value
+        if (index != null) {
+            runBlocking {
+                try {
+                    val query = Query().apply {
+                        query = str
+                        if (num != null) hitsPerPage = num
+                    }
+                    val result = index.search(query)
+                    val seeds = result.hits.deserialize(SeedResult.serializer())
+                    callback(seeds)
+                } catch (e: RuntimeException) {
+                    failed()
+                }
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         activity!!.setTitle(com.appli.folist.R.string.menu_store)
 
-        @Serializable
-        data class SeedResult(
-            val title: String,
-            val description: String,
-            val key: String,
-            val price: Int
-        )
-
-        //show all
-        val index = sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
-        val query = Query()
-        runBlocking {
-            try {
-
-                val result = index.search(query)
-                val seeds = result.hits.deserialize(SeedResult.serializer())
-
-                testText.text = seeds.map { "${it.title}:${it.description}\n" }.joinToString()
-            } catch (e: RuntimeException) {
-                AppUtils().toast(context!!, "search failed.")//TODO
-            }
+        search("", STORE_SHOW_LATEST_NUM){seeds->
+           setList(seeds)
         }
-
-//        testButton.setOnClickListener {
-//            val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
-//            val query =  Query().apply {
-//                query=testEditor.text.toString()
-//            }
-//            runBlocking {
-//                try {
-//
-//                    val result = index.search(query)
-//                    val seeds=result.hits.deserialize(SeedResult.serializer())
-//
-//                    testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
-//                }catch (e:RuntimeException){
-//                    AppUtils().toast(context!!,"search failed.")//TODO
-//                }
-//            }
-//        }
 
     }
 }

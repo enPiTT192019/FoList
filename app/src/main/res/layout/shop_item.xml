@@ -28,7 +28,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/shopItemAddToTaskButton"
+            android:id="@+id/storeItemAddToTaskButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
@@ -36,7 +36,7 @@
             android:tint="@android:color/holo_green_light"
             app:srcCompat="@drawable/ic_create" />
         <ImageView
-            android:id="@+id/shopItemDownloadButton"
+            android:id="@+id/storeItemDownloadButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
@@ -46,7 +46,7 @@
 
 <!--        if author-->
         <ImageView
-            android:id="@+id/shopItemDeleteButton"
+            android:id="@+id/storeItemDeleteButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
@@ -67,7 +67,7 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/shopItemContent"
+            android:id="@+id/storeItemContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

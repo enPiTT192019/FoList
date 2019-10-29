@@ -73,6 +73,7 @@
     <string name="store_author_id">Author UID</string>
     <string name="store_price">Price</string>
     <string name="store_search">Search</string>
+    <string name="store_search_failed_msg">search failed. Are you connected to the internet?</string>
 
 
     <string name="copyright">©2019 Appli All Rights Reserved</string>

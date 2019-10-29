@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.algolia.search.client.ClientSearch
+import com.algolia.search.client.Index
 import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.treeview.models.TreeSeedNode
 import com.appli.folist.utils.UserUtils
@@ -19,6 +20,7 @@ class SharedViewModel : ViewModel() {
     val root=MutableLiveData<RawTreeNode>()
     val seedRoot=MutableLiveData<TreeSeedNode>()
     val algolia=MutableLiveData<ClientSearch>()
+    val seedsIndex= MutableLiveData<Index>()
 
     fun login(activity: AppCompatActivity,email:String,password:String ) {
         UserUtils(activity, auth).login(email,password,

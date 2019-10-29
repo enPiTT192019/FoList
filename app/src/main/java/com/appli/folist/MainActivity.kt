@@ -19,6 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.algolia.search.model.IndexName
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.NodeValue
 import com.appli.folist.treeview.models.RawTreeNode
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
         sharedModel.algolia.value=AppUtils().getAlgolia()
+        sharedModel.seedsIndex.value=sharedModel.algolia.value?.initIndex(IndexName("seeds"))
 
         //メニュー初期化
         navNodesItems= mutableListOf()
