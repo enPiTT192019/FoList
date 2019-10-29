@@ -23,8 +23,12 @@
 
 
     <string name="title_confirm">Confirm</string>
+    <string name="title_download">Download</string>
+    <string name="title_add_to_task">Add to Task</string>
     <string name="title_seed_content">Seed Content</string>
     <string name="msg_confirm_delete">Delete %1$s?</string>
+    <string name="msg_confirm_download_free">Download %1$s?</string>
+    <string name="msg_confirm_download_purchase">Purchase %1$s?\n Price:%2$d yen</string>
     <string name="msg_confirm_add_to_task">Add %1$s to Top-Level Task?</string>
     <string name="msg_confirm_overwrite_task">Task exists, Overwrite %1$s?</string>
     <string name="msg_confirm_publish">Publish %1$s?</string>
@@ -73,7 +77,7 @@
     <string name="store_author_id">Author UID</string>
     <string name="store_price">Price</string>
     <string name="store_search">Search</string>
-    <string name="store_search_failed_msg">search failed. Are you connected to the internet?</string>
+    <string name="store_search_failed_msg">Search failed. Are you connected to the internet?</string>
 
 
     <string name="copyright">©2019 Appli All Rights Reserved</string>

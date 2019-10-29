@@ -43,11 +43,11 @@ class SeedsFragment : Fragment() {
 
     fun refreshView(){
         activity!!.setTitle(R.string.menu_seeds)
-        val arrayAdapter = MyArrayAdapter(context!!, 0, sharedModel)
+        val arrayAdapter = SeedsAdapter(context!!, 0, sharedModel)
         if(sharedModel.seedRoot.value!!.children.size>0){
             noSeedFoundText.text=""
             sharedModel.seedRoot.value!!.children.forEach {
-                arrayAdapter.add(ListItem(it.value.toString()))
+                arrayAdapter.add(SeedListItem(it.value.toString()))
             }
             seedListView.adapter = arrayAdapter
         }else{
@@ -57,34 +57,9 @@ class SeedsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         refreshView()
-        //TODO:delete
-//        fun saveSeedToRealm(seed: TreeSeedNode) {
-//            sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
-//                sharedModel.seedRoot.value!!.children.add(seed)
-//                sharedModel.realm.value!!.copyToRealmOrUpdate(seed)
-//            }
-//        }
-//        seedDownloadButton.setOnClickListener {
-//            TreeSeedNode().download("-LsEAZ7GP1jHokPz8F37"){seed->
-//                if(seed!=null) {
-//                    if(seed.value.toString() in sharedModel.seedRoot.value!!.children.map { it.value.toString() }){
-//                        AlertDialog.Builder(context!!)
-//                            .setTitle(getString(R.string.action_confirm))
-//                            .setMessage(getString(R.string.msg_duplicated_seed_confirm_question))
-//                            .setPositiveButton(android.R.string.yes) { _, _ ->
-//                                saveSeedToRealm(seed)
-//                            }
-//                            .setNegativeButton(android.R.string.no){ dialog, _ -> dialog.cancel()}.show()
-//
-//                    }else{
-//                        saveSeedToRealm(seed)
-//                    }
-//                }
-//            }
-//        }
     }
 
-    class ListItem(val title: String)
+    class SeedListItem(val title: String)
     data class ViewHolder(
         val titleView: TextView,
         val seedDeleteButton: View,
@@ -93,9 +68,8 @@ class SeedsFragment : Fragment() {
         val seedContent: TextView
     )
 
-    class MyArrayAdapter : ArrayAdapter<ListItem> {
-        private var inflater: LayoutInflater? =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+    class SeedsAdapter : ArrayAdapter<SeedListItem> {
+        private var inflater: LayoutInflater? = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         var sharedModel: SharedViewModel
 
         constructor(context: Context, resource: Int, sharedModel: SharedViewModel) : super(
@@ -112,7 +86,7 @@ class SeedsFragment : Fragment() {
             if (view == null) {
                 view = inflater!!.inflate(R.layout.seed_list_item, parent, false)
                 viewHolder = ViewHolder(
-                    view.findViewById(R.id.item_title),
+                    view.findViewById(R.id.seedTitle),
                     view.findViewById(R.id.seedDeleteButton),
                     view.findViewById(R.id.seedPublishButton),
                     view.findViewById(R.id.seedAddToTaskButton),
@@ -122,10 +96,13 @@ class SeedsFragment : Fragment() {
             } else {
                 viewHolder = view.tag as ViewHolder
             }
-            val seed = sharedModel.seedRoot.value!!.children.find { it.value.toString() == viewHolder!!.titleView.text }
-            val listItem = getItem(position)
 
+            val listItem = getItem(position)
             viewHolder.titleView.text = listItem!!.title
+            val seed = sharedModel.seedRoot.value!!.children.find {
+                it.value.toString() == viewHolder.titleView.text
+            }
+
             fun showSeedContent(){
                 if (seed != null) {
                     val dialogView =

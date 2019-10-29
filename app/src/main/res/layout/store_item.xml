@@ -16,14 +16,24 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/item_title"
+            android:id="@+id/storeItemTitle"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/store_title"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/storeItemPriceText"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:text="￥2000"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="18sp" />
 

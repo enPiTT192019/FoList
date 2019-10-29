@@ -20,6 +20,7 @@ open class TreeSeedNode(
     @Expose open var children: RealmList<TreeSeedNode>,
     @Expose open var parent: TreeSeedNode?,
     @Expose open var downloadFrom:String?=null,
+    @Expose open var publishedKey:String?=null,
     @Expose @PrimaryKey open var uuid:String= UUID.randomUUID().toString()
 ): RealmObject()  {
     constructor():this(NodeValue(""), RealmList<TreeSeedNode>(),null)

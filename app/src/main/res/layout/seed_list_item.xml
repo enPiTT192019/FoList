@@ -16,7 +16,7 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/item_title"
+            android:id="@+id/seedTitle"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="center"
