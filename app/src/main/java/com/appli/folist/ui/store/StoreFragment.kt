@@ -11,7 +11,6 @@ import com.algolia.search.model.IndexName
 import com.algolia.search.model.search.Query
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.utils.AppUtils
-import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 
@@ -28,7 +27,8 @@ class StoreFragment : Fragment() {
     ): View? {
         storeViewModel = ViewModelProviders.of(this).get(StoreViewModel::class.java)
         val root = inflater.inflate(com.appli.folist.R.layout.fragment_store, container, false)
-        sharedModel = activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
+        sharedModel =
+            activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
 
         return root
     }
@@ -37,38 +37,46 @@ class StoreFragment : Fragment() {
         super.onStart()
         activity!!.setTitle(com.appli.folist.R.string.menu_store)
 
-
         @Serializable
         data class SeedResult(
             val title: String,
             val description: String,
-            val key:String,
-            val price:Int
+            val key: String,
+            val price: Int
         )
 
+        //show all
+        val index = sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
+        val query = Query()
+        runBlocking {
+            try {
 
-        testButton.setOnClickListener {
-            val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
-            val query =  Query().apply {
-                query=testEditor.text.toString()
-            }
-            runBlocking {
-                try {
+                val result = index.search(query)
+                val seeds = result.hits.deserialize(SeedResult.serializer())
 
-                    val result = index.search(query)
-                    val seeds=result.hits.deserialize(SeedResult.serializer())
-
-                    testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
-                }catch (e:RuntimeException){
-                    AppUtils().toast(context!!,"search failed.")//TODO
-                }
+                testText.text = seeds.map { "${it.title}:${it.description}\n" }.joinToString()
+            } catch (e: RuntimeException) {
+                AppUtils().toast(context!!, "search failed.")//TODO
             }
         }
 
-
-
-
-
+//        testButton.setOnClickListener {
+//            val index=sharedModel.algolia.value!!.initIndex(IndexName("seeds"))
+//            val query =  Query().apply {
+//                query=testEditor.text.toString()
+//            }
+//            runBlocking {
+//                try {
+//
+//                    val result = index.search(query)
+//                    val seeds=result.hits.deserialize(SeedResult.serializer())
+//
+//                    testText.text=seeds.map { "${it.title}:${it.description}\n" }.joinToString()
+//                }catch (e:RuntimeException){
+//                    AppUtils().toast(context!!,"search failed.")//TODO
+//                }
+//            }
+//        }
 
     }
 }

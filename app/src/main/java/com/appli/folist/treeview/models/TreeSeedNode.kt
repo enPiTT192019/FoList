@@ -19,6 +19,7 @@ open class TreeSeedNode(
     @Expose open var value: NodeValue?=null,
     @Expose open var children: RealmList<TreeSeedNode>,
     @Expose open var parent: TreeSeedNode?,
+    @Expose open var downloadFrom:String?=null,
     @Expose @PrimaryKey open var uuid:String= UUID.randomUUID().toString()
 ): RealmObject()  {
     constructor():this(NodeValue(""), RealmList<TreeSeedNode>(),null)
@@ -31,8 +32,8 @@ open class TreeSeedNode(
             this.children.add(TreeSeedNode(it, this))
         }
     }
-    constructor(seed: SeedNodeForFirebase):this(seed,null)
-    constructor(seed: SeedNodeForFirebase, parent: TreeSeedNode?):this() {
+    constructor(seed: SeedNodeForFirebase,downloadFrom: String?=null):this(seed,null,downloadFrom)
+    constructor(seed: SeedNodeForFirebase, parent: TreeSeedNode?,downloadFrom: String?=null):this() {
 
         this.value = NodeValue(
             seed.value.str, seed.value.type, seed.value.mediaUri,
@@ -41,10 +42,9 @@ open class TreeSeedNode(
         seed.value.detail?.forEach { (key, value) ->
             this.value?.setDetail(key, value)
         }
-        //TODO: right?
-//        this.uuid = seed.uuid
         this.uuid=UUID.randomUUID().toString()
         this.parent = parent
+        this.downloadFrom=downloadFrom
         seed.children.forEach {
             this.children.add(TreeSeedNode(it, this))
         }
@@ -140,12 +140,9 @@ open class TreeSeedNode(
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val result=dataSnapshot.getValue(SeedNodeForFirebase::class.java)
-                callback(result?.let { TreeSeedNode(it, null) })
-//                callback(result)
+                callback(result?.let { TreeSeedNode(it, key) })
             }
-            override fun onCancelled(error: DatabaseError) {
-                cancelled(error)
-            }
+            override fun onCancelled(error: DatabaseError) { cancelled(error) }
         })
     }
 }

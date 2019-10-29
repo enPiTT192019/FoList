@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.appli.folist.models.SharedViewModel
@@ -84,6 +86,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
+    }
+
+    fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
+        val navHostFragment = this.supportFragmentManager.fragments.first() as NavHostFragment
+
+        navHostFragment.childFragmentManager.fragments.forEach {
+            if (fragmentClass.isAssignableFrom(it.javaClass)) {
+                return it as F
+            }
+        }
+
+        return null
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
