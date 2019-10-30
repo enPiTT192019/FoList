@@ -30,7 +30,7 @@ class NodeUtils {
         }
     }
 
-    fun findNode(root: RawTreeNode, id: String): RawTreeNode? {
+    fun findTask(root: RawTreeNode, id: String): RawTreeNode? {
         return root.children.find { it.uuid == id }
     }
 

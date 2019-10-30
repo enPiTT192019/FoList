@@ -34,7 +34,7 @@
     <string name="msg_confirm_publish">Publish %1$s?</string>
     <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
     <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
-    <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite?</string>
+    <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite %1$s?</string>
 
 
     <string name="img_cd_expand_ic">expand</string>

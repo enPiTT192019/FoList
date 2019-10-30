@@ -35,9 +35,12 @@ open class RawTreeNode(
         }
     }
 
+    override fun toString(): String {
+        return value.toString()
+    }
     fun calcProgress():Double{
         this.progress=if(children.size>=1){
-            (children.sumByDouble { it.calcProgress() })/(children.size)
+            (children.sumByDouble { it.calcProgress() })/getSumOfPower()
         }else{
             this.progress
         }
@@ -48,6 +51,10 @@ open class RawTreeNode(
         var result=this
         while(result.parent!=null)result= result.parent!!
         return result
+    }
+
+    fun getSumOfPower():Int{
+        return children.sumBy { it.value!!.power }
     }
 
 }

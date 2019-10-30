@@ -290,7 +290,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 AppUtils().confirmDialog(
                                     recyclerView.context,
                                     recyclerView.context.getString(R.string.action_confirm),
-                                    recyclerView.context.getString(R.string.msg_duplicated_seed_confirm_question)
+                                    recyclerView.context.getString(R.string.msg_duplicated_seed_confirm_question,node.value!!.toString())
                                 ) { _, _ ->
                                     realm.executeTransactionIfNotInTransaction {
                                         seedRoot.children.removeAll {
@@ -413,6 +413,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 }
                                 parent = viewParent.rawReference
                                 if (viewNode.parent!!.children.size <= 1) {
+                                    //TODO:set progress node
                                     progress = viewNode.parent!!.rawReference!!.progress
                                 }
                             }

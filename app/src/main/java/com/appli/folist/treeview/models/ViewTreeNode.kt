@@ -47,6 +47,9 @@ class ViewTreeNode(
         if(!onlyText)this.children.add(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
     }
 
+    override fun toString(): String {
+        return rawReference.toString()
+    }
     fun isTop(): Boolean {
         return parent == null
     }

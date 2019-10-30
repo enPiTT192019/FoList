@@ -235,7 +235,7 @@ class StoreFragment : Fragment() {
                                     AppUtils().confirmDialog(
                                         context,
                                         context.getString(R.string.action_confirm),
-                                        context.getString(R.string.msg_duplicated_seed_confirm_question)
+                                        context.getString(R.string.msg_duplicated_seed_confirm_question,seed.value.toString())
                                     ){_,_->
                                         sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
                                             sharedModel.seedRoot.value!!.children.removeAll {
@@ -276,7 +276,7 @@ class StoreFragment : Fragment() {
                                 AppUtils().confirmDialog(
                                     context,
                                     context.getString(R.string.action_confirm),
-                                    context.getString(R.string.msg_duplicated_seed_confirm_question)
+                                    context.getString(R.string.msg_duplicated_seed_confirm_question,seed.value.toString())
                                 ){_,_->
                                     sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
                                         sharedModel.seedRoot.value!!.children.removeAll {

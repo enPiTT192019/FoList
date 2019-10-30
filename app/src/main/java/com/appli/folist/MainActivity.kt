@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         //テスト用
-//        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+        AppUtils().fillTestNodes(AppUtils().getRealm(this))
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
@@ -124,11 +125,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.root.value!!.children.forEach {
             val progress=it.calcProgress()
             val progressText=when{
-                progress>=10000->(progress/1000).roundToInt().toString()+"k"
-                progress>=1000->progress.roundToInt().toString()
-                progress>=100->"%.1f".format(progress)
-                progress>=10->"%.2f".format(progress)
-                else->"%.3f".format(progress)
+                progress>=100->"%d".format(progress.roundToInt())
+                progress>=10->"%d".format(progress.roundToInt())
+                else->"%.1f".format(progress)
             }
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
         }
