@@ -135,6 +135,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
     }
 
+
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var doNotCloseDrawer=false
         navController.popBackStack()
