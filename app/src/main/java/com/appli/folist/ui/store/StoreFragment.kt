@@ -140,7 +140,7 @@ class StoreFragment : Fragment() {
 
             //TODO: if author, enable delete
             //TODO: if downloaded disable download
-            fun showSeedContent(seed: TreeSeedNode) {
+            fun showStoreSeedContent(seed: TreeSeedNode) {
                 //TODO: only show level2 nodes if price>0
                 val dialogView =
                     (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
@@ -160,7 +160,7 @@ class StoreFragment : Fragment() {
             viewHolder.storeItemTitle.setOnClickListener {
                 TreeSeedNode().download(listItem.key) { seed ->
                     if (seed != null) {
-                        showSeedContent(seed)
+                        showStoreSeedContent(seed)
                     } else {
                         //TODO
                     }
@@ -170,7 +170,7 @@ class StoreFragment : Fragment() {
             viewHolder.storeItemContent.setOnClickListener {
                 TreeSeedNode().download(listItem.key) { seed ->
                     if (seed != null) {
-                        showSeedContent(seed)
+                        showStoreSeedContent(seed)
                     } else {
                         //TODO
                     }

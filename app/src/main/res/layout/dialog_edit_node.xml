@@ -75,14 +75,31 @@
             android:layout_marginStart="24dp"
             android:text="@string/node_value_type" />
 
-        <EditText
-            android:id="@+id/nodeTypeEditor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/nodeTypeText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="text"
-            android:text="@string/node_value_type" />
+            android:text="TextView" />
+
+        <RadioGroup
+            android:id="@+id/nodeTypeSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+        </RadioGroup>
+
     </LinearLayout>
 
     <LinearLayout

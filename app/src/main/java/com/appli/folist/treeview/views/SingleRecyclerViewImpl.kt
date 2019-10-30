@@ -327,11 +327,14 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 node.uuid,
                                 node.value!!.uuid
                             )
-                            nodeTypeEditor.setText(node.value!!.type)
-                            if (node.children.size > 0) {
-                                nodeTypeEditor.setText(R.string.node_type_tree)
-                                nodeTypeEditor.isEnabled = false
+                            if (node.children.size > 0) {//tree
+                                nodeTypeText.setText(R.string.node_type_tree)
                                 nodeProgressEditor.isEnabled=false
+                                nodeTypeSelector.isVisible=false
+                            }else{//node
+                                nodeTypeText.isVisible=false
+                                nodeProgressEditor.isEnabled=true
+                                nodeTypeSelector.isEnabled=true
                             }
                             nodeProgressEditor.setText(node.progress.toString())
                             nodePowerEditor.setText(node.value!!.power.toString())

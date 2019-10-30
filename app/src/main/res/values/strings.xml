@@ -68,6 +68,8 @@
     <string name="seed_price">Price</string>
     <string name="seed_password">Password</string>
     <string name="seed_content">Content</string>
+    <string name="seed_download_from">Download From:%1$s</string>
+    <string name="seed_download_origin">Origin</string>
     <string name="seed_not_found">No seeds found, you can download seeds from store, or generate a seed by seed button.</string>
 
 

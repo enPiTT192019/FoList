@@ -108,6 +108,11 @@ class SeedsFragment : Fragment() {
                     val dialogView =
                         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                             .inflate(R.layout.dialog_show_seed, null).apply {
+                                if(seed.downloadFrom!=null&&!seed.downloadFrom!!.isBlank()){
+                                    downloadFromText.text=context.getString(R.string.seed_download_from,seed.downloadFrom)
+                                }else{
+                                    downloadFromText.text=context.getString(R.string.seed_download_origin)
+                                }
                                 setBackgroundColor(Color.rgb(238, 238, 238))
                                 NodeUtils().refreshViewWithOnlyText(
                                     seedContentTreeView,
