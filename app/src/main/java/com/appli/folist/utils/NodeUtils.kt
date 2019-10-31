@@ -15,10 +15,11 @@ class NodeUtils {
                 RawTreeNode::class.java,
                 RawTreeNode().uuid
             ).apply {
-                value = realm.createObject(NodeValue::class.java).apply {
+                val value=NodeValue("root").apply {
                     str = "root"
                     detail = realm.createObject(NodeDetailMap::class.java)
                 }
+                realm.copyToRealmOrUpdate(value)
             }
         if(!inTransaction)realm.commitTransaction()
         return result
@@ -104,10 +105,11 @@ class NodeUtils {
                 TreeSeedNode::class.java,
                 TreeSeedNode().uuid
             ).apply {
-                value = realm.createObject(NodeValue::class.java).apply {
+                val value=NodeValue("root").apply {
                     str = "root"
                     detail = realm.createObject(NodeDetailMap::class.java)
                 }
+                realm.copyToRealmOrUpdate(value)
             }
         realm.commitTransaction()
         return result

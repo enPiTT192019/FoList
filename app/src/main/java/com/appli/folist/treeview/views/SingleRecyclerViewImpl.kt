@@ -50,7 +50,7 @@ import java.util.*
 import kotlin.math.roundToInt
 
 
-private const val TAG = "SingleRecyclerView"
+//private const val TAG = "SingleRecyclerView"
 
 class SingleRecyclerViewImpl : RecyclerView,
     TreeView<NodeValue> {
@@ -418,11 +418,23 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             nodeTypeBinary.isChecked=node.value!!.type==NodeTypes.BINARY_NODE.name
                             nodeProgressEditor.isEnabled=node.value!!.type==NodeTypes.PROGRESS_NODE.name
                             nodeTypeProgress.isChecked=node.value!!.type==NodeTypes.PROGRESS_NODE.name
-                            nodeShareButton.isVisible = node.sharedId == null
+                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
+
+                            nodeSyncedIdEditor.text=if(node.syncedId.isNullOrBlank())"" else node.syncedId
+                            nodeSyncButton.isVisible=node.syncedId.isNullOrBlank()
 
                             nodeShareButton.setOnClickListener {
                                 //TODO:upload to frebase and set shared-id
-                                nodeSharedIdEditor.text="shared"
+                            }
+                            nodeSyncButton.setOnClickListener {
+                                node.refreshView={
+                                    //TODO:refresh view
+                                    NodeUtils().refreshView(recyclerView,it.getRoot())
+//                                    notifyItemRangeChanged(0,adapterPosition+1)
+                                }
+                                node.upload (realm){id->
+                                    nodeSyncedIdEditor.text=id
+                                }
                             }
 
                         }

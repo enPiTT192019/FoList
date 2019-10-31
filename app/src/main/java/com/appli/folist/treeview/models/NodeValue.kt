@@ -3,6 +3,7 @@ import com.appli.folist.NodeTypes
 import com.appli.folist.treeview.views.Checkable
 import com.google.gson.annotations.Expose
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmModule
 import java.util.*
 
@@ -14,7 +15,8 @@ open class NodeValue(
     @Expose open var detail: NodeDetailMap?=null,
     @Expose open var link:String?=null,
     @Expose open var power:Int=1,
-    @Expose open var uuid:String=UUID.randomUUID().toString(),
+    @Expose @PrimaryKey open var uuid:String=UUID.randomUUID().toString(),
+    @Expose open var remoteUuid:String?=null,
     @Expose override var checked: Boolean=false
 ) : Checkable, RealmObject() {
 

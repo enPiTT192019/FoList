@@ -221,6 +221,37 @@
         android:orientation="horizontal"
         android:layout_marginEnd="24dp"
         android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/nodeSyncedIdLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:text="@string/node_synced_id" />
+
+        <TextView
+            android:id="@+id/nodeSyncedIdEditor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="@string/node_synced_id" />
+
+        <ImageView
+            android:id="@+id/nodeSyncButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/ic_sync" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="20dp">
         <TextView
             android:id="@+id/nodeLinkLabel"
             android:layout_marginStart="24dp"
