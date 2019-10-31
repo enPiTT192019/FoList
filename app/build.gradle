@@ -68,14 +68,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "io.reactivex.rxjava2:rxjava:2.2.12"
     implementation 'com.github.WangcWj:WeSwipe:1.0.1'
-//    implementation 'com.algolia:algoliasearch-android:3.27.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.multidex:multidex:2.0.1'
-
     implementation "com.algolia:algoliasearch-client-kotlin-jvm:$kotlin_client_version"
-    // Choose one of the following http client
     implementation "io.ktor:ktor-client-android:$ktor_version"
-
-
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0'
+    implementation 'com.github.florent37:singledateandtimepicker:2.1.5'
 }

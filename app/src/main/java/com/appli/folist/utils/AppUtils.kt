@@ -3,23 +3,34 @@ package com.appli.folist.utils
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.preference.PreferenceManager
+import android.view.LayoutInflater
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.algolia.search.client.ClientSearch
 import com.algolia.search.model.APIKey
 import com.algolia.search.model.ApplicationID
 import com.appli.folist.ALGOLIA_API_KEY
 import com.appli.folist.ALGOLIA_APP_ID
+import com.appli.folist.R
 import com.appli.folist.treeview.models.NodeValue
 import com.appli.folist.treeview.models.RawTreeNode
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.android.synthetic.main.dialog_datetime_picker.view.*
+import kotlinx.android.synthetic.main.dialog_seek_bar.view.*
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AppUtils {
@@ -78,6 +89,68 @@ class AppUtils {
                 cancelCallback(dialog,whichButton)
             }.show()
 
+    }
+
+    fun datatimeDialog(context:Activity,
+                       cancelCallback:(DialogInterface, Int)->Unit={  dialog, _ ->dialog.cancel()},
+                       okCallback:(View, DialogInterface,Int)->Unit){
+
+        val view=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+            .inflate(R.layout.dialog_datetime_picker, null).apply {
+                timePicker.setIs24HourView(true)
+            }
+        AlertDialog.Builder(context)
+            .setView(view)
+            .setTitle(R.string.picker_title)
+            .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                okCallback(view,dialog,whichButton)
+            }
+            .setNegativeButton(android.R.string.no){dialog, whichButton ->
+                cancelCallback(dialog,whichButton)
+            }.show()
+
+    }
+
+    fun seekbarDialog(context:Activity,
+                      now:Int=0,
+                      max:Int=100,
+                       cancelCallback:(DialogInterface, Int)->Unit={  dialog, _ ->dialog.cancel()},
+                       okCallback:(Int, DialogInterface,Int)->Unit){
+
+        val view=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+            .inflate(R.layout.dialog_seek_bar, null).apply {
+                progressSeekBar.max=max
+                progressSeekBar.progress=now
+                progressText.text= "${progressSeekBar.progress}%"
+                progressSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+                    override fun onStartTrackingTouch(p0: SeekBar?) {}
+                    override fun onStopTrackingTouch(p0: SeekBar?) {}
+                    override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
+                        progressText.text= "$progress%"
+                     }
+                })
+            }
+        AlertDialog.Builder(context)
+            .setView(view)
+            .setTitle(R.string.seekbar_title)
+            .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                okCallback(view.progressSeekBar.progress,dialog,whichButton)
+            }
+            .setNegativeButton(android.R.string.no){dialog, whichButton ->
+                cancelCallback(dialog,whichButton)
+            }.show()
+
+    }
+
+    fun hasPermissions(context: Context?, vararg permissions:String): Boolean {
+        if (context != null) {
+            for (permission in permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     fun fillTestNodes(realm: Realm){
@@ -213,4 +286,20 @@ class AppUtils {
 
     }
 
+}
+
+fun String.toDate(pattern: String = "yyyy/MM/dd HH:mm:ss"): Date? {
+    val sdFormat = try {
+        SimpleDateFormat(pattern)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
+    val date = sdFormat?.let {
+        try {
+            it.parse(this)
+        } catch (e: ParseException){
+            null
+        }
+    }
+    return date
 }

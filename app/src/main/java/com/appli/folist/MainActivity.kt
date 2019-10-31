@@ -1,5 +1,7 @@
 package com.appli.folist
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var createNodeMenu:SubMenu
     private lateinit var navController:NavController
     private lateinit var navNodesItems:MutableList<MenuItem>
-    private lateinit var sharedModel: SharedViewModel
+    lateinit var sharedModel: SharedViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,5 +190,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         if(!doNotCloseDrawer)(nav_view.parent as DrawerLayout).closeDrawer(nav_view)
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode === Activity.RESULT_OK) {
+            try {
+                sharedModel.tempImageUri.value = data?.data.toString()
+            } catch (e: Exception) { }
+        }
     }
 }

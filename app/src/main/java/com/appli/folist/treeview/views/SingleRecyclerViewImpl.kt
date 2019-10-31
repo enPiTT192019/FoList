@@ -1,14 +1,17 @@
 package com.appli.folist.treeview.views
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
-import android.text.InputType
+import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
@@ -25,12 +28,15 @@ import com.appli.folist.MainActivity
 import com.appli.folist.NodeTypes
 import com.appli.folist.R
 import com.appli.folist.Tags
+import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
 import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
+import com.appli.folist.utils.toDate
 import io.realm.Realm
+import kotlinx.android.synthetic.main.dialog_datetime_picker.view.*
 import kotlinx.android.synthetic.main.dialog_edit_node.view.*
 import kotlinx.android.synthetic.main.item_node.view.*
 import kotlinx.android.synthetic.main.item_node.view.indentation
@@ -39,6 +45,7 @@ import kotlinx.android.synthetic.main.item_node.view.slideDelete
 import kotlinx.android.synthetic.main.item_node.view.slideEdit
 import kotlinx.android.synthetic.main.item_node.view.slideSeed
 import kotlinx.android.synthetic.main.item_quick_create_node.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -148,7 +155,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             LayoutInflater.from(parent.context).inflate(layout, parent, false),
             indentation,
             recyclerView,
-            recyclerView.realm
+            recyclerView.realm,
+            (recyclerView.context as MainActivity).sharedModel
         )
     }
 
@@ -202,7 +210,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         view: View,
         private val indentation: Int,
         recyclerView: SingleRecyclerViewImpl,
-        val realm: Realm?
+        val realm: Realm?,
+        val sharedModel: SharedViewModel
     ) : RecyclerView.ViewHolder(view), WeSwipeHelper.SwipeLayoutTypeCallBack {
 
 
@@ -251,7 +260,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         NodeUtils().getRoot(realm).children.remove(viewNode.rawReference)
                     }
 
-                    val navController=findNavController(
+                    val navController = findNavController(
                         (recyclerView.rootView.context as Activity),
                         R.id.nav_host_fragment
                     )
@@ -290,7 +299,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 AppUtils().confirmDialog(
                                     recyclerView.context,
                                     recyclerView.context.getString(R.string.action_confirm),
-                                    recyclerView.context.getString(R.string.msg_duplicated_seed_confirm_question,node.value!!.toString())
+                                    recyclerView.context.getString(
+                                        R.string.msg_duplicated_seed_confirm_question,
+                                        node.value!!.toString()
+                                    )
                                 ) { _, _ ->
                                     realm.executeTransactionIfNotInTransaction {
                                         seedRoot.children.removeAll {
@@ -308,6 +320,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
         }
 
+        @SuppressLint("NewApi")
         private fun bindEdit(viewNode: ViewTreeNode) {
             itemView.slideEdit.setOnClickListener {
                 //ごめんなさい！！！！！！！！！！！！！
@@ -318,8 +331,69 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     val dialogView = ((recyclerView.context as Activity)
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                         .inflate(R.layout.dialog_edit_node, null).apply {
-                            //TODO:complete editor
+                            sharedModel.tempImageUri.removeObservers(context as MainActivity)
+                            sharedModel.tempImageUri.value = node.value!!.mediaUri
                             nodeTitleEditor.setText(node.value!!.str)
+                            nodeProgressEditor.setText(node.progress.toString())
+                            nodePowerEditor.setText(node.value!!.power.toString())
+                            nodeNoticeEditor.text = node.notice?.toString()
+                                ?: context.getString(R.string.node_notice_notset)
+                            nodeSharedIdEditor.text =
+                                if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
+                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
+                            nodeLinkEditor.setText(node.value!!.link)
+                            nodeLinkEditor.addTextChangedListener {
+                                if (URLUtil.isValidUrl(it.toString()) || it.toString().isBlank()) {
+                                    nodelinkValidText.text =
+                                        context.getString(R.string.node_link_valid)
+                                    nodelinkValidText.setTextColor(Color.rgb(0, 255, 0))
+                                } else {
+                                    nodelinkValidText.text =
+                                        context.getString(R.string.node_link_invalid)
+                                    nodelinkValidText.setTextColor(Color.rgb(255, 0, 0))
+                                }
+                            }
+                            nodeNoticeEditor.setOnClickListener {
+                                AppUtils().datatimeDialog(context as MainActivity){view,_,_->
+                                    val d=view.datePicker
+                                    val t=view.timePicker
+                                    val time=Date(d.year,d.month,d.dayOfMonth,t.hour,t.minute,0)
+                                    val format = SimpleDateFormat(context.getString(R.string.picker_format))
+                                    nodeNoticeEditor.text=format.format(time)
+                                }
+                            }
+                            fun resetMedia(uri: String?) {
+                                nodeMediaDeleteButton.isVisible=!uri.isNullOrBlank()
+                                nodeMedia.layoutParams.width=if(uri.isNullOrBlank())36 else 200
+                                nodeMedia.layoutParams.height=if(uri.isNullOrBlank())36 else 200
+                                if (!uri.isNullOrBlank()) {
+                                    nodeMedia.setImageURI(Uri.parse(uri))
+                                } else {
+                                    nodeMedia.setImageResource(R.drawable.ic_add_black_36dp)
+                                }
+                            }
+                            resetMedia(node.value!!.mediaUri)
+                            sharedModel.tempImageUri.observe(
+                                context as MainActivity,
+                                androidx.lifecycle.Observer {
+                                    if (!sharedModel.tempImageUri.value.isNullOrBlank()) {
+                                        resetMedia(sharedModel.tempImageUri.value!!)
+                                    }
+                                })
+                            nodeMedia.setOnClickListener {
+                                val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                                photoPickerIntent.type = "image/*"
+                                val RESULT_LOAD_IMG = 1
+                                (context as MainActivity).startActivityForResult(
+                                    photoPickerIntent,
+                                    RESULT_LOAD_IMG
+                                )
+                            }
+                            nodeMediaDeleteButton.setOnClickListener {
+                                sharedModel.tempImageUri.value = null
+                                resetMedia(null)
+                            }
+
                             nodeInfoTextView.text = recyclerView.context.getString(
                                 R.string.node_info_content,
                                 node.parent?.value?.toString() ?: "root",
@@ -329,31 +403,91 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             )
                             if (node.children.size > 0) {//tree
                                 nodeTypeText.setText(R.string.node_type_tree)
-                                nodeProgressEditor.isEnabled=false
-                                nodeTypeSelector.isVisible=false
-                            }else{//node
-                                nodeTypeText.isVisible=false
-                                nodeProgressEditor.isEnabled=true
-                                nodeTypeSelector.isEnabled=true
+                                nodeProgressEditor.isEnabled = false
+                                nodeTypeSelector.isVisible = false
+                            } else {//node
+                                nodeTypeText.isVisible = false
+                                nodeProgressEditor.isEnabled = true
+                                nodeTypeSelector.isEnabled = true
+                                nodeTypeBinary.text =
+                                    context.getString(R.string.node_type_binary_node)
+                                nodeTypeProgress.text =
+                                    context.getString(R.string.node_type_progress_node)
                             }
-                            nodeProgressEditor.setText(node.progress.toString())
-                            nodePowerEditor.setText(node.value!!.power.toString())
-                            nodeNoticeEditor.setText(node.notice?.toString() ?: "")
-                            nodeSharedIdEditor.setText(node.sharedId)
-                            nodeLinkEditor.setText(node.value!!.link)
-                            nodeMediaUriEditor.setText(node.value!!.mediaUri)
+
+                            nodeTypeBinary.isChecked=node.value!!.type==NodeTypes.BINARY_NODE.name
+                            nodeProgressEditor.isEnabled=node.value!!.type==NodeTypes.PROGRESS_NODE.name
+                            nodeTypeProgress.isChecked=node.value!!.type==NodeTypes.PROGRESS_NODE.name
+                            nodeShareButton.isVisible = node.sharedId == null
+
+                            nodeShareButton.setOnClickListener {
+                                //TODO:upload to frebase and set shared-id
+                                nodeSharedIdEditor.text="shared"
+                            }
 
                         }
                     AlertDialog.Builder(recyclerView.context).setView(dialogView)
                         .setTitle(R.string.edit_node)
                         .setPositiveButton(recyclerView.context.getString(R.string.action_ok)) { dialog, _ ->
-                            //TODO:complete editor
-//                            val title = input.text.toString()
-//                            if (!title.isBlank()) {
-//                                realm.executeTransaction {
-//                                    viewNode.rawReference!!.value!!.str = title
-//                                }
-//                            }
+                            val title = dialogView.nodeTitleEditor.text.toString()
+                            if (!title.isBlank() && title!=node.value!!.str
+                                &&(node.parent?.parent==null //check duplicate
+                                        && title !in node.getRoot().children.map { it.value.toString() })) {
+                                realm.executeTransaction {
+                                    node.value!!.str = title
+                                }
+                            }
+
+                            val power=dialogView.nodePowerEditor.text.toString().toInt()
+                            if(power>=0 && power!=node.value!!.power){
+                                realm.executeTransaction {
+                                    node.value!!.power=power
+                                    if(node.progress>power*100){
+                                        node.progress=(power*100).toDouble()
+                                    }else{
+                                        node.progress=(node.progress/node.value!!.power*power).toDouble()
+                                    }
+                                }
+                            }
+
+                            val type=when{
+                                dialogView.nodeTypeBinary.isChecked->NodeTypes.BINARY_NODE.name
+                                dialogView.nodeTypeProgress.isChecked->NodeTypes.PROGRESS_NODE.name
+                                else->NodeTypes.BINARY_NODE.name
+                            }
+                            if(type!=node.value!!.type){
+                                realm.executeTransaction {
+                                    node.value!!.type=type
+                                    if(type==NodeTypes.BINARY_NODE.name){
+                                        node.progress=(if(node.progress>0)node.value!!.power*100 else 0).toDouble()
+                                    }
+
+                                }
+                            }
+
+                            realm.executeTransaction {
+                                node.notice=dialogView.nodeNoticeEditor.text.toString()
+                                    .toDate(recyclerView.context.getString( R.string.picker_format))
+                            }
+
+                            if(dialogView.nodeSharedIdEditor.text.toString()!=recyclerView.context.getString( R.string.node_shared_id_not_shared)){
+                                realm.executeTransaction {
+                                    node.sharedId=dialogView.nodeSharedIdEditor.text.toString()
+                                }
+                            }
+
+                            realm.executeTransaction {
+                                node.value!!.mediaUri = sharedModel.tempImageUri.value
+                            }
+
+                            val link=dialogView.nodeLinkEditor.text.toString()
+                            if (link!=node.value!!.link
+                                &&(URLUtil.isValidUrl(link) || link.isBlank())){
+                                realm.executeTransaction {
+                                    node.value!!.link = link
+                                }
+                            }
+
                             notifyItemRangeChanged(0, adapterPosition + 1)
                         }
                         .setNegativeButton(recyclerView.context.getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
@@ -588,9 +722,16 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
 
             bindNodeToggle(viewNode)
+            //TODO:if link is not blank,...
 
             itemView.nodeTitle.text = viewNode.value.toString()
-            itemView.nodeTitle.setTextColor(if(viewNode.rawReference!!.children.size >= 1)Color.rgb(100,100,100) else Color.rgb(0,0,0))
+            itemView.nodeTitle.setTextColor(
+                if (viewNode.rawReference!!.children.size >= 1) Color.rgb(
+                    100,
+                    100,
+                    100
+                ) else Color.rgb(0, 0, 0)
+            )
             itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
             itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
 
@@ -614,21 +755,18 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         }
                         //Progress
                         viewNode.rawReference!!.value!!.type == NodeTypes.PROGRESS_NODE.name -> {
-                            //TODO:use seek bar
                             val input = EditText(recyclerView.context)
-                            input.inputType = InputType.TYPE_CLASS_TEXT
-                            AlertDialog.Builder(recyclerView.context).setView(input)
-                                .setTitle("input progress")
-                                .setPositiveButton("OK") { dialog, _ ->
-                                    val num = input.text.toString().toDoubleOrNull()
-                                    if (num != null) {
-                                        realm!!.executeTransaction {
-                                            viewNode.rawReference!!.progress = num
-                                        }
-                                        notifyItemRangeChanged(0, adapterPosition + 1)
-                                    }
-                                }.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-                                .show()
+                            AppUtils().seekbarDialog(
+                                recyclerView.context as Activity,
+                                viewNode.rawReference!!.progress.toInt(),
+                                viewNode.rawReference!!.value!!.power * 100
+
+                            ) { progress, _, _ ->
+                                realm!!.executeTransaction {
+                                    viewNode.rawReference!!.progress = progress.toDouble()
+                                }
+                                notifyItemRangeChanged(0, adapterPosition + 1)
+                            }
                         }
                         else -> {
 

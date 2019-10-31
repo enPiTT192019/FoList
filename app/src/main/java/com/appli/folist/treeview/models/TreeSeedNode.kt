@@ -16,25 +16,36 @@ import kotlinx.serialization.json.json
 import java.util.*
 
 open class TreeSeedNode(
-    @Expose open var value: NodeValue?=null,
+    @Expose open var value: NodeValue? = null,
     @Expose open var children: RealmList<TreeSeedNode>,
     @Expose open var parent: TreeSeedNode?,
-    @Expose open var downloadFrom:String?=null,
-    @Expose open var publishedKey:String?=null,
-    @Expose @PrimaryKey open var uuid:String= UUID.randomUUID().toString()
-): RealmObject()  {
-    constructor():this(NodeValue(""), RealmList<TreeSeedNode>(),null)
-    constructor(raw: RawTreeNode):this(raw,null)
-    constructor(raw: RawTreeNode, parent: TreeSeedNode?):this(){
-        this.value=raw.value!!
-        this.parent=parent
+    @Expose open var downloadFrom: String? = null,
+    @Expose open var publishedKey: String? = null,
+    @Expose open var sharedId: String? = null,
+    @Expose @PrimaryKey open var uuid: String = UUID.randomUUID().toString()
+) : RealmObject() {
+    constructor() : this(NodeValue(""), RealmList<TreeSeedNode>(), null)
+    constructor(raw: RawTreeNode) : this(raw, null)
+    constructor(raw: RawTreeNode, parent: TreeSeedNode?) : this() {
+        this.value = raw.value!!
+        this.parent = parent
         this.children.clear()
         raw.children.forEach {
             this.children.add(TreeSeedNode(it, this))
         }
     }
-    constructor(seed: SeedNodeForFirebase,downloadFrom: String?=null):this(seed,null,downloadFrom)
-    constructor(seed: SeedNodeForFirebase, parent: TreeSeedNode?,downloadFrom: String?=null):this() {
+
+    constructor(seed: SeedNodeForFirebase, downloadFrom: String? = null) : this(
+        seed,
+        null,
+        downloadFrom
+    )
+
+    constructor(
+        seed: SeedNodeForFirebase,
+        parent: TreeSeedNode?,
+        downloadFrom: String? = null
+    ) : this() {
 
         this.value = NodeValue(
             seed.value.str, seed.value.type, seed.value.mediaUri,
@@ -43,9 +54,10 @@ open class TreeSeedNode(
         seed.value.detail?.forEach { (key, value) ->
             this.value?.setDetail(key, value)
         }
-        this.uuid=UUID.randomUUID().toString()
+        this.uuid = UUID.randomUUID().toString()
         this.parent = parent
-        this.downloadFrom=downloadFrom
+        this.downloadFrom = downloadFrom
+        this.sharedId = seed.sharedId
         seed.children.forEach {
             this.children.add(TreeSeedNode(it, this))
         }
@@ -53,39 +65,44 @@ open class TreeSeedNode(
 
 
     data class SeedValueForFirebase(
-        var str: String="",
-        var type:String= NodeTypes.BINARY_NODE.name,
-        var mediaUri:String?=null,
-        var detail: MutableMap<String,String?>?= mutableMapOf(),
-        var link:String?=null,
-        var power:Int=1,
-        var uuid:String="",
-        var checked: Boolean=false
-    ){
-        constructor():this("")
-        constructor(nodeValue: NodeValue):this(){
-            this.str=nodeValue.str
-            this.type=nodeValue.type
-            this.mediaUri=nodeValue.mediaUri
+        var str: String = "",
+        var type: String = NodeTypes.BINARY_NODE.name,
+        var mediaUri: String? = null,
+        var detail: MutableMap<String, String?>? = mutableMapOf(),
+        var link: String? = null,
+        var power: Int = 1,
+        var uuid: String = "",
+        var checked: Boolean = false
+    ) {
+        constructor() : this("")
+        constructor(nodeValue: NodeValue) : this() {
+            this.str = nodeValue.str
+            this.type = nodeValue.type
+            this.mediaUri = nodeValue.mediaUri
             nodeValue.detail?.list?.forEach {
-                this.detail?.set(it.key,it.value)
+                this.detail?.set(it.key, it.value)
             }
-            this.link=nodeValue.link
-            this.power=nodeValue.power
-            this.checked=nodeValue.checked
-            this.uuid=nodeValue.uuid
+            this.link = nodeValue.link
+            this.power = nodeValue.power
+            this.checked = nodeValue.checked
+            this.uuid = nodeValue.uuid
         }
     }
+
     data class SeedNodeForFirebase(
         var value: SeedValueForFirebase,
-        var children:MutableList<SeedNodeForFirebase>,
-        var uuid:String= ""){
-        constructor():this(SeedValueForFirebase(), mutableListOf())
-        constructor(seed: TreeSeedNode, parent: SeedNodeForFirebase?):this(
-            SeedValueForFirebase(), mutableListOf()){
-            this.value=
+        var children: MutableList<SeedNodeForFirebase>,
+        var uuid: String = "",
+        var sharedId: String? = null
+    ) {
+        constructor() : this(SeedValueForFirebase(), mutableListOf())
+        constructor(seed: TreeSeedNode, parent: SeedNodeForFirebase?) : this(
+            SeedValueForFirebase(), mutableListOf()
+        ) {
+            this.value =
                 SeedValueForFirebase(seed.value!!)
-            this.uuid=seed.uuid
+            this.uuid = seed.uuid
+            this.sharedId = seed.sharedId
             seed.children.forEach {
                 this.children.add(
                     SeedNodeForFirebase(
@@ -96,11 +113,14 @@ open class TreeSeedNode(
             }
         }
     }
-    fun upload(title:String="", description:String="", authorUid:String="", price:Int=0,
-               password:String="", algolia: ClientSearch?,
-               callback: (String?) -> Unit={}){
+
+    fun upload(
+        title: String = "", description: String = "", authorUid: String = "", price: Int = 0,
+        password: String = "", algolia: ClientSearch?,
+        callback: (String?) -> Unit = {}
+    ) {
         val ref = FirebaseDatabase.getInstance().getReference("seeds")
-        val newRef=ref.push()
+        val newRef = ref.push()
         newRef.child("title").setValue(title)
         newRef.child("description").setValue(description)
         newRef.child("authorUid").setValue(authorUid)
@@ -113,9 +133,8 @@ open class TreeSeedNode(
             )
         )
         //for algolia search
-        //TODO
-        if(algolia!=null){
-            val index=algolia.initIndex(IndexName("seeds"))
+        if (algolia != null) {
+            val index = algolia.initIndex(IndexName("seeds"))
             val json = json {
                 "title" to title
                 "description" to description
@@ -126,24 +145,28 @@ open class TreeSeedNode(
             runBlocking {
                 try {
                     index.saveObject(json)
-                }catch (e:RuntimeException){
+                    callback(newRef.key)
+                } catch (e: RuntimeException) {
                     //TODO
                 }
             }
         }
-
-        callback(newRef.key)
     }
 
-    fun download(key:String, cancelled:(DatabaseError)->Unit={},
-                 callback:(TreeSeedNode?)->Unit){
-        val ref=FirebaseDatabase.getInstance().getReference("seeds/$key/data")
+    fun download(
+        key: String, cancelled: (DatabaseError) -> Unit = {},
+        callback: (TreeSeedNode?) -> Unit
+    ) {
+        val ref = FirebaseDatabase.getInstance().getReference("seeds/$key/data")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val result=dataSnapshot.getValue(SeedNodeForFirebase::class.java)
+                val result = dataSnapshot.getValue(SeedNodeForFirebase::class.java)
                 callback(result?.let { TreeSeedNode(it, key) })
             }
-            override fun onCancelled(error: DatabaseError) { cancelled(error) }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancelled(error)
+            }
         })
     }
 }

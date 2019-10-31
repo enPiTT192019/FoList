@@ -35,6 +35,7 @@
     <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
     <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
     <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite %1$s?</string>
+    <string name="msg_no_permissions">No Permissions?</string>
 
 
     <string name="img_cd_expand_ic">expand</string>
@@ -45,21 +46,35 @@
     <string name="node_value_type">Value Type</string>
     <string name="node_type_tree">TREE</string>
     <string name="node_media_uri">Media URI</string>
+    <string name="node_media">Media</string>
     <string name="node_detail">Detail</string>
     <string name="node_link">Link</string>
+    <string name="node_link_valid">Valid</string>
+    <string name="node_link_invalid">Invalid</string>
     <string name="node_power">Power</string>
     <string name="node_value_uuid">Value ID</string>
     <string name="node_children_number">Subtask Number</string>
     <string name="node_parent">Parent</string>
     <string name="node_progress">Progress</string>
     <string name="node_notice">Notice</string>
+    <string name="node_notice_notset">Not set. click to set</string>
     <string name="node_shared_id">shared ID</string>
+    <string name="node_shared_id_not_shared">Not shared. click button to share</string>
     <string name="node_uuid">Node ID</string>
     <string name="node_relative">Relative</string>
     <string name="node_info">Information</string>
+    <string name="node_type_binary_node">BINARY_NODE</string>
+    <string name="node_type_progress_node">PROGRESS_NODE</string>
     <string name="node_info_content">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
     <string name="node_generate_seed_title">Generate Seed</string>
     <string name="node_generate_seed_msg">Generate Seed and Save Locally?</string>
+
+    <string name="picker_date">Date</string>
+    <string name="picker_time">Time</string>
+    <string name="picker_title">Select Datatime</string>
+    <string name="picker_format">yy/MM/dd HH:mm</string>
+
+    <string name="seekbar_title">Progress</string>
 
 
     <string name="seed_upload">Publish</string>

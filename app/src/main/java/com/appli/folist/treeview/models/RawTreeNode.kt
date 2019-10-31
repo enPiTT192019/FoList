@@ -35,9 +35,25 @@ open class RawTreeNode(
         this.sharedId = null
         this.uuid = UUID.randomUUID().toString()
         this.children.clear()
+        this.sharedId=seedRoot.sharedId
         seedRoot.children.forEach {
             this.children.add(RawTreeNode(it, this))
         }
+    }
+
+    fun edited(){
+        //TODO
+//        if(... shareId!=null){
+//            upload()
+//        }
+    }
+    fun upload(){
+        //TODO
+
+    }
+    fun restore(){
+        //TODO
+
     }
 
     override fun toString(): String {

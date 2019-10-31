@@ -21,6 +21,7 @@ class SharedViewModel : ViewModel() {
     val seedRoot=MutableLiveData<TreeSeedNode>()
     val algolia=MutableLiveData<ClientSearch>()
     val seedsIndex= MutableLiveData<Index>()
+    var tempImageUri=MutableLiveData<String?>()
 
     fun login(activity: AppCompatActivity,email:String,password:String ) {
         UserUtils(activity, auth).login(email,password,
