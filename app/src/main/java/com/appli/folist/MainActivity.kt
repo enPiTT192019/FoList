@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
                         }else{
                             sharedModel.realm.value!!.executeTransaction{
-                                sharedModel.root.value!!.children.add(RawTreeNode(NodeValue(title),sharedModel.root.value!!))
+                                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title),sharedModel.root.value!!))
                             }
                             refreshTasksMenu()
                             AppUtils().hideKeyboard(this@MainActivity)

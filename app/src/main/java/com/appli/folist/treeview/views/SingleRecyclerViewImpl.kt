@@ -285,7 +285,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             val seedRoot = NodeUtils().getSeedRoot(realm)
                             fun addSeed() {
                                 realm.executeTransactionIfNotInTransaction {
-                                    seedRoot.children.add(
+                                    seedRoot.addChild(
                                         TreeSeedNode(node)
                                     )
                                 }
@@ -443,8 +443,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         .setPositiveButton(recyclerView.context.getString(R.string.action_ok)) { dialog, _ ->
                             val title = dialogView.nodeTitleEditor.text.toString()
                             if (!title.isBlank() && title!=node.value!!.str
-                                &&(node.parent?.parent==null //check duplicate
-                                        && title !in node.getRoot().children.map { it.value.toString() })) {
+                                &&!(node.parent?.parent==null //check duplicate
+                                        && title in node.getRoot().children.map { it.value.toString() })) {
                                 realm.executeTransaction {
                                     node.value!!.str = title
                                 }
@@ -572,9 +572,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewNodes.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition + 1)
                         val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
-                        viewParent.children.add(newViewNode)
+                        viewParent.addChild(newViewNode)
                         viewNodes.add(adapterPosition, newViewNode)
-                        viewParent.children.add(viewNode)
+                        viewParent.addChild(viewNode)
                         viewNodes.add(adapterPosition + 1, viewNode)
                         notifyItemRangeInserted(adapterPosition + 1, 2)
 //                        notifyItemChanged(adapterPosition-1)
@@ -632,10 +632,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         notifyItemRemoved(adapterPosition + 1)
                         //create new view-node of new-node, update ui
                         val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
-                        viewParent.children.add(newViewNode)
+                        viewParent.addChild(newViewNode)
                         viewNodes.add(adapterPosition, newViewNode)
                         //add create-node
-                        viewParent.children.add(viewNode)
+                        viewParent.addChild(viewNode)
                         viewNodes.add(adapterPosition + 1, viewNode)
                         notifyItemRangeInserted(adapterPosition + 1, 2)
                         notifyItemRangeChanged(0, adapterPosition + 1)

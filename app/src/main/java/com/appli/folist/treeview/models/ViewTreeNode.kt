@@ -42,9 +42,13 @@ class ViewTreeNode(
             val childBefore= before?.children?.findLast {it2->
                 it2.value.uuid== it.value?.uuid
             }
-            this.children.add(ViewTreeNode(it,this,childBefore,onlyText=onlyText))
+            this.addChild(ViewTreeNode(it,this,childBefore,onlyText=onlyText))
         }
-        if(!onlyText)this.children.add(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
+        if(!onlyText)this.addChild(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
+    }
+
+    fun addChild(child:ViewTreeNode){
+        children.add(child)
     }
 
     override fun toString(): String {

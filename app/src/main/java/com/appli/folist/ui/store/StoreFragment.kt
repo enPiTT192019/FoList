@@ -108,7 +108,7 @@ class StoreFragment : Fragment() {
 
         fun saveSeedToRealm(seed: TreeSeedNode) {
             sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
-                sharedModel.seedRoot.value!!.children.add(seed)
+                sharedModel.seedRoot.value!!.addChild(seed)
                 sharedModel.realm.value!!.copyToRealmOrUpdate(seed)
             }
         }
@@ -207,13 +207,13 @@ class StoreFragment : Fragment() {
                         ) { _, _ ->
                             realm.executeTransactionIfNotInTransaction {
                                 sharedModel.root.value!!.children.removeAll { it.value.toString() == newNode.value.toString() }
-                                sharedModel.root.value!!.children.add((newNode))
+                                sharedModel.root.value!!.addChild((newNode))
                                 realm.copyToRealmOrUpdate(newNode)
                             }
                         }
                     } else {
                         realm.executeTransactionIfNotInTransaction {
-                            sharedModel.root.value!!.children.add((newNode))
+                            sharedModel.root.value!!.addChild((newNode))
                             realm.copyToRealmOrUpdate(newNode)
                         }
                     }

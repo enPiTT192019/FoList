@@ -168,13 +168,13 @@ class SeedsFragment : Fragment() {
                             ) { _, _ ->
                                 realm.executeTransactionIfNotInTransaction {
                                     sharedModel.root.value!!.children.removeAll { it.value.toString() == newNode.value.toString() }
-                                    sharedModel.root.value!!.children.add((newNode))
+                                    sharedModel.root.value!!.addChild((newNode))
                                     realm.copyToRealmOrUpdate(newNode)
                                 }
                             }
                         } else {
                             realm.executeTransactionIfNotInTransaction {
-                                sharedModel.root.value!!.children.add((newNode))
+                                sharedModel.root.value!!.addChild((newNode))
                                 realm.copyToRealmOrUpdate(newNode)
                             }
                         }

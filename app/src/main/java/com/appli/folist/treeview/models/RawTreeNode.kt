@@ -2,11 +2,7 @@ package com.appli.folist.treeview.models
 
 import android.util.Log
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.gson.annotations.Expose
+import com.google.firebase.database.*
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -17,16 +13,52 @@ import java.util.*
 
 @RealmModule(allClasses = true)
 open class RawTreeNode(
-    @Expose open var value: NodeValue? = null,
-    @Expose open var children: RealmList<RawTreeNode>,
-    @Expose open var parent: RawTreeNode? = null,
-    @Expose open var progress: Double = 0.0,
-    @Expose open var notice: Date? = null,
-    @Expose open var sharedId: String? = null,
-    @Expose open var syncedId: String? = null,
-    @Expose @PrimaryKey open var uuid: String = UUID.randomUUID().toString()
+    value: NodeValue? = null,
+    children: RealmList<RawTreeNode>,
+    parent: RawTreeNode? = null,
+    progress: Double = 0.0,
+    notice: Date? = null,
+    sharedId: String? = null,
+    syncedId: String? = null,
+    uuid: String = UUID.randomUUID().toString()
 ) : RealmObject() {
     @Ignore var refreshView:((RawTreeNode)->Unit)?=null
+    @Ignore var firebaseRef:DatabaseReference?=null
+
+    @PrimaryKey open var uuid: String = uuid//cannot be changed
+    open var value: NodeValue?=value
+    open var parent: RawTreeNode? = parent
+    open var syncedId: String? = syncedId
+    open var children: RealmList<RawTreeNode> =children
+        fun addChild(child:RawTreeNode){
+            if(!syncedId.isNullOrBlank() && firebaseRef!=null){
+
+            }
+            children.add(child)
+        }
+    open var progress: Double = progress
+        set(value) {
+            if(!syncedId.isNullOrBlank() && firebaseRef!=null){
+
+            }
+            field=value
+        }
+    open var notice: Date? = notice
+        set(value) {
+            if(!syncedId.isNullOrBlank() && firebaseRef!=null){
+
+            }
+            field=value
+        }
+    open var sharedId: String? = sharedId
+        set(value) {
+            if(!syncedId.isNullOrBlank() && firebaseRef!=null){
+
+            }
+            field=value
+        }
+
+
     constructor() : this(children = RealmList<RawTreeNode>())
     constructor(value: NodeValue) : this(value, children = RealmList<RawTreeNode>())
     constructor(value: NodeValue, parent: RawTreeNode?) : this(
@@ -45,7 +77,7 @@ open class RawTreeNode(
         this.children.clear()
         this.sharedId = nodeRoot.sharedId
         nodeRoot.children.forEach {
-            this.children.add(RawTreeNode(it, this))
+            this.addChild(RawTreeNode(it, this))
         }
     }
 
@@ -86,12 +118,11 @@ open class RawTreeNode(
             this.sharedId = remoteNode.sharedId
             this.progress = remoteNode.progress
             this.notice = remoteNode.notice
-            this.children=RealmList<RawTreeNode>()
+            this.children=RealmList()
             remoteNode.children.forEach { n ->
-                this.children.add(RawTreeNode(n, this, realm))
+                this.addChild(RawTreeNode(n, this, realm))
             }
         }
-//        this.setSync()
     }
 
     init {
@@ -109,10 +140,9 @@ open class RawTreeNode(
         }
     }
 
-    fun setSync() {
-        if (!syncedId.isNullOrBlank()) {
-            val ref = FirebaseDatabase.getInstance().getReference("synced-nodes/$syncedId/data")
-            ref.addValueEventListener(object : ValueEventListener {
+    private fun setSync() {
+        if (!syncedId.isNullOrBlank() && this.firebaseRef!=null) {
+            this.firebaseRef!!.child("data").addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {}
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val newRemoteNode = dataSnapshot.getValue(NodeForFirebase::class.java)
@@ -126,27 +156,17 @@ open class RawTreeNode(
         }
     }
 
-    fun edited() {
-        //TODO
-//        if(... shareId!=null){
-//            upload()
-//        }
-    }
-
     fun upload(realm: Realm,callback: (String?) -> Unit = {}) {
         val ref = FirebaseDatabase.getInstance().getReference("synced-nodes")
         val newRef = ref.push()
         newRef.child("data").setValue(NodeForFirebase(this))
         realm.executeTransactionIfNotInTransaction {
             syncedId=newRef.key
+            value!!.nodeSyncedId=newRef.key
         }
+        this.firebaseRef = FirebaseDatabase.getInstance().getReference("synced-nodes/$syncedId")
         setSync()
         callback(newRef.key)
-    }
-
-    fun restore() {
-        //TODO
-
     }
 
     override fun toString(): String {
@@ -168,7 +188,7 @@ open class RawTreeNode(
         return result
     }
 
-    fun getSumOfPower(): Int {
+    private fun getSumOfPower(): Int {
         return children.sumBy { it.value!!.power }
     }
 

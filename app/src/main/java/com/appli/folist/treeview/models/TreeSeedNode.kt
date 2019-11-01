@@ -30,7 +30,7 @@ open class TreeSeedNode(
         this.parent = parent
         this.children.clear()
         raw.children.forEach {
-            this.children.add(TreeSeedNode(it, this))
+            this.addChild(TreeSeedNode(it, this))
         }
     }
 
@@ -58,10 +58,14 @@ open class TreeSeedNode(
         this.downloadFrom = downloadFrom
         this.sharedId = seed.sharedId
         seed.children.forEach {
-            this.children.add(TreeSeedNode(it, this))
+            this.addChild(TreeSeedNode(it, this))
         }
     }
 
+
+    fun addChild(child:TreeSeedNode){
+        children.add(child)
+    }
 
     fun upload(
         title: String = "", description: String = "", authorUid: String = "", price: Int = 0,
