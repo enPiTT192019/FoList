@@ -556,7 +556,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 RawTreeNode::class.java,
                                 UUID.randomUUID().toString()
                             ).apply {
-                                value = realm.createObject(NodeValue::class.java).apply {
+                                value = realm.createObject(NodeValue::class.java,UUID.randomUUID().toString()).apply {
                                     //set new node
                                     str = inputStr
                                 }

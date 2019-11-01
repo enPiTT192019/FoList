@@ -32,7 +32,7 @@ open class RawTreeNode(
     open var children: RealmList<RawTreeNode> =children
         fun addChild(child:RawTreeNode){
             if(!syncedId.isNullOrBlank() && firebaseRef!=null){
-
+                firebaseRef!!.child("${children.size}")
             }
             children.add(child)
         }
@@ -156,15 +156,33 @@ open class RawTreeNode(
         }
     }
 
-    fun upload(realm: Realm,callback: (String?) -> Unit = {}) {
+    fun upload(realm: Realm,syncedId:String?=null,callback: (String?) -> Unit = {}) {
         val ref = FirebaseDatabase.getInstance().getReference("synced-nodes")
-        val newRef = ref.push()
+        var newRef:DatabaseReference
+        newRef = if(syncedId.isNullOrBlank()){
+            ref.push()
+        }else{
+            ref.child(syncedId)
+        }
         newRef.child("data").setValue(NodeForFirebase(this))
         realm.executeTransactionIfNotInTransaction {
-            syncedId=newRef.key
-            value!!.nodeSyncedId=newRef.key
+            this.syncedId=syncedId?: newRef.key
+            value!!.nodeSyncedId=this.syncedId
         }
-        this.firebaseRef = FirebaseDatabase.getInstance().getReference("synced-nodes/$syncedId")
+        this.firebaseRef = FirebaseDatabase.getInstance().getReference("synced-nodes/${this.syncedId}/data")
+        this.value!!.firebaseRef=this.firebaseRef!!.child("value")
+        fun setChildrenFirebaseRef(node:RawTreeNode,index:Int,ref:DatabaseReference){
+            node.firebaseRef=ref.child("children/$index")
+            node.value!!.firebaseRef=node.firebaseRef!!.child("value")
+            if(node.children.size>0){
+                node.children.forEachIndexed { index, rawTreeNode ->
+                    setChildrenFirebaseRef(rawTreeNode,index,this.firebaseRef!!)
+                }
+            }
+        }
+        this.children.forEachIndexed { index, rawTreeNode ->
+            setChildrenFirebaseRef(rawTreeNode,index,this.firebaseRef!!)
+        }
         setSync()
         callback(newRef.key)
     }
