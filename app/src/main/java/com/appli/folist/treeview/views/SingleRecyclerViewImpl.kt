@@ -234,42 +234,48 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         private fun bindDelete(viewNode: ViewTreeNode) {
             itemView.slideDelete.setOnClickListener {
-                if (realm == null || viewNode.rawReference == null) return@setOnClickListener
-                //TODO:confirm?
-                if (viewNode.parent != null) {
-                    realm.executeTransactionIfNotInTransaction {
-                        viewNode.rawReference!!.parent!!.children.remove(viewNode.rawReference)
-                    }
+                if (slideButtonCalledTime++ % 2 == 0) {
+                    if (realm == null || viewNode.rawReference == null) return@setOnClickListener
+                    //TODO:confirm?
                     if (viewNode.parent != null) {
-                        viewNode.parent!!.children.remove(viewNode)
-                        fun deleteFromViewNodes(viewNode: ViewTreeNode) {
-                            if (viewNode.children.size > 0) {
-                                viewNode.children.forEach { deleteFromViewNodes(it) }
-                            }
-                            if (viewNode in viewNodes) viewNodes.remove(viewNode)
-                        }
-                        deleteFromViewNodes(viewNode)
-                        notifyItemRangeRemoved(
-                            adapterPosition,
-                            viewNode.getDisplayedNodeNumber()
-                        )
-                        notifyDataSetChanged()
-                    }
-                } else {//level2 node
-                    realm.executeTransactionIfNotInTransaction {
-                        NodeUtils().getRoot(realm).children.remove(viewNode.rawReference)
-                    }
+                        realm.executeTransactionIfNotInTransaction {
 
-                    val navController = findNavController(
-                        (recyclerView.rootView.context as Activity),
-                        R.id.nav_host_fragment
-                    )
-                    navController.popBackStack()
-                    navController.navigate(R.id.nav_timeline)
-                    (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
+                            if (viewNode.parent != null) {
+                                viewNode.parent!!.children.remove(viewNode)
+                                fun deleteFromViewNodes(viewNode: ViewTreeNode) {
+                                    if (viewNode.children.size > 0) {
+                                        viewNode.children.forEach { deleteFromViewNodes(it) }
+                                    }
+                                    if (viewNode in viewNodes) viewNodes.remove(viewNode)
+                                }
+                                deleteFromViewNodes(viewNode)
+                            }
+                            notifyItemRangeRemoved(
+                                adapterPosition,
+                                viewNode.getDisplayedNodeNumber()
+                            )
+//                            notifyItemRangeChanged(0,adapterPosition+1)
+                            notifyDataSetChanged()
+
+                            viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
+                            viewNode.rawReference!!.deleteFromRealm()
+
+                        }
+                    } else {//level2 node
+                        realm.executeTransactionIfNotInTransaction {
+                            sharedModel.root.value!!.removeChild(viewNode.rawReference!!)
+                        }
+
+                        val navController = findNavController(
+                            (recyclerView.rootView.context as Activity),
+                            R.id.nav_host_fragment
+                        )
+                        navController.popBackStack()
+                        navController.navigate(R.id.nav_timeline)
+                        (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
+                    }
                 }
             }
-
         }
 
         private fun bindGenerateSeed(viewNode: ViewTreeNode) {
@@ -354,18 +360,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 }
                             }
                             nodeNoticeEditor.setOnClickListener {
-                                AppUtils().datatimeDialog(context as MainActivity){view,_,_->
-                                    val d=view.datePicker
-                                    val t=view.timePicker
-                                    val time=Date(d.year,d.month,d.dayOfMonth,t.hour,t.minute,0)
-                                    val format = SimpleDateFormat(context.getString(R.string.picker_format))
-                                    nodeNoticeEditor.text=format.format(time)
+                                AppUtils().datatimeDialog(context as MainActivity) { view, _, _ ->
+                                    val d = view.datePicker
+                                    val t = view.timePicker
+                                    val time =
+                                        Date(d.year, d.month, d.dayOfMonth, t.hour, t.minute, 0)
+                                    val format =
+                                        SimpleDateFormat(context.getString(R.string.picker_format))
+                                    nodeNoticeEditor.text = format.format(time)
                                 }
                             }
                             fun resetMedia(uri: String?) {
-                                nodeMediaDeleteButton.isVisible=!uri.isNullOrBlank()
-                                nodeMedia.layoutParams.width=if(uri.isNullOrBlank())36 else 200
-                                nodeMedia.layoutParams.height=if(uri.isNullOrBlank())36 else 200
+                                nodeMediaDeleteButton.isVisible = !uri.isNullOrBlank()
+                                nodeMedia.layoutParams.width = if (uri.isNullOrBlank()) 36 else 200
+                                nodeMedia.layoutParams.height = if (uri.isNullOrBlank()) 36 else 200
                                 if (!uri.isNullOrBlank()) {
                                     nodeMedia.setImageURI(Uri.parse(uri))
                                 } else {
@@ -415,25 +423,30 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     context.getString(R.string.node_type_progress_node)
                             }
 
-                            nodeTypeBinary.isChecked=node.value!!.type==NodeTypes.BINARY_NODE.name
-                            nodeProgressEditor.isEnabled=node.value!!.type==NodeTypes.PROGRESS_NODE.name
-                            nodeTypeProgress.isChecked=node.value!!.type==NodeTypes.PROGRESS_NODE.name
+                            nodeTypeBinary.isChecked =
+                                node.value!!.type == NodeTypes.BINARY_NODE.name
+                            nodeProgressEditor.isEnabled =
+                                node.value!!.type == NodeTypes.PROGRESS_NODE.name
+                            nodeTypeProgress.isChecked =
+                                node.value!!.type == NodeTypes.PROGRESS_NODE.name
                             nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
 
-                            nodeSyncedIdEditor.text=if(node.syncedId.isNullOrBlank())"" else node.syncedId
-                            nodeSyncButton.isVisible=node.syncedId.isNullOrBlank()
+//                            nodeSyncedIdEditor.text=if(node.syncedId.isNullOrBlank())"" else node.syncedId
+//                            nodeSyncButton.isVisible=node.syncedId.isNullOrBlank()
+                            nodeSyncedIdEditor.text = node.firebaseRefPath
+                            nodeSyncButton.isVisible = true
 
                             nodeShareButton.setOnClickListener {
                                 //TODO:upload to frebase and set shared-id
                             }
                             nodeSyncButton.setOnClickListener {
-                                node.refreshView={
+                                node.refreshView = {
                                     //TODO:refresh view
-                                    NodeUtils().refreshView(recyclerView,it.getRoot())
 //                                    notifyItemRangeChanged(0,adapterPosition+1)
+                                    Log.d("refresh", "${it.value.toString()}")
                                 }
-                                node.upload (realm){id->
-                                    nodeSyncedIdEditor.text=id
+                                node.upload(realm) { id ->
+                                    nodeSyncedIdEditor.text = id
                                 }
                             }
 
@@ -442,49 +455,55 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         .setTitle(R.string.edit_node)
                         .setPositiveButton(recyclerView.context.getString(R.string.action_ok)) { dialog, _ ->
                             val title = dialogView.nodeTitleEditor.text.toString()
-                            if (!title.isBlank() && title!=node.value!!.str
-                                &&!(node.parent?.parent==null //check duplicate
-                                        && title in node.getRoot().children.map { it.value.toString() })) {
+                            if (!title.isBlank() && title != node.value!!.str
+                                && !(node.parent?.parent == null //check duplicate
+                                        && title in sharedModel.root.value!!.children.map { it.value.toString() })
+                            ) {
                                 realm.executeTransaction {
                                     node.value!!.str = title
                                 }
                             }
 
-                            val power=dialogView.nodePowerEditor.text.toString().toInt()
-                            if(power>=0 && power!=node.value!!.power){
+                            val power = dialogView.nodePowerEditor.text.toString().toInt()
+                            if (power >= 0 && power != node.value!!.power) {
                                 realm.executeTransaction {
-                                    node.value!!.power=power
-                                    if(node.progress>power*100){
-                                        node.progress=(power*100).toDouble()
-                                    }else{
-                                        node.progress=(node.progress/node.value!!.power*power).toDouble()
+                                    node.value!!.power = power
+                                    if (node.progress > power * 100) {
+                                        node.progress = (power * 100).toDouble()
+                                    } else {
+                                        node.progress =
+                                            (node.progress / node.value!!.power * power).toDouble()
                                     }
                                 }
                             }
 
-                            val type=when{
-                                dialogView.nodeTypeBinary.isChecked->NodeTypes.BINARY_NODE.name
-                                dialogView.nodeTypeProgress.isChecked->NodeTypes.PROGRESS_NODE.name
-                                else->NodeTypes.BINARY_NODE.name
+                            val type = when {
+                                dialogView.nodeTypeBinary.isChecked -> NodeTypes.BINARY_NODE.name
+                                dialogView.nodeTypeProgress.isChecked -> NodeTypes.PROGRESS_NODE.name
+                                else -> NodeTypes.BINARY_NODE.name
                             }
-                            if(type!=node.value!!.type){
+                            if (type != node.value!!.type) {
                                 realm.executeTransaction {
-                                    node.value!!.type=type
-                                    if(type==NodeTypes.BINARY_NODE.name){
-                                        node.progress=(if(node.progress>0)node.value!!.power*100 else 0).toDouble()
+                                    node.value!!.type = type
+                                    if (type == NodeTypes.BINARY_NODE.name) {
+                                        node.progress =
+                                            (if (node.progress > 0) node.value!!.power * 100 else 0).toDouble()
                                     }
 
                                 }
                             }
 
                             realm.executeTransaction {
-                                node.notice=dialogView.nodeNoticeEditor.text.toString()
-                                    .toDate(recyclerView.context.getString( R.string.picker_format))
+                                node.notice = dialogView.nodeNoticeEditor.text.toString()
+                                    .toDate(recyclerView.context.getString(R.string.picker_format))
                             }
 
-                            if(dialogView.nodeSharedIdEditor.text.toString()!=recyclerView.context.getString( R.string.node_shared_id_not_shared)){
+                            if (dialogView.nodeSharedIdEditor.text.toString() != recyclerView.context.getString(
+                                    R.string.node_shared_id_not_shared
+                                )
+                            ) {
                                 realm.executeTransaction {
-                                    node.sharedId=dialogView.nodeSharedIdEditor.text.toString()
+                                    node.sharedId = dialogView.nodeSharedIdEditor.text.toString()
                                 }
                             }
 
@@ -492,9 +511,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 node.value!!.mediaUri = sharedModel.tempImageUri.value
                             }
 
-                            val link=dialogView.nodeLinkEditor.text.toString()
-                            if (link!=node.value!!.link
-                                &&(URLUtil.isValidUrl(link) || link.isBlank())){
+                            val link = dialogView.nodeLinkEditor.text.toString()
+                            if (link != node.value!!.link
+                                && (URLUtil.isValidUrl(link) || link.isBlank())
+                            ) {
                                 realm.executeTransaction {
                                     node.value!!.link = link
                                 }
@@ -556,7 +576,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 RawTreeNode::class.java,
                                 UUID.randomUUID().toString()
                             ).apply {
-                                value = realm.createObject(NodeValue::class.java,UUID.randomUUID().toString()).apply {
+                                value = realm.createObject(
+                                    NodeValue::class.java,
+                                    UUID.randomUUID().toString()
+                                ).apply {
                                     //set new node
                                     str = inputStr
                                 }
@@ -566,7 +589,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     progress = viewNode.parent!!.rawReference!!.progress
                                 }
                             }
-                            viewParent.rawReference?.children?.add((newNode))
+                            viewParent.rawReference!!.addChild(newNode!!)
                         }
                         viewParent.children.remove(viewNode)
                         viewNodes.removeAt(adapterPosition)
@@ -622,7 +645,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         newNode = RawTreeNode(seed)
 
                         realm.executeTransactionIfNotInTransaction {
-                            viewParent.rawReference?.children?.add((newNode))
+                            viewParent.rawReference?.addChild(newNode!!)
                             realm.copyToRealmOrUpdate(newNode)
                         }
                         //adjust view nodes list

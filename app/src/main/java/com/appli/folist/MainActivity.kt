@@ -54,10 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
-
         //テスト用
         NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
-        AppUtils().fillTestNodes(AppUtils().getRealm(this))
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
@@ -67,6 +65,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
         sharedModel.algolia.value=AppUtils().getAlgolia()
         sharedModel.seedsIndex.value=sharedModel.algolia.value?.initIndex(IndexName("seeds"))
+
+
+        //テスト用
+        AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
 
         //メニュー初期化
         navNodesItems= mutableListOf()

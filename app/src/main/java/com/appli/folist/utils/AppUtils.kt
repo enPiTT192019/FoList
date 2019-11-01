@@ -153,8 +153,7 @@ class AppUtils {
         return true
     }
 
-    fun fillTestNodes(realm: Realm){
-        val root=NodeUtils().getRoot(realm)
+    fun fillTestNodes(realm: Realm,root:RawTreeNode){
         realm.executeTransaction {
             root.apply {
                 addChild(RawTreeNode(NodeValue("２０１９年の目標"),this).apply {
@@ -288,6 +287,7 @@ class AppUtils {
             }
         }
 
+//        root.upload(realm,"synced-nodes/replace-with-uid/data")
     }
 
 }

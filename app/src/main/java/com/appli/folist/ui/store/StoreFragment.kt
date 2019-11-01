@@ -206,7 +206,7 @@ class StoreFragment : Fragment() {
                             context.getString(R.string.msg_confirm_overwrite_task, seed.value.toString())
                         ) { _, _ ->
                             realm.executeTransactionIfNotInTransaction {
-                                sharedModel.root.value!!.children.removeAll { it.value.toString() == newNode.value.toString() }
+                                sharedModel.root.value!!.removeAllChild { it.value.toString() == newNode.value.toString() }
                                 sharedModel.root.value!!.addChild((newNode))
                                 realm.copyToRealmOrUpdate(newNode)
                             }

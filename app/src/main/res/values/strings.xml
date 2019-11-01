@@ -58,7 +58,7 @@
     <string name="node_notice">Notice</string>
     <string name="node_notice_notset">Not set. click to set</string>
     <string name="node_shared_id">Shared ID</string>
-    <string name="node_synced_id">Synced ID</string>
+    <string name="node_synced_id">Synced Path</string>
     <string name="node_shared_id_not_shared">Not shared. click button to share</string>
     <string name="node_uuid">Node ID</string>
     <string name="node_relative">Relative</string>
