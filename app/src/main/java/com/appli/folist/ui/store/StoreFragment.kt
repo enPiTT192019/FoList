@@ -148,7 +148,7 @@ class StoreFragment : Fragment() {
                             setBackgroundColor(Color.rgb(238, 238, 238))
                             NodeUtils().refreshViewWithOnlyText(
                                 seedContentTreeView,
-                                RawTreeNode(seed)
+                                RawTreeNode(seed,sharedModel.realm.value!!)
                             )
                         }
                 AlertDialog.Builder(context).setView(dialogView)
@@ -197,7 +197,7 @@ class StoreFragment : Fragment() {
                     context.getString(R.string.title_add_to_task),
                     context.getString(R.string.msg_confirm_add_to_task, listItem.title)
                 ) { _, _ ->
-                    val newNode = RawTreeNode(seed)
+                    val newNode = RawTreeNode(seed,sharedModel.realm.value!!)
                     val realm = sharedModel.realm.value!!
                     if (seed.value.toString() in sharedModel.root.value!!.children.map { it.value!!.str }) {
                         AppUtils().confirmDialog(

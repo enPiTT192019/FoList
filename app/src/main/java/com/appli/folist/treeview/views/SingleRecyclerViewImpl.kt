@@ -27,7 +27,6 @@ import cn.we.swipe.helper.WeSwipeHelper
 import com.appli.folist.MainActivity
 import com.appli.folist.NodeTypes
 import com.appli.folist.R
-import com.appli.folist.Tags
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.utils.px
@@ -35,6 +34,7 @@ import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import com.appli.folist.utils.toDate
+import com.google.firebase.database.FirebaseDatabase
 import io.realm.Realm
 import kotlinx.android.synthetic.main.dialog_datetime_picker.view.*
 import kotlinx.android.synthetic.main.dialog_edit_node.view.*
@@ -444,8 +444,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     //TODO:refresh view
 //                                    notifyItemRangeChanged(0,adapterPosition+1)
                                     Log.d("refresh", "${it.value.toString()}")
+                                    notifyItemChanged(adapterPosition + 1)
                                 }
-                                node.upload(realm) { id ->
+                                node.upload { id ->
                                     nodeSyncedIdEditor.text = id
                                 }
                             }
@@ -459,14 +460,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 && !(node.parent?.parent == null //check duplicate
                                         && title in sharedModel.root.value!!.children.map { it.value.toString() })
                             ) {
-                                realm.executeTransaction {
+                                realm.executeTransactionIfNotInTransaction {
                                     node.value!!.str = title
+                                }
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("value/str").setValue(title)
                                 }
                             }
 
                             val power = dialogView.nodePowerEditor.text.toString().toInt()
                             if (power >= 0 && power != node.value!!.power) {
-                                realm.executeTransaction {
+                                realm.executeTransactionIfNotInTransaction {
                                     node.value!!.power = power
                                     if (node.progress > power * 100) {
                                         node.progress = (power * 100).toDouble()
@@ -474,6 +481,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                         node.progress =
                                             (node.progress / node.value!!.power * power).toDouble()
                                     }
+                                }
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("value/power").setValue(power)
                                 }
                             }
 
@@ -483,7 +496,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 else -> NodeTypes.BINARY_NODE.name
                             }
                             if (type != node.value!!.type) {
-                                realm.executeTransaction {
+                                realm.executeTransactionIfNotInTransaction {
                                     node.value!!.type = type
                                     if (type == NodeTypes.BINARY_NODE.name) {
                                         node.progress =
@@ -491,34 +504,65 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     }
 
                                 }
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("value/type").setValue(type)
+                                }
                             }
 
-                            realm.executeTransaction {
+                            realm.executeTransactionIfNotInTransaction {
                                 node.notice = dialogView.nodeNoticeEditor.text.toString()
                                     .toDate(recyclerView.context.getString(R.string.picker_format))
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("notice").setValue(node.notice)
+                                }
                             }
 
                             if (dialogView.nodeSharedIdEditor.text.toString() != recyclerView.context.getString(
                                     R.string.node_shared_id_not_shared
                                 )
                             ) {
-                                realm.executeTransaction {
+                                realm.executeTransactionIfNotInTransaction {
                                     node.sharedId = dialogView.nodeSharedIdEditor.text.toString()
+                                }
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("sharedId").setValue(node.sharedId)
                                 }
                             }
 
-                            realm.executeTransaction {
+                            realm.executeTransactionIfNotInTransaction {
                                 node.value!!.mediaUri = sharedModel.tempImageUri.value
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+//                                    FirebaseDatabase.getInstance().getReference(node.firebaseRefPath!!)
+//                                        .child("value/mediaUri").setValue(node.value!!.mediUri)//TODO
+                                }
                             }
 
                             val link = dialogView.nodeLinkEditor.text.toString()
                             if (link != node.value!!.link
                                 && (URLUtil.isValidUrl(link) || link.isBlank())
                             ) {
-                                realm.executeTransaction {
+                                realm.executeTransactionIfNotInTransaction {
                                     node.value!!.link = link
                                 }
+
+                                if (!node.firebaseRefPath.isNullOrBlank()) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference(node.firebaseRefPath!!)
+                                        .child("value/link").setValue(link)
+                                }
                             }
+
+
 
                             notifyItemRangeChanged(0, adapterPosition + 1)
                         }
@@ -567,30 +611,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     //get variables
                     val inputStr = itemView.editText.text.toString()
                     val viewParent = viewNode.parent as ViewTreeNode
-                    var newNode: RawTreeNode? = null
+//                    var newNode: RawTreeNode? = null
 
                     if (viewNode.parent != null && realm != null) {
-                        //create new RawNode
-                        realm.executeTransaction {
-                            newNode = realm.createObject(
-                                RawTreeNode::class.java,
-                                UUID.randomUUID().toString()
-                            ).apply {
-                                value = realm.createObject(
-                                    NodeValue::class.java,
-                                    UUID.randomUUID().toString()
-                                ).apply {
-                                    //set new node
-                                    str = inputStr
-                                }
-                                parent = viewParent.rawReference
-                                if (viewNode.parent!!.children.size <= 1) {
-                                    //TODO:set progress node
-                                    progress = viewNode.parent!!.rawReference!!.progress
-                                }
-                            }
-                            viewParent.rawReference!!.addChild(newNode!!)
+                        val newNode = RawTreeNode(
+                            NodeValue(inputStr),
+                            parent = viewParent.rawReference,
+                            mRealm = sharedModel.realm.value!!
+                        )
+                        newNode.progress =
+                            if (viewParent.children.size <= 1) viewParent.rawReference!!.progress else 0.0
+                        realm.executeTransactionIfNotInTransaction {
+                            realm.copyToRealmOrUpdate(newNode)
                         }
+                        viewParent.rawReference!!.addChild(newNode)
                         viewParent.children.remove(viewNode)
                         viewNodes.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition + 1)
@@ -600,14 +634,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewParent.addChild(viewNode)
                         viewNodes.add(adapterPosition + 1, viewNode)
                         notifyItemRangeInserted(adapterPosition + 1, 2)
-//                        notifyItemChanged(adapterPosition-1)
                         notifyItemRangeChanged(0, adapterPosition + 1)
                         itemView.editText.setText("")
-                    } else {
-                        Log.w(
-                            Tags.DEFAULT.name,
-                            "SingleRecyclerViewImpl:realm not set, or parent does not exist"
-                        )
                     }
                 }
                 AppUtils().hideKeyboard(recyclerView.context as Activity)
@@ -642,7 +670,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             ).show()
                             return@setOnClickListener
                         }
-                        newNode = RawTreeNode(seed)
+                        newNode = RawTreeNode(seed, realm)
 
                         realm.executeTransactionIfNotInTransaction {
                             viewParent.rawReference?.addChild(newNode!!)
@@ -664,11 +692,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         notifyItemRangeChanged(0, adapterPosition + 1)
                         //reset editor
                         itemView.editText.setText("")
-                    } else {
-                        Log.w(
-                            Tags.DEFAULT.name,
-                            "SingleRecyclerViewImpl:realm not set, or parent does not exist"
-                        )
                     }
                 }
                 AppUtils().hideKeyboard(recyclerView.context as Activity)
@@ -681,6 +704,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
                 else R.drawable.ic_unchecked
             )
+
+            if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()) {
+                FirebaseDatabase.getInstance()
+                    .getReference(viewNode.rawReference!!.firebaseRefPath!!)
+                    .child("progress").setValue(viewNode.rawReference!!.progress)
+            }
         }
 
         private fun bindProgress(viewNode: ViewTreeNode) {
@@ -697,6 +726,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     progress >= 100 -> "%.1f".format(progress)
                     progress >= 10 -> "%.2f".format(progress)
                     else -> " %.2f".format(progress)
+                }
+
+                if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()) {
+                    FirebaseDatabase.getInstance()
+                        .getReference(viewNode.rawReference!!.firebaseRefPath!!)
+                        .child("progress").setValue(progress)
                 }
             }
             (recyclerView.context as MainActivity).refreshTasksMenu()

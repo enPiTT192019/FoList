@@ -12,7 +12,7 @@ class NodeUtils {
         var result = realm.where(RawTreeNode::class.java).findFirst()
         //取得できない場合（初めて起動するとき）、Rootノードを作る
         if(result==null){
-            result= RawTreeNode(NodeValue("root"))
+            result= RawTreeNode(NodeValue("root"),realm)
             realm.copyToRealmOrUpdate(result)
         }
         if(!inTransaction)realm.commitTransaction()

@@ -11,8 +11,7 @@ data class NodeValueForFirebase(
     var link: String? = null,
     var power: Int = 1,
     var uuid: String = "",
-    var checked: Boolean = false,
-    var path:String?=null
+    var checked: Boolean = false
 ) {
     constructor() : this("")
     constructor(nodeValue: NodeValue) : this() {
@@ -26,6 +25,5 @@ data class NodeValueForFirebase(
         this.power = nodeValue.power
         this.checked = nodeValue.checked
         this.uuid = nodeValue.uuid
-        this.path=nodeValue.firebaseRefPath
     }
 }

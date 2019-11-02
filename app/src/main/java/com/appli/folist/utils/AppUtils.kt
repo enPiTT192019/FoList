@@ -156,128 +156,128 @@ class AppUtils {
     fun fillTestNodes(realm: Realm,root:RawTreeNode){
         realm.executeTransaction {
             root.apply {
-                addChild(RawTreeNode(NodeValue("２０１９年の目標"),this).apply {
+                addChild(RawTreeNode(NodeValue("２０１９年の目標"),this,mRealm=realm).apply {
                     //特に意味なし
-                    addChild(RawTreeNode(NodeValue("生きる"),this))
+                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
-                addChild(RawTreeNode(NodeValue("ショッピングリスト"),this).apply {
+                addChild(RawTreeNode(NodeValue("ショッピングリスト"),this,mRealm=realm).apply {
                     //Seedsのアピール
-                    addChild(RawTreeNode(NodeValue("ケンタッキー"),this))
-                    addChild(RawTreeNode(NodeValue("コーラ"),this))
+                    addChild(RawTreeNode(NodeValue("ケンタッキー"),this,mRealm=realm))
+                    addChild(RawTreeNode(NodeValue("コーラ"),this,mRealm=realm))
                     //Seedsの使い方として、複数のSeedsを組み合わせてSeedをつくることがかのう
                     //「重複のものはどうする（たとえば複数のレシピに同じ食材がある）」→「処理しない」
                     //「作り方が間違ってる」→「あくまでもでも」
-                    addChild(RawTreeNode(NodeValue("[献立]和食セット"),this).apply {
-                        addChild(RawTreeNode(NodeValue("[レシピ]塩鮭"),this).apply {
-                            addChild(RawTreeNode(NodeValue("しゃけ"),this))
-                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this).apply {
-                                addChild(RawTreeNode(NodeValue("しお"),this))
+                    addChild(RawTreeNode(NodeValue("[献立]和食セット"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("[レシピ]塩鮭"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("しゃけ"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this,mRealm=realm).apply {
+                                addChild(RawTreeNode(NodeValue("しお"),this,mRealm=realm))
                             })
                         })
-                        addChild(RawTreeNode(NodeValue("[レシピ]豚汁"),this).apply {
-                            addChild(RawTreeNode(NodeValue("豚肉"),this))
-                            addChild(RawTreeNode(NodeValue("じゃがいも"),this))
-                            addChild(RawTreeNode(NodeValue("にんじん"),this))
-                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this).apply {
-                                addChild(RawTreeNode(NodeValue("味噌"),this))
+                        addChild(RawTreeNode(NodeValue("[レシピ]豚汁"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("豚肉"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("じゃがいも"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("にんじん"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this,mRealm=realm).apply {
+                                addChild(RawTreeNode(NodeValue("味噌"),this,mRealm=realm))
                             })
                         })
-                        addChild(RawTreeNode(NodeValue("[レシピ]冷奴"),this).apply {
-                            addChild(RawTreeNode(NodeValue("豆腐"),this))
-                            addChild(RawTreeNode(NodeValue("しょうが"),this))
-                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this).apply {
-                                addChild(RawTreeNode(NodeValue("醤油"),this))
+                        addChild(RawTreeNode(NodeValue("[レシピ]冷奴"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("豆腐"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("しょうが"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("調味料",power = 0),this,mRealm=realm).apply {
+                                addChild(RawTreeNode(NodeValue("醤油"),this,mRealm=realm))
                             })
                         })
                     })
                 })
-                addChild(RawTreeNode(NodeValue("ダイエット"),this).apply {
+                addChild(RawTreeNode(NodeValue("ダイエット"),this,mRealm=realm).apply {
                     //階層構造・Storeでプラン検索のアピール,power, progress node機能
                     //TODO
                 })
-                addChild(RawTreeNode(NodeValue("基本情報資格を取得"),this).apply {
+                addChild(RawTreeNode(NodeValue("基本情報資格を取得"),this,mRealm=realm).apply {
                     //階層構造のアピール,TODO:notice
-                    addChild(RawTreeNode(NodeValue("教科書を読む"),this).apply {
-                        addChild(RawTreeNode(NodeValue("技術部分"),this))
-                        addChild(RawTreeNode(NodeValue("ビジネス部分"),this))
-                        addChild(RawTreeNode(NodeValue("マネジメント部分"),this))
-                        addChild(RawTreeNode(NodeValue("法律部分"),this))
+                    addChild(RawTreeNode(NodeValue("教科書を読む"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("技術部分"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("ビジネス部分"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("マネジメント部分"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("法律部分"),this,mRealm=realm))
                     })
-                    addChild(RawTreeNode(NodeValue("二ヶ月毎日練習問題を読む",power = 60),this))
-                    addChild(RawTreeNode(NodeValue("過去問をやる"),this).apply {
-                        addChild(RawTreeNode(NodeValue("平成２９年春"),this))
-                        addChild(RawTreeNode(NodeValue("平成２９年秋"),this))
-                        addChild(RawTreeNode(NodeValue("平成３０年春"),this))
-                        addChild(RawTreeNode(NodeValue("平成３０年秋"),this))
-                        addChild(RawTreeNode(NodeValue("平成３１年春"),this))
-                        addChild(RawTreeNode(NodeValue("平成３１年秋"),this))
+                    addChild(RawTreeNode(NodeValue("二ヶ月毎日練習問題を読む",power = 60),this,mRealm=realm))
+                    addChild(RawTreeNode(NodeValue("過去問をやる"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("平成２９年春"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("平成２９年秋"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("平成３０年春"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("平成３０年秋"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("平成３１年春"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("平成３１年秋"),this,mRealm=realm))
                     })
                 })
-                addChild(RawTreeNode(NodeValue("『TOEIC単語マスター』"),this).apply {
+                addChild(RawTreeNode(NodeValue("『TOEIC単語マスター』"),this,mRealm=realm).apply {
                     //TODO:バーコード連携のアピール
                     //TODO:テスト機能
-                    addChild(RawTreeNode(NodeValue("Chapter1"),this).apply {//TODO: can be clicked, -> test
-                        addChild(RawTreeNode(NodeValue("hello"),this))//TODO: can not be clicked
-                        addChild(RawTreeNode(NodeValue("nice"),this))
-                        addChild(RawTreeNode(NodeValue("meet"),this))
-                        addChild(RawTreeNode(NodeValue("you"),this))
+                    addChild(RawTreeNode(NodeValue("Chapter1"),this,mRealm=realm).apply {//TODO: can be clicked, -> test
+                        addChild(RawTreeNode(NodeValue("hello"),this,mRealm=realm))//TODO: can not be clicked
+                        addChild(RawTreeNode(NodeValue("nice"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("meet"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("you"),this,mRealm=realm))
                     })
-                    addChild(RawTreeNode(NodeValue("Chapter2"),this).apply {
-                        addChild(RawTreeNode(NodeValue("my"),this))
-                        addChild(RawTreeNode(NodeValue("name"),this))
-                        addChild(RawTreeNode(NodeValue("is"),this))
-                        addChild(RawTreeNode(NodeValue("Yamamoto"),this))
-                        addChild(RawTreeNode(NodeValue("what"),this))
-                        addChild(RawTreeNode(NodeValue("your"),this))
+                    addChild(RawTreeNode(NodeValue("Chapter2"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("my"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("name"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("is"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("Yamamoto"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("what"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("your"),this,mRealm=realm))
                     })
                 })
-                addChild(RawTreeNode(NodeValue("学園祭の準備"),this).apply {
+                addChild(RawTreeNode(NodeValue("学園祭の準備"),this,mRealm=realm).apply {
                     //TODO:協力作業のアピール
                     //何をするかがわからないからだれか書いてくれ
                     //例えば買い物：物１、物２とか
-                    addChild(RawTreeNode(NodeValue("name"),this))
-                    addChild(RawTreeNode(NodeValue("name"),this))
-                    addChild(RawTreeNode(NodeValue("name"),this))
+                    addChild(RawTreeNode(NodeValue("name"),this,mRealm=realm))
+                    addChild(RawTreeNode(NodeValue("name"),this,mRealm=realm))
+                    addChild(RawTreeNode(NodeValue("name"),this,mRealm=realm))
                 })
-                addChild(RawTreeNode(NodeValue("引っ越し"),this).apply {
+                addChild(RawTreeNode(NodeValue("引っ越し"),this,mRealm=realm).apply {
                     //Storeで情報検索のアピール, TODO:Line version
-                    addChild(RawTreeNode(NodeValue("一か月前"),this).apply {
-                        addChild(RawTreeNode(NodeValue("部屋の解約"),this))
-                        addChild(RawTreeNode(NodeValue("引っ越し業者に依頼"),this).apply {
-                            addChild(RawTreeNode(NodeValue("A社"),this))//TODO:link,power=0
-                            addChild(RawTreeNode(NodeValue("B社"),this))//TODO:link,power=0
-                            addChild(RawTreeNode(NodeValue("C社"),this))//TODO:link,power=0
+                    addChild(RawTreeNode(NodeValue("一か月前"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("部屋の解約"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("引っ越し業者に依頼"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("A社"),this,mRealm=realm))//TODO:link,power=0
+                            addChild(RawTreeNode(NodeValue("B社"),this,mRealm=realm))//TODO:link,power=0
+                            addChild(RawTreeNode(NodeValue("C社"),this,mRealm=realm))//TODO:link,power=0
                         })
                     })
-                    addChild(RawTreeNode(NodeValue("一か月以内"),this).apply {
+                    addChild(RawTreeNode(NodeValue("一か月以内"),this,mRealm=realm).apply {
                         //TODO:link
-                        addChild(RawTreeNode(NodeValue("役所で"),this).apply {
-                            addChild(RawTreeNode(NodeValue("転出手続き"),this))
-                            addChild(RawTreeNode(NodeValue("健康保険の喪失手続き"),this))
-                            addChild(RawTreeNode(NodeValue("印鑑登録の廃止"),this))
+                        addChild(RawTreeNode(NodeValue("役所で"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("転出手続き"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("健康保険の喪失手続き"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("印鑑登録の廃止"),this,mRealm=realm))
                         })
-                        addChild(RawTreeNode(NodeValue("電話で"),this).apply {
-                            addChild(RawTreeNode(NodeValue("電気の解約"),this))
-                            addChild(RawTreeNode(NodeValue("水道の解約"),this))
-                            addChild(RawTreeNode(NodeValue("ガスの解約"),this))
+                        addChild(RawTreeNode(NodeValue("電話で"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("電気の解約"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("水道の解約"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("ガスの解約"),this,mRealm=realm))
                         })
-                        addChild(RawTreeNode(NodeValue("各種住所変更"),this).apply {
-                            addChild(RawTreeNode(NodeValue("携帯電話"),this))
-                            addChild(RawTreeNode(NodeValue("銀行"),this))
+                        addChild(RawTreeNode(NodeValue("各種住所変更"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("携帯電話"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("銀行"),this,mRealm=realm))
                         })
-                        addChild(RawTreeNode(NodeValue("郵便局で：転送の依頼"),this))
+                        addChild(RawTreeNode(NodeValue("郵便局で：転送の依頼"),this,mRealm=realm))
                     })
-                    addChild(RawTreeNode(NodeValue("当日"),this).apply {
-                        addChild(RawTreeNode(NodeValue("ガスなどの立合い"),this))
-                        addChild(RawTreeNode(NodeValue("新居のガスなどの立会い"),this))
+                    addChild(RawTreeNode(NodeValue("当日"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("ガスなどの立合い"),this,mRealm=realm))
+                        addChild(RawTreeNode(NodeValue("新居のガスなどの立会い"),this,mRealm=realm))
                     })
-                    addChild(RawTreeNode(NodeValue("引っ越し後"),this).apply {
-                        addChild(RawTreeNode(NodeValue("役所で"),this).apply {
-                            addChild(RawTreeNode(NodeValue("転入手続き"),this))
-                            addChild(RawTreeNode(NodeValue("健康保険の手続き"),this))
-                            addChild(RawTreeNode(NodeValue("印鑑登録"),this))
+                    addChild(RawTreeNode(NodeValue("引っ越し後"),this,mRealm=realm).apply {
+                        addChild(RawTreeNode(NodeValue("役所で"),this,mRealm=realm).apply {
+                            addChild(RawTreeNode(NodeValue("転入手続き"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("健康保険の手続き"),this,mRealm=realm))
+                            addChild(RawTreeNode(NodeValue("印鑑登録"),this,mRealm=realm))
                         })
-                        addChild(RawTreeNode(NodeValue("警察署で免許の住所変更"),this))
+                        addChild(RawTreeNode(NodeValue("警察署で免許の住所変更"),this,mRealm=realm))
                     })
                 })
 
