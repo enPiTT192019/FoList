@@ -9,20 +9,14 @@ class NodeUtils {
     fun getRoot(realm: Realm): RawTreeNode {
         val inTransaction=realm.isInTransaction
         if(!inTransaction)realm.beginTransaction()
-        val result = realm.where(RawTreeNode::class.java).findFirst()
+        var result = realm.where(RawTreeNode::class.java).findFirst()
         //取得できない場合（初めて起動するとき）、Rootノードを作る
-            ?: realm.createObject(
-                RawTreeNode::class.java,
-                RawTreeNode().uuid
-            ).apply {
-                val value=NodeValue("root").apply {
-                    str = "root"
-                    detail = realm.createObject(NodeDetailMap::class.java)
-                }
-                realm.copyToRealmOrUpdate(value)
-            }
+        if(result==null){
+            result= RawTreeNode(NodeValue("root"),realm)
+            realm.copyToRealmOrUpdate(result)
+        }
         if(!inTransaction)realm.commitTransaction()
-        return result
+        return result!!
     }
 
     fun clearAllNodesForTest(realm: Realm) {
@@ -35,10 +29,6 @@ class NodeUtils {
         return root.children.find { it.uuid == id }
     }
 
-    fun getNodeFromRoot(realm: Realm, id: String): RawTreeNode? {
-        val root = getRoot(realm)
-        return _getNodeFromRoot(root, id)
-    }
 
     private fun _getNodeFromRoot(node: RawTreeNode, id: String): RawTreeNode? {
         return when {

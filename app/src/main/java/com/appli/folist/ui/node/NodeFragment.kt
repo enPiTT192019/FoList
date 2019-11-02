@@ -36,7 +36,8 @@ class NodeFragment : Fragment() {
         nodeId= arguments!!.getString("nodeId","")!!
 
         //木の表示
-        val node=NodeUtils().getNode(sharedModel.realm.value!!,nodeId)
+//        val node=NodeUtils().getNode(sharedModel.realm.value!!,nodeId)
+        val node=sharedModel.root.value!!.children.find { it.uuid==nodeId }
         NodeUtils().refreshView(treeView,node)
 
         return view
