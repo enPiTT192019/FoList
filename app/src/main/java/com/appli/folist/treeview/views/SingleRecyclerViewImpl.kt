@@ -258,7 +258,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             notifyDataSetChanged()
 
                             viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
-                            viewNode.rawReference!!.deleteFromRealm()
+//                            viewNode.rawReference!!.deleteFromRealm()
 
                         }
                     } else {//level2 node

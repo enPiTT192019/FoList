@@ -31,4 +31,8 @@ data class NodeForFirebase(
 //            )
 //        }
     }
+
+    override fun toString(): String {
+        return this.value.str
+    }
 }
