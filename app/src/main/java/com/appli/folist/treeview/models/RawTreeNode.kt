@@ -162,9 +162,6 @@ open class RawTreeNode(
 
     init {
         if (firebaseRefPath != null) {
-//            realm.executeTransactionIfNotInTransaction {
-//                this.value!!.firebaseRefPath = "${this.firebaseRefPath}/value"
-//            }
             setSync()
         }
     }
@@ -224,6 +221,8 @@ open class RawTreeNode(
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
                     override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+                    //TODO:child wont be deleted even if deleted in fb
+                    //TODO:refresh view
                     override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
                         val remote = dataSnapshot.getValue(NodeForFirebase::class.java)
                         if (remote != null && remote.uuid !in this@RawTreeNode.children.map { it.uuid }) {
