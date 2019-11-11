@@ -25,10 +25,7 @@ import com.algolia.search.model.IndexName
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.NodeValue
 import com.appli.folist.treeview.models.RawTreeNode
-import com.appli.folist.utils.AppUtils
-import com.appli.folist.utils.NodeUtils
-import com.appli.folist.utils.getAttribute
-import com.appli.folist.utils.setAttribute
+import com.appli.folist.utils.*
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -55,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setNavigationViewListener()
 
         //テスト用
-        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+//        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
@@ -68,7 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         //テスト用
-        AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
+//        AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
 
         //メニュー初期化
         navNodesItems= mutableListOf()
@@ -89,6 +86,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 userEmail.text = "email:${it.email} uid:${it.uid}"
                 it.getAttribute("name") {
                     userName.text = it?:"no name"
+                }
+                it.getAttribute("root"){rootPath->
+                    if(rootPath!=null){
+                        sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
+                            sharedModel.root.value!!.firebaseRefPath="synced-nodes/$rootPath/data"
+                            sharedModel.root.value!!.loadRef()//TODO: change to load once from firebase
+                        }
+                    }else{
+                        sharedModel.root.value!!.upload {id->
+                            it.setAttribute("root",id)
+                        }
+                    }
                 }
             }
         })

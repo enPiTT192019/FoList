@@ -22,21 +22,22 @@ open class RawTreeNode(
     sharedId: String? = null,
     syncedId: String? = null,
     uuid: String = UUID.randomUUID().toString(),
-    mRealm: Realm?=null
+    mRealm: Realm? = null
 ) : RealmObject() {
     @Ignore
     var refreshView: ((RawTreeNode) -> Unit)? = null
     @Ignore
     var refreshChildAdded: ((RawTreeNode) -> Unit)? = null
     @Ignore
-    var refreshChildRemoved: ((RawTreeNode,ViewTreeNode) -> Unit)? = null
+    var refreshChildRemoved: ((RawTreeNode, ViewTreeNode) -> Unit)? = null
     @Ignore
-    var viewNodeRef:ViewTreeNode?=null
+    var viewNodeRef: ViewTreeNode? = null
 
 
-    @Ignore var mRealm: Realm?=mRealm
+    @Ignore
+    var mRealm: Realm? = mRealm
     open var firebaseRefPath: String? = null
-    private fun getRef(): DatabaseReference? {
+    fun getRef(): DatabaseReference? {
         return if (!firebaseRefPath.isNullOrBlank()) {
             FirebaseDatabase.getInstance().getReference(firebaseRefPath!!)
         } else {
@@ -51,7 +52,7 @@ open class RawTreeNode(
     open var syncedId: String? = syncedId
     open var children: RealmList<RawTreeNode> = children
     fun addChild(child: RawTreeNode, needUpload: Boolean = true) {
-        Log.d("firebase","raw child added:$child")
+        Log.d("firebase", "raw child added:$child")
         if (!this.firebaseRefPath.isNullOrBlank() && needUpload) {
             val key = getRef()!!.child("children").push().key
             child.upload("$firebaseRefPath/children/$key")
@@ -94,17 +95,26 @@ open class RawTreeNode(
     open var sharedId: String? = sharedId
 
     constructor() : this(null)
-    constructor(mRealm: Realm?) : this(children = RealmList<RawTreeNode>(),mRealm = mRealm)
-    constructor(value: NodeValue,mRealm: Realm?) : this(value, children = RealmList<RawTreeNode>(),mRealm = mRealm)
-    constructor(value: NodeValue, parent: RawTreeNode?,mRealm: Realm?) : this(
+    constructor(mRealm: Realm?) : this(children = RealmList<RawTreeNode>(), mRealm = mRealm)
+    constructor(value: NodeValue, mRealm: Realm?) : this(
+        value,
+        children = RealmList<RawTreeNode>(),
+        mRealm = mRealm
+    )
+
+    constructor(value: NodeValue, parent: RawTreeNode?, mRealm: Realm?) : this(
         value,
         children = RealmList<RawTreeNode>(),
         parent = parent,
-                mRealm = mRealm
+        mRealm = mRealm
     )
 
-    constructor(nodeRoot: TreeSeedNode,mRealm: Realm?) : this(nodeRoot, null,mRealm = mRealm)
-    constructor(nodeRoot: TreeSeedNode, parent: RawTreeNode? = null,mRealm: Realm?) : this(mRealm = mRealm) {
+    constructor(nodeRoot: TreeSeedNode, mRealm: Realm?) : this(nodeRoot, null, mRealm = mRealm)
+    constructor(
+        nodeRoot: TreeSeedNode,
+        parent: RawTreeNode? = null,
+        mRealm: Realm?
+    ) : this(mRealm = mRealm) {
         this.value = nodeRoot.value
         this.progress = 0.0
         this.parent = parent
@@ -114,13 +124,43 @@ open class RawTreeNode(
         this.children.clear()
         this.sharedId = nodeRoot.sharedId
         nodeRoot.children.forEach {
-            this.addChild(RawTreeNode(it, this,mRealm))
+            this.addChild(RawTreeNode(it, this, mRealm))
         }
     }
 
-    constructor(remoteNode: NodeForFirebase, parent: RawTreeNode?, realm: Realm?) : this(mRealm = realm) {
+    constructor(
+        remoteNode: NodeForFirebase,
+        parent: RawTreeNode?,
+        realm: Realm?
+    ) : this(mRealm = realm) {
         reset(remoteNode, parent, realm)
         setSync()
+    }
+
+    fun loadRef(){
+        if(children.size>0){
+            this.getRef()?.child("children")?.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) { }
+                override fun onDataChange(p0: DataSnapshot) {
+                    val remote = p0.getValue()
+                    if(remote!=null){
+                        (remote as Map<*, *>).forEach { (k, v) ->
+                            this@RawTreeNode.children.filter {
+                                (v as Map<*,*>)["uuid"]==it.uuid
+                            }.forEach {node->
+                                mRealm?.executeTransactionIfNotInTransaction {
+                                    node.firebaseRefPath="${this@RawTreeNode.firebaseRefPath}/children/$k"
+                                }
+                            }
+                            //TODO: add...
+                        }
+                        this@RawTreeNode.children.filter {!it.firebaseRefPath.isNullOrBlank()}.forEach {
+                            it.loadRef()
+                        }
+                    }
+                }
+            })
+        }
     }
 
     @SuppressLint("NewApi")
@@ -186,17 +226,37 @@ open class RawTreeNode(
             val ref = getRef()
             if (ref != null) {
                 val realm = this.realm
-                ref.addValueEventListener(object : ValueEventListener {
+                ref.child("progress").addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val remote = dataSnapshot.getValue(NodeForFirebase::class.java)
-                        if (remote != null&& !remote.value.str.isNullOrBlank()) {
-                            Log.d("firebase", "node changed:${remote.toString()}")
+                        val remote = dataSnapshot.getValue(Double::class.java)
+                        if(remote!=null){
                             mRealm?.executeTransactionIfNotInTransaction {
-
-                                this@RawTreeNode.progress = remote.progress
-                                this@RawTreeNode.notice = remote.notice
-                                this@RawTreeNode.sharedId = remote.sharedId
+                                this@RawTreeNode.progress = remote
+                                this@RawTreeNode.refreshView?.invoke(this@RawTreeNode)
+                            }
+                        }
+                    }
+                })
+                ref.child("notice").addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val remote = dataSnapshot.getValue(Date::class.java)
+                        if(remote!=null){
+                            mRealm?.executeTransactionIfNotInTransaction {
+                                this@RawTreeNode.notice = remote
+                                this@RawTreeNode.refreshView?.invoke(this@RawTreeNode)
+                            }
+                        }
+                    }
+                })
+                ref.child("sharedId").addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val remote = dataSnapshot.getValue(String::class.java)
+                        if(remote!=null){
+                            mRealm?.executeTransactionIfNotInTransaction {
+                                this@RawTreeNode.sharedId = remote
                                 this@RawTreeNode.refreshView?.invoke(this@RawTreeNode)
                             }
                         }
@@ -230,7 +290,8 @@ open class RawTreeNode(
                         val remote = dataSnapshot.getValue(NodeForFirebase::class.java)
                         if (remote != null
                             && remote.uuid !in this@RawTreeNode.children.map { it.uuid }
-                            && !remote.value.str.isNullOrBlank()) {
+                            && !remote.value.str.isNullOrBlank()
+                        ) {
                             Log.d("firebase", "child added:$remote")
                             this@RawTreeNode.addChild(
                                 RawTreeNode(
@@ -247,17 +308,18 @@ open class RawTreeNode(
                         val remote = dataSnapshot.getValue(NodeForFirebase::class.java)
                         if (remote != null
                             && remote.uuid in this@RawTreeNode.children.map { it.uuid }
-                            && !remote.value.str.isNullOrBlank()) {
+                            && !remote.value.str.isNullOrBlank()
+                        ) {
                             Log.d("firebase", "child removed:$remote")
-                            var v:ViewTreeNode?=null
+                            var v: ViewTreeNode? = null
                             this@RawTreeNode.children.forEach {
-                                if(it.uuid==remote.uuid){
-                                    v=it.viewNodeRef
+                                if (it.uuid == remote.uuid) {
+                                    v = it.viewNodeRef
                                 }
                             }
                             this@RawTreeNode.removeAllChild(needUpload = false) { it.uuid == remote.uuid }
-                            if(v!=null){
-                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode,v!!)
+                            if (v != null) {
+                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode, v!!)
                             }
                         }
                     }
@@ -267,8 +329,8 @@ open class RawTreeNode(
     }
 
     fun upload(refPath: String? = null, callback: (String?) -> Unit = {}) {
-        if(this.value!!.str.isNullOrBlank())return
-        Log.d("firebase","upload:$this")
+        if (this.value!!.str.isNullOrBlank()) return
+        Log.d("firebase", "upload:$this")
         var ref = FirebaseDatabase.getInstance().getReference("")
         var syncedId: String? = null
         if (refPath.isNullOrBlank()) {
@@ -283,8 +345,9 @@ open class RawTreeNode(
         ref.setValue(NodeForFirebase(this))
 
         this.children.forEach {
-            if(it.firebaseRefPath.isNullOrBlank()){
-                it.firebaseRefPath=FirebaseDatabase.getInstance().getReference(firebaseRefPath!!).push().key
+            if (it.firebaseRefPath.isNullOrBlank()) {
+                it.firebaseRefPath =
+                    FirebaseDatabase.getInstance().getReference(firebaseRefPath!!).push().key
             }
             it.upload("${this.firebaseRefPath}/children/${it.firebaseRefPath}")
         }
