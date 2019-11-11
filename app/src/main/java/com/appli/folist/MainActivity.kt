@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
         val navHostFragment = this.supportFragmentManager.fragments.first() as NavHostFragment
 
+
         navHostFragment.childFragmentManager.fragments.forEach {
             if (fragmentClass.isAssignableFrom(it.javaClass)) {
                 return it as F
