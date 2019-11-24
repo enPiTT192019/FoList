@@ -16,12 +16,12 @@ import io.realm.Realm
 class SharedViewModel : ViewModel() {
     val realm = MutableLiveData<Realm>()
     private val auth =  FirebaseAuth.getInstance()
-    val user=MutableLiveData<FirebaseUser>()
-    val root=MutableLiveData<RawTreeNode>()
-    val seedRoot=MutableLiveData<TreeSeedNode>()
-    val algolia=MutableLiveData<ClientSearch>()
-    val seedsIndex= MutableLiveData<Index>()
-    var tempImageUri=MutableLiveData<String?>()
+    val user = MutableLiveData<FirebaseUser>()
+    val root = MutableLiveData<RawTreeNode>()
+    val seedRoot = MutableLiveData<TreeSeedNode>()
+    val algolia = MutableLiveData<ClientSearch>()
+    val seedsIndex = MutableLiveData<Index>()
+    var tempImageUri = MutableLiveData<String?>()
 
     fun login(activity: AppCompatActivity,email:String,password:String ) {
         UserUtils(activity, auth).login(email,password,

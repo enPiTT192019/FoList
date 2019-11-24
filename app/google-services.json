@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "472580761412",
+    "firebase_url": "https://folist-bbb54.firebaseio.com",
+    "project_id": "folist-bbb54",
+    "storage_bucket": "folist-bbb54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472580761412:android:237d069c57f63323ead911",
+        "android_client_info": {
+          "package_name": "com.appli.folist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472580761412-nuhn4l9knmjdpn3trjo80ksni1ii87jp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqGnZrE5O9GjucwNCb20YAUSxJ-MYD8yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472580761412-nuhn4l9knmjdpn3trjo80ksni1ii87jp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
