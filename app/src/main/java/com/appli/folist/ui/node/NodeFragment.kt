@@ -27,7 +27,16 @@ class NodeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_node, container, false)
+//
+/*        val intent = getIntent()
+        val task = intent!!.getStringExtra("TASK")
+        activity!!.setTitle(task)*/
 
+        val intent = activity?.intent
+        var task = intent?.extras?.getString("TASK")
+        activity!!.setTitle(task)
+
+//
         //変数初期化
         sharedModel = activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
         treeView = view.findViewById(R.id.treeView)
@@ -45,7 +54,12 @@ class NodeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity!!.setTitle(R.string.menu_task)
+/*        val intent = activity?.intent
+        val task = intent?.getStringExtra("TASK")
+        activity!!.setTitle(task)*/
+
+//        activity!!.setTitle(R.string.menu_task)
+
         AppUtils().hideKeyboard(context as Activity)
     }
 }

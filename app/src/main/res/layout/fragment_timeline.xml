@@ -44,14 +44,45 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_timeline" />
 
-    <ImageButton
+<!--    <ImageButton-->
+<!--        android:id="@+id/button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="right"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/ic_comment_black_24dp" />-->
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="4dp"
+        android:fontFamily="sans-serif-condensed"
+        android:paddingStart="18sp"
+        android:paddingLeft="18dp"
+        android:paddingEnd="18dp"
+        android:paddingRight="18dp"
+        android:text="ADDPOST"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:backgroundTint="?attr/colorAccent"
+        app:cornerRadius="32dp"
+        app:fontFamily="sans-serif-condensed"
+        app:icon="@drawable/ic_comment_black_24dp"
+        app:iconPadding="8dp"
+        app:iconSize="18dp"
+        app:iconTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_comment_black_24dp" />
+        app:rippleColor="@color/tertiaryText"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

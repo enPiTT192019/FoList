@@ -701,7 +701,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindBinary(viewNode: ViewTreeNode) {
             itemView.nodeBinaryBox.isVisible = true
             itemView.nodeBinaryBox.setImageResource(
-                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
+                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power)    R.drawable.ic_checked
                 else R.drawable.ic_unchecked
             )
 
@@ -741,7 +741,14 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             val minChildrenNumber = if (hasCreateNode) 1 else 0
             itemView.nodeToggle.setImageResource(
                 when {
-                    viewNode.children.size <= minChildrenNumber -> R.drawable.ic_leaf
+                    viewNode.children.size <= minChildrenNumber -> {
+//
+                        if(viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power)
+                            R.drawable.ic_leaf_color
+                        else
+                            R.drawable.ic_leaf
+//
+                    }
                     viewNode.isExpanded -> R.drawable.ic_down
                     else -> R.drawable.ic_right
                 }

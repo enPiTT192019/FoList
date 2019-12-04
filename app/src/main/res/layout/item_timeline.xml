@@ -39,7 +39,7 @@
                 android:id="@+id/user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="user name" />
+                android:text="Sawada INKYA Kenta" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_timeline_date"

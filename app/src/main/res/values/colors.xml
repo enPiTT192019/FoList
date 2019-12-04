@@ -25,5 +25,5 @@
     <color name="colorBackground">#eeeeee</color>
 
     <color name="material_amber_500">#FFC107</color>
-    <color name="dsb_progress_color">#ff009688</color>
+    <color name="dsb_progress_color">#009688</color>
 </resources>

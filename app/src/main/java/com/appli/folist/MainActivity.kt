@@ -2,8 +2,12 @@ package com.appli.folist
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextPaint
+import android.text.style.TypefaceSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
@@ -51,6 +55,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // タイトルバーを中央寄せさせる
+/*
+        val t_vg = getWindow().getDecorView() as ViewGroup
+        val t_ll = t_vg.getChildAt(0) as LinearLayout
+        val t_fl = t_ll.getChildAt(0) as FrameLayout
+        val title = t_fl.getChildAt(0) as TextView
+        title.gravity = Gravity.CENTER
+*/
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setNavigationViewListener()
@@ -73,6 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //メニュー初期化
         navNodesItems = mutableListOf()
         tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
+
         refreshTasksMenu()
         functionsMenu = nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
@@ -83,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //ログインとナビのユーザー情報の更新
         //TODO:ログインダイアログ
-        sharedModel.login(this,"user@email.com","password")
+        sharedModel.login(this,"enpit@totoro.com","password")
         sharedModel.user.observe(this, Observer {
             if(it!=null) {
                 sharedModel.user.value?.setAttribute("name","TestUser")
@@ -94,6 +108,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
     }
+
+
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
         val navHostFragment = this.supportFragmentManager.fragments.first() as NavHostFragment
@@ -133,6 +149,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 progress>=10->"%d".format(progress.roundToInt())
                 else->"%.1f".format(progress)
             }
+//
+/*            var intent = Intent(this, NodeFragment::class.java)
+            intent.putExtra("TASK", it.value!!.str )*/
+
+
+//
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
         }
         }
@@ -198,5 +220,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 sharedModel.tempImageUri.value = data?.data.toString()
             } catch (e: Exception) { }
         }
+    }
+}
+
+class CustomTypefaceSpan(family: String, private val mTypeface: Typeface) : TypefaceSpan(family) {
+
+    override fun updateDrawState(textPaint: TextPaint) {
+        applyCustomTypeFace(textPaint, mTypeface)
+    }
+
+    override fun updateMeasureState(textPaint: TextPaint) {
+        applyCustomTypeFace(textPaint, mTypeface)
+    }
+
+    private fun applyCustomTypeFace(paint: Paint, typeface: Typeface) {
+        val oldStyle: Int
+        val old = paint.getTypeface()
+        if (old == null) {
+            oldStyle = 0
+        } else {
+            oldStyle = old!!.getStyle()
+        }
+
+        val fake = oldStyle and typeface.style.inv()
+        if (fake and Typeface.BOLD != 0) {
+            paint.setFakeBoldText(true)
+        }
+
+        if (fake and Typeface.ITALIC != 0) {
+            paint.setTextSkewX(-0.25f)
+        }
+
+        paint.setTypeface(typeface)
     }
 }

@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: "realm-android"
-
 apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.appli.folist"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 11
         versionName "1.0"
@@ -74,4 +74,6 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0'
     implementation 'com.github.florent37:singledateandtimepicker:2.1.5'
+    //implementation 'com.jakewharton:butterknife:8.5.1'
+    //apt 'com.jakewharton:butterknife-compiler:8.5.1'
 }

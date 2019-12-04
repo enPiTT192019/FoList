@@ -160,6 +160,7 @@ class AppUtils {
                     //特に意味なし
                     addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
+
                 addChild(RawTreeNode(NodeValue("ショッピングリスト"),this,mRealm=realm).apply {
                     //Seedsのアピール
                     addChild(RawTreeNode(NodeValue("ケンタッキー"),this,mRealm=realm))
