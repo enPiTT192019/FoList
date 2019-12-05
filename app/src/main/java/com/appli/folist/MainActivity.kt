@@ -36,6 +36,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlin.math.roundToInt
 
 val mDataList = ArrayList<TimeLineModel>()
+var loggedIn: Boolean = false
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
-        sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
@@ -83,16 +84,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //ログインとナビのユーザー情報の更新
         //TODO:ログインダイアログ
-        sharedModel.login(this,"user@email.com","password")
-        sharedModel.user.observe(this, Observer {
-            if(it!=null) {
-                sharedModel.user.value?.setAttribute("name","TestUser")
-                userEmail.text = "email:${it.email} uid:${it.uid}"
-                it.getAttribute("name") {
-                    userName.text = it?:"no name"
+        if(loggedIn == false) {
+            sharedModel.login(this, "appli@test.com", "password")
+            sharedModel.user.observe(this, Observer {
+                if (it != null) {
+                    sharedModel.user.value?.setAttribute("name", "TestUser")
+                    userEmail.text = "email:${it.email} uid:${it.uid}"
+                    it.getAttribute("name") {
+                        name.text = it ?: "no name"
+                    }
                 }
-            }
-        })
+            })
+            loggedIn = true
+        }
     }
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
@@ -149,7 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
 
             //新規Level2ノード（以下、タスク）
-            getString(R.string.menu_create_new_task)->{
+            getString(R.string.menu_create_new_task) -> {
                 doNotCloseDrawer=true
                 val input = EditText(this)
                 input.inputType = InputType.TYPE_CLASS_TEXT
@@ -158,30 +162,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
                         val title = input.text.toString()
                         //同じ名前のタスク・空の入力を不可とする
-                        if(title.isBlank()||title in sharedModel.root.value!!.children.map { it.value!!.str }){
+                        if(title.isBlank() || title in sharedModel.root.value!!.children.map { it.value!!.str }){
                             AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
-                        }else{
+                        } else {
                             sharedModel.realm.value!!.executeTransaction{
-                                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title),sharedModel.root.value!!,sharedModel.realm.value!!))
+                                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title), sharedModel.root.value!!, sharedModel.realm.value!!))
                             }
                             refreshTasksMenu()
                             AppUtils().hideKeyboard(this@MainActivity)  //Keyboard排除?できてないかもsk
-                            val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
-                            if(id!=null){
+                            val id = sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
+                            if(id != null){
                                 val bundle = bundleOf("nodeId" to id)
                                 navController.navigate(R.id.nav_node,bundle)
                                 (nav_view.parent as DrawerLayout).closeDrawer(nav_view)
                             }
                         }
                         AppUtils().hideKeyboard(this)
-                    }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
+                    }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }.show()
             }
+
             //タスク
-            else->{
+            else -> {
                 //[...%]ThisIsATitle -> ThisIsATitle
-                val title= """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
-                val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
-                if(id!=null){
+                val title = """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
+                val id = sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
+                if(id != null){
                     val bundle = bundleOf("nodeId" to id)
                     navController.navigate(R.id.nav_node,bundle)
                 }

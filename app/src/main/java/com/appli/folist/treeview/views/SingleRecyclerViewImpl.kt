@@ -596,6 +596,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 itemView.seedButton.isVisible =
                     (NodeUtils().getSeedRoot(realm).children.find { it.value.toString() == text.toString() } != null)
             }
+            
 
             //新規ノード
             itemView.createButton.setOnClickListener {
@@ -607,7 +608,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     ).show()
                     return@setOnClickListener
                 }
+
                 if (viewNode.parent != null) {
+                    //todo 高速化
                     //get variables
                     val inputStr = itemView.editText.text.toString()
                     val viewParent = viewNode.parent as ViewTreeNode
@@ -628,6 +631,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewParent.children.remove(viewNode)
                         viewNodes.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition + 1)
+
                         val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
                         viewParent.addChild(newViewNode)
                         viewNodes.add(adapterPosition, newViewNode)

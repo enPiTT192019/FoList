@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "472580761412",
-    "firebase_url": "https://folist-bbb54.firebaseio.com",
-    "project_id": "folist-bbb54",
-    "storage_bucket": "folist-bbb54.appspot.com"
+    "project_number": "650501747923",
+    "firebase_url": "https://folist-ce3de.firebaseio.com",
+    "project_id": "folist-ce3de",
+    "storage_bucket": "folist-ce3de.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:472580761412:android:237d069c57f63323ead911",
+        "mobilesdk_app_id": "1:650501747923:android:5ee03a0e515edba3aad026",
         "android_client_info": {
           "package_name": "com.appli.folist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "472580761412-nuhn4l9knmjdpn3trjo80ksni1ii87jp.apps.googleusercontent.com",
+          "client_id": "650501747923-8s598u9nl47trrae4r2m7le4v7d8midp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appli.folist",
+            "certificate_hash": "1e28c76f2894da56eb3bb26563922cdcd75bebd7"
+          }
+        },
+        {
+          "client_id": "650501747923-87f42dstrgtoa75pv0obi3nce7gks1bn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAqGnZrE5O9GjucwNCb20YAUSxJ-MYD8yY"
+          "current_key": "AIzaSyBDrnGQZcZGtpiMC8Bef_rADLL0zL9YR-I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "472580761412-nuhn4l9knmjdpn3trjo80ksni1ii87jp.apps.googleusercontent.com",
+              "client_id": "650501747923-87f42dstrgtoa75pv0obi3nce7gks1bn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

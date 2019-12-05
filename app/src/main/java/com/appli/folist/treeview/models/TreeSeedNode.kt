@@ -62,7 +62,6 @@ open class TreeSeedNode(
         }
     }
 
-
     fun addChild(child:TreeSeedNode){
         children.add(child)
     }

@@ -45,6 +45,16 @@
             android:layout_marginEnd="1dp"
             android:tint="@android:color/holo_green_light"
             app:srcCompat="@drawable/ic_create" />
+
+        <ImageView
+            android:id="@+id/storeShareButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="1dp"
+            android:tint="@android:color/holo_orange_light"
+            app:srcCompat="@drawable/ic_comment_black_24dp" />
+
         <ImageView
             android:id="@+id/storeItemDownloadButton"
             android:layout_width="36dp"
