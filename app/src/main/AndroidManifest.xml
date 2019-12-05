@@ -16,11 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PaidSubscriberAdActivity"></activity>
+        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".PaidSubscriberAdActivity" />
         <activity
             android:name=".AboutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".tweetActivity"></activity>
+        <activity android:name=".tweetActivity" />
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="true"

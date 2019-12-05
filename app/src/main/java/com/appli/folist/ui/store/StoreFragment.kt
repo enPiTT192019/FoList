@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,13 @@ import androidx.lifecycle.ViewModelProviders
 import com.algolia.search.helper.deserialize
 import com.algolia.search.model.ObjectID
 import com.algolia.search.model.search.Query
+import com.appli.folist.CommentActivity
 import com.appli.folist.MainActivity
 import com.appli.folist.R
 import com.appli.folist.STORE_SHOW_LATEST_NUM
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.treeview.models.TreeSeedNode
-import com.appli.folist.tweetActivity
 import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
@@ -198,17 +199,27 @@ class StoreFragment : Fragment() {
             }
 
             viewHolder.storeShareButton.setOnClickListener {
-                TreeSeedNode().download(listItem.key) { seed ->
-                    if (seed != null) {
-                        val intent = Intent(this.context, tweetActivity::class.java)
-                        println("mokemoketitle "+ seed.value?.str+" mokemoke uuid "+ seed.uuid)
-                        intent.putExtra("SEEDTITLE", seed.value?.str)
-                        intent.putExtra("SEEDUUID", seed.value?.uuid)
-                        startActivity(this.context, intent, null)
-                    } else {
-                        //TODO
-                    }
-                }
+                val intent=Intent(this.context,CommentActivity::class.java)
+                Log.d("COMMENT","comment button clicked")
+                intent.putExtra("KEY",listItem.key)
+                startActivity(this.context,intent,null)
+
+//                TreeSeedNode().download(listItem.key) { seed ->
+//                    if (seed != null) {
+////                        println("mokemoketitle "+ seed.value?.str+" mokemoke uuid "+ seed.uuid)
+////                        intent.putExtra("SEEDTITLE", seed.value?.str)
+////                        intent.putExtra("SEEDUUID", seed.value?.uuid)
+////                        startActivity(this
+////                        val intent = Intent(.context, intent, null)
+//
+//                        val intent=Intent(this.context,CommentActivity::class.java)
+//                        Log.d("COMMENT","comment button clicked")
+//                        intent.putExtra("KEY",listItem.key)
+//                        startActivity(this.context,intent,null)
+//                    } else {
+//                        //TODO
+//                    }
+//                }
             }
 
             fun addToTask(seed: TreeSeedNode){
