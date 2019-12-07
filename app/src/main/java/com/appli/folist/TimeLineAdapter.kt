@@ -18,7 +18,7 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {
-        val  layoutInflater = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         val view: View
 
         view = if (mAttributes.orientation == Orientation.HORIZONTAL) {
@@ -45,7 +45,6 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
         holder.userButton.setOnClickListener {
             //TODO
             //プロフ画像押下時。プロフィール画面表示
-
         }
     }
 

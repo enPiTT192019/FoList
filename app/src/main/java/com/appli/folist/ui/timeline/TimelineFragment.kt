@@ -92,7 +92,7 @@ class TimelineFragment : Fragment() {
     private fun initRecyclerView() {
         initAdapter()
 
-        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        commentView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             @SuppressLint("LongLogTag")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -107,9 +107,9 @@ class TimelineFragment : Fragment() {
             LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         }
 
-        recyclerView.layoutManager = mLayoutManager
+        commentView.layoutManager = mLayoutManager
         mAdapter = TimeLineAdapter(mDataList, mAttributes)
-        recyclerView.adapter = mAdapter
+        commentView.adapter = mAdapter
     }
 
     override fun onStart() {

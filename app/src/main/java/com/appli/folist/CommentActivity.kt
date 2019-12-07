@@ -17,18 +17,19 @@ class CommentActivity : AppCompatActivity() {
         val key: String? = intent.getStringExtra("KEY")
         Log.d("COMMENT",key?:"null")
 
-        val ref=FirebaseDatabase.getInstance().getReference("comments").child(key!!)
+        val ref = FirebaseDatabase.getInstance().getReference("comments").child(key!!)
 
         commentButton.setOnClickListener {
             val str=commentEditor.text.toString()
             if(!str.isNullOrBlank()){
-                val cref=ref.push().setValue(Comment(FirebaseAuth.getInstance().currentUser?.uid?:"unknown user",str))
+                val cref = ref.push().setValue(Comment(FirebaseAuth.getInstance().currentUser?.uid?:"unknown user",str))
 //                cref.child("content").setValue(str)
 //                cref.child("uid").setValue(FirebaseAuth.getInstance().currentUser?.uid?:"unknown user")
             }
+            commentEditor.text = null
         }
 
-        if(key!=null){
+        if(key != null){
             //TODO:リストにしてください
             //最初の読み取り
 //            ref.addListenerForSingleValueEvent(object:ValueEventListener{
@@ -47,24 +48,31 @@ class CommentActivity : AppCompatActivity() {
 //                }
 //
 //            })
-            //投降後の更新
+
+            //投稿後の更新
             ref.addChildEventListener(object :ChildEventListener{
                 override fun onCancelled(p0: DatabaseError) { }
                 override fun onChildMoved(p0: DataSnapshot, p1: String?) { }
                 override fun onChildChanged(p0: DataSnapshot, p1: String?) { }
                 override fun onChildRemoved(p0: DataSnapshot) { }
                 override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                    val r=p0.getValue(Comment::class.java)
-                    commentsText.text=commentsText.text.toString()+"\n"+r
+                    val r = p0.getValue(Comment::class.java)
+
                 }
-
-
             })
         }
     }
+//
+//    inner class CommentViewHolder(itemView: View, viewType: Int) : RecyclerView.ViewHolder(itemView) {
+//        val dateinkya = itemView.text_timeline_date
+//        val message = itemView.text_comment
+//        val userButton = itemView.user_button
+//        val userName = itemView.name
+//    }
+
     data class Comment(
-        val uid:String,
-        val content:String
+        val uid: String,
+        val content: String
     ){
         constructor():this("","")
         override fun toString(): String {

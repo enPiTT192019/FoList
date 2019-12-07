@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Animation" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@animator/close_enter</item>
+        <item name="android:activityOpenExitAnimation">@animator/close_exit</item>
+        <item name="android:activityCloseEnterAnimation">@animator/open_enter</item>
+        <item name="android:activityCloseExitAnimation">@animator/open_exit</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
