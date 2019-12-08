@@ -3,4 +3,23 @@
     <declare-styleable name="CheckBoxEx">
         <attr name="state_indeterminate" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="TimelineView" >
+        <attr name="marker" format="color|reference"/>
+        <attr name="markerSize" format="dimension"/>
+        <attr name="markerInCenter" format="boolean"/>
+        <attr name="startLineColor" format="color"/>
+        <attr name="endLineColor" format="color"/>
+        <attr name="lineWidth" format="dimension"/>
+        <attr name="lineStyle" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="dash" value="1" />
+        </attr>
+        <attr name="lineStyleDashGap" format="dimension" />
+        <attr name="lineStyleDashLength" format="dimension" />
+        <attr name="lineOrientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="linePadding" format="dimension"/>
+    </declare-styleable>
 </resources>

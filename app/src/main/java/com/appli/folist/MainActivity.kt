@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.algolia.search.model.IndexName
 import com.appli.folist.models.SharedViewModel
+import com.appli.folist.models.TimeLineModel
 import com.appli.folist.treeview.models.NodeValue
 import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.utils.AppUtils
@@ -34,9 +35,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlin.math.roundToInt
 
+val mDataList = ArrayList<TimeLineModel>()
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var tasksMenu:SubMenu
@@ -46,10 +47,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navNodesItems:MutableList<MenuItem>
     lateinit var sharedModel: SharedViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setNavigationViewListener()
@@ -66,19 +67,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.algolia.value=AppUtils().getAlgolia()
         sharedModel.seedsIndex.value=sharedModel.algolia.value?.initIndex(IndexName("seeds"))
 
-
         //テスト用
         AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
 
         //メニュー初期化
-        navNodesItems= mutableListOf()
-        tasksMenu=nav_view.menu.addSubMenu(R.string.menu_tasks)
+        navNodesItems = mutableListOf()
+        tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
         refreshTasksMenu()
-        functionsMenu=nav_view.menu.addSubMenu(R.string.menu_functions)
+        functionsMenu = nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
         functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
+
 
         //ログインとナビのユーザー情報の更新
         //TODO:ログインダイアログ
@@ -92,7 +93,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         })
-
     }
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
@@ -139,8 +139,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tasksMenu.add(R.string.menu_create_new_task).setIcon(R.drawable.ic_create)
     }
 
-
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var doNotCloseDrawer=false
         navController.popBackStack()
@@ -167,7 +165,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title),sharedModel.root.value!!,sharedModel.realm.value!!))
                             }
                             refreshTasksMenu()
-                            AppUtils().hideKeyboard(this@MainActivity)
+                            AppUtils().hideKeyboard(this@MainActivity)  //Keyboard排除?できてないかもsk
                             val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
                             if(id!=null){
                                 val bundle = bundleOf("nodeId" to id)
@@ -188,7 +186,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     navController.navigate(R.id.nav_node,bundle)
                 }
             }
-
         }
         if(!doNotCloseDrawer)(nav_view.parent as DrawerLayout).closeDrawer(nav_view)
         return true
