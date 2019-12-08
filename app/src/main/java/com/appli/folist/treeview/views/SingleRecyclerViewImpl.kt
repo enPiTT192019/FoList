@@ -109,6 +109,7 @@ class SingleRecyclerViewImpl : RecyclerView,
                 viewTreeNode.position=index
             }
             notifyItemRangeInserted(0, viewNodes.size)
+//            notifyDataSetChanged()
         }
     }
 
@@ -469,6 +470,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 //TODO:upload to frebase and set shared-id
                             }
                             nodeSyncButton.setOnClickListener {
+                               // node.refreshView = {
+                               //     //TODO:refresh view
+//                            //        notifyItemRangeChanged(0,adapterPosition+1)
+                               //     Log.d("refresh", "${it.value.toString()}")
+                             //       notifyItemChanged(adapterPosition + 1)
+                             //   }
                                 node.upload { id ->
                                     nodeSyncedIdEditor.text = id
                                     setNodeRefreshFunctions(node)
@@ -632,7 +639,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     ).show()
                     return@setOnClickListener
                 }
+
                 if (viewNode.parent != null) {
+                    //todo 高速化
                     //get variables
                     val inputStr = itemView.editText.text.toString()
                     val viewParent = viewNode.parent as ViewTreeNode

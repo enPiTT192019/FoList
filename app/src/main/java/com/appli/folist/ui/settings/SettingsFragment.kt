@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
+
 import com.appli.folist.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -29,6 +31,16 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        nightModeSwitch.setOnCheckedChangeListener{ buttonView, isChecked ->
+            if(isChecked) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
         copyrightTextView?.setOnClickListener {
             val intent= Intent(this.context, AboutActivity::class.java)
             startActivity(intent)

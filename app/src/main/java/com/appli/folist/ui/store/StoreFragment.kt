@@ -1,19 +1,23 @@
 package com.appli.folist.ui.store
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.algolia.search.helper.deserialize
 import com.algolia.search.model.ObjectID
 import com.algolia.search.model.search.Query
+import com.appli.folist.CommentActivity
 import com.appli.folist.MainActivity
 import com.appli.folist.R
 import com.appli.folist.STORE_SHOW_LATEST_NUM
@@ -91,7 +95,8 @@ class StoreFragment : Fragment() {
         val storeItemDownloadButton: View,
         val storeItemDeleteButton: View,
         val storeItemContent: TextView,
-        val storeItemPriceText: TextView
+        val storeItemPriceText: TextView,
+        val storeShareButton: View
     )
 
     class StoreAdapter : ArrayAdapter<StoreListItem> {
@@ -125,7 +130,8 @@ class StoreFragment : Fragment() {
                     view.findViewById(R.id.storeItemDownloadButton),
                     view.findViewById(R.id.storeItemDeleteButton),
                     view.findViewById(R.id.storeItemContent),
-                    view.findViewById(R.id.storeItemPriceText)
+                    view.findViewById(R.id.storeItemPriceText),
+                    view.findViewById(R.id.storeShareButton)
                 )
                 view.tag = viewHolder
             } else {
@@ -191,6 +197,31 @@ class StoreFragment : Fragment() {
                     this.notifyDataSetChanged()
                 }
             }
+
+            viewHolder.storeShareButton.setOnClickListener {
+                val intent=Intent(this.context,CommentActivity::class.java)
+                Log.d("COMMENT","comment button clicked")
+                intent.putExtra("KEY",listItem.key)
+                startActivity(this.context,intent,null)
+
+//                TreeSeedNode().download(listItem.key) { seed ->
+//                    if (seed != null) {
+////                        println("mokemoketitle "+ seed.value?.str+" mokemoke uuid "+ seed.uuid)
+////                        intent.putExtra("SEEDTITLE", seed.value?.str)
+////                        intent.putExtra("SEEDUUID", seed.value?.uuid)
+////                        startActivity(this
+////                        val intent = Intent(.context, intent, null)
+//
+//                        val intent=Intent(this.context,CommentActivity::class.java)
+//                        Log.d("COMMENT","comment button clicked")
+//                        intent.putExtra("KEY",listItem.key)
+//                        startActivity(this.context,intent,null)
+//                    } else {
+//                        //TODO
+//                    }
+//                }
+            }
+
             fun addToTask(seed: TreeSeedNode){
                 AppUtils().confirmDialog(
                     context,
@@ -220,8 +251,9 @@ class StoreFragment : Fragment() {
                     (context as MainActivity).refreshTasksMenu()
                 }
             }
+
             viewHolder.storeItemAddToTaskButton.setOnClickListener {
-                val downloaded=listItem.key in sharedModel.seedRoot.value!!.children.map { it.downloadFrom }
+                val downloaded = listItem.key in sharedModel.seedRoot.value!!.children.map { it.downloadFrom }
                 if(!downloaded){
                     AppUtils().confirmDialog(
                         context,
@@ -248,21 +280,20 @@ class StoreFragment : Fragment() {
                                     saveSeedToRealm(seed)
                                 }
                             }
-                            val downadedSeed=sharedModel.seedRoot.value!!.children.find { it.downloadFrom==listItem.key }
-                            if(downadedSeed!=null){
+                            val downadedSeed = sharedModel.seedRoot.value!!.children.find { it.downloadFrom==listItem.key }
+                            if(downadedSeed != null){
                                 addToTask(downadedSeed)
                             }
                         }
                     }
                 }else{
-                    val seed=sharedModel.seedRoot.value!!.children.find { it.downloadFrom==listItem.key }
-                    if(seed!=null){
+                    val seed = sharedModel.seedRoot.value!!.children.find { it.downloadFrom==listItem.key }
+                    if(seed != null){
                         addToTask(seed)
                     }
                 }
-
-
             }
+
             viewHolder.storeItemDownloadButton.setOnClickListener {
                 AppUtils().confirmDialog(
                     context,

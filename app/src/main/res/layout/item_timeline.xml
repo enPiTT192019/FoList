@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp">
+    android:layout_marginRight="10dp"
+    >
 
     <ImageButton
         android:id="@+id/user_button"
@@ -16,7 +17,7 @@
         android:adjustViewBounds="true"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/foo" />
+        android:src="@drawable/dog" />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
         android:layout_gravity="center_vertical"
-        app:cardBackgroundColor="@color/colorGrey50"
+        app:cardBackgroundColor="@color/colorTimeline"
         app:contentPadding="15dp">
 
         <LinearLayout
@@ -36,10 +37,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="user name" />
+                android:textColor="@color/colorSoftText"
+                android:text="Sawada INKYA Kenta" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_timeline_date"
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="right"
+                android:textColor="@color/colorSoftText"
                 android:textSize="12sp"
                 tools:text="24 JAN" />
 
@@ -55,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorBlack"
                 tools:text="Order Successfully Completed" />
 
         </LinearLayout>

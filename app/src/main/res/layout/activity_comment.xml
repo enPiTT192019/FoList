@@ -2,28 +2,28 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".CommentActivity">
 
-    <TextView
-        android:id="@+id/copyrightTextView"
+    <Button
+        android:id="@+id/commentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/copyright"
-        android:textSize="12sp"
-        android:textColor="@color/colorBlack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="17dp"
+        android:text="Button"
+        app:layout_constraintStart_toEndOf="@+id/commentEditor"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/nightModeSwitch"
+    <EditText
+        android:id="@+id/commentEditor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
-        android:text="夜間モード"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="コメント"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@ open class RawTreeNode(
     uuid: String = UUID.randomUUID().toString(),
     mRealm: Realm?=null
 ) : RealmObject() {
+
     @Ignore
     var refreshView: ((RawTreeNode) -> Unit)? = null
     @Ignore
@@ -94,8 +95,8 @@ open class RawTreeNode(
     open var sharedId: String? = sharedId
 
     constructor() : this(null)
-    constructor(mRealm: Realm?) : this(children = RealmList<RawTreeNode>(),mRealm = mRealm)
-    constructor(value: NodeValue,mRealm: Realm?) : this(value, children = RealmList<RawTreeNode>(),mRealm = mRealm)
+    constructor(mRealm: Realm?) : this(children = RealmList<RawTreeNode>(), mRealm = mRealm)
+    constructor(value: NodeValue, mRealm: Realm?) : this(value, children = RealmList<RawTreeNode>(), mRealm = mRealm)
     constructor(value: NodeValue, parent: RawTreeNode?,mRealm: Realm?) : this(
         value,
         children = RealmList<RawTreeNode>(),
