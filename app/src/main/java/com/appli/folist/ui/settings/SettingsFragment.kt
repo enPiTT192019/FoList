@@ -1,6 +1,8 @@
 package com.appli.folist.ui.settings
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +34,7 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         nightModeSwitch.setOnCheckedChangeListener{ buttonView, isChecked ->
             if(isChecked) {
                 AppCompatDelegate.setDefaultNightMode(

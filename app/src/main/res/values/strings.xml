@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Timeline</string>
+    <string name="app_name">FoList</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Please Login</string>
@@ -98,7 +98,7 @@
 
 
     <string name="copyright">©2019 Appli All Rights Reserved</string>
-    <string name="action_done">成功</string>
+    <string name="action_done">シードに追加されました</string>
     <string name="action_ok">OK</string>
     <string name="action_cancel">キャンセル</string>
     <string name="action_confirm">確認</string>

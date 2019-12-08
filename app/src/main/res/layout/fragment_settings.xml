@@ -21,8 +21,10 @@
         android:id="@+id/nightModeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
         android:text="夜間モード"
+        android:textColor="@color/colorBlack"
+        android:textOn="ON"
+        android:textOff="OFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

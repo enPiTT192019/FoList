@@ -40,8 +40,11 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
             holder.date.visibility = View.GONE
 
         holder.message.text = timeLineModel.message
-        holder.userName.text = usersName
-
+        if(usersName != null && usersName != "") {
+            holder.userName.text = usersName
+        } else {
+            holder.userName.text = "Appli2019"
+        }
         holder.userButton.setOnClickListener {
             //TODO
             //プロフ画像押下時。プロフィール画面表示
