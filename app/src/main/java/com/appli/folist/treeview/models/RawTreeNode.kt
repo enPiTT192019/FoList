@@ -17,7 +17,7 @@ open class RawTreeNode(
     value: NodeValue? = null,
     children: RealmList<RawTreeNode>,
     parent: RawTreeNode? = null,
-    progress: Double = 0.0,
+    progress: Double? = 0.0,
     notice: Date? = null,
     sharedId: String? = null,
     syncedId: String? = null,
@@ -37,7 +37,22 @@ open class RawTreeNode(
 
     @Ignore var mRealm: Realm?=mRealm
     open var firebaseRefPath: String? = null
-    private fun getRef(): DatabaseReference? {
+    set(value) {
+        field=value
+        if (value != null) {
+//            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
+//                override fun onCancelled(p0: DatabaseError) {}
+//                override fun onDataChange(p0: DataSnapshot) {
+//                    val remote = p0.getValue(NodeForFirebase::class.java)
+//                    if(remote!=null){
+//                        reset(remote, parent, mRealm)
+//                        setSync()
+//                    }
+//                }
+//            })
+        }
+    }
+    public fun getRef(): DatabaseReference? {
         return if (!firebaseRefPath.isNullOrBlank()) {
             FirebaseDatabase.getInstance().getReference(firebaseRefPath!!)
         } else {
@@ -65,22 +80,21 @@ open class RawTreeNode(
     }
 
     fun removeChild(child: RawTreeNode, needUpload: Boolean = true) {
-        if (!child.firebaseRefPath.isNullOrBlank() && needUpload) {
-            child.getRef()!!.removeValue()
-            child.firebaseRefPath = null
-        }
+        val ref=child.getRef()
         mRealm?.executeTransactionIfNotInTransaction {
             children.remove(child)
+        }
+        if (ref!=null&& needUpload) {
+            ref.removeValue()
         }
     }
 
     fun removeAllChild(needUpload: Boolean = true, condition: (RawTreeNode) -> Boolean) {
         if (!this.firebaseRefPath.isNullOrBlank() && needUpload) {
-            children.filter(condition).forEach {
-                if (!it.firebaseRefPath.isNullOrBlank()) {
-                    it.getRef()!!.removeValue()
-                    it.firebaseRefPath = null
-                }
+            children.filter(condition).forEach {child->
+                val ref=child.getRef()
+                children.remove(child)
+                ref?.removeValue()
             }
         }
 
@@ -90,7 +104,7 @@ open class RawTreeNode(
         }
     }
 
-    open var progress: Double = progress
+    open var progress: Double? = progress
     open var notice: Date? = notice
     open var sharedId: String? = sharedId
 
@@ -162,25 +176,25 @@ open class RawTreeNode(
 //            this.children = RealmList()
 //            this.removeAllChild { true }
             remoteNode.children.forEach { (k, v) ->
-                this.addChild(RawTreeNode(v, this, realm))
+                this.addChild(RawTreeNode(v, this, realm),needUpload = false)
             }
         }
     }
 
     init {
-//        if (firebaseRefPath != null) {
-//            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
-//                override fun onCancelled(p0: DatabaseError) {}
-//                 override fun onDataChange(p0: DataSnapshot) {
-//                     val remote = p0.getValue(NodeForFirebase::class.java)
-//                     if(remote!=null){
-//                         reset(remote, parent, realm)
-//                         setSync()
-//                     }
-//                }
-//
-//            })
-//        }
+        if (firebaseRefPath != null) {
+            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                 override fun onDataChange(p0: DataSnapshot) {
+                     val remote = p0.getValue(NodeForFirebase::class.java)
+                     if(remote!=null){
+                         reset(remote, parent, mRealm)
+                         setSync()
+                     }
+                }
+
+            })
+        }
     }
 
 
@@ -195,7 +209,7 @@ open class RawTreeNode(
             parent!!.findFirstSyncedNode()
         }
     }
-    private fun setSync() {
+    fun setSync() {
         if (firebaseRefPath != null) {
             val ref = getRef()
             if (ref != null) {
@@ -315,7 +329,7 @@ open class RawTreeNode(
         return if (children.size >= 1) {
             ((children.sumByDouble { it.calcProgress() }) / getSumOfPower()) * this.value!!.power
         } else {
-            this.progress
+            this.progress!!
         }
 //        return this.progress
     }

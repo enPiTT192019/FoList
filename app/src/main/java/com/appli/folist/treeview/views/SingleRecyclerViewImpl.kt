@@ -243,6 +243,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     if (viewNode.parent != null) {
                         realm.executeTransactionIfNotInTransaction {
 
+                            viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
+
+
                             if (viewNode.parent != null) {
                                 viewNode.parent!!.children.remove(viewNode)
                                 fun deleteFromViewNodes(viewNode: ViewTreeNode) {
@@ -260,7 +263,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 //                            notifyItemRangeChanged(0,adapterPosition+1)
                             notifyDataSetChanged()
 
-                            viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
 //                            viewNode.rawReference!!.deleteFromRealm()
 
                         }
@@ -506,11 +508,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             if (power >= 0 && power != node.value!!.power) {
                                 realm.executeTransactionIfNotInTransaction {
                                     node.value!!.power = power
-                                    if (node.progress > power * 100) {
+                                    if (node.progress!! > power * 100) {
                                         node.progress = (power * 100).toDouble()
                                     } else {
                                         node.progress =
-                                            (node.progress / node.value!!.power * power).toDouble()
+                                            (node.progress!! / node.value!!.power * power).toDouble()
                                     }
                                 }
 
@@ -531,7 +533,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     node.value!!.type = type
                                     if (type == NodeTypes.BINARY_NODE.name) {
                                         node.progress =
-                                            (if (node.progress > 0) node.value!!.power * 100 else 0).toDouble()
+                                            (if (node.progress!! > 0) node.value!!.power * 100 else 0).toDouble()
                                     }
 
                                 }
@@ -735,7 +737,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindBinary(viewNode: ViewTreeNode) {
             itemView.nodeBinaryBox.isVisible = true
             itemView.nodeBinaryBox.setImageResource(
-                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
+                if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
                 else R.drawable.ic_unchecked
             )
 
@@ -855,7 +857,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewNode.rawReference!!.value!!.type == NodeTypes.BINARY_NODE.name -> {
                             realm!!.executeTransaction {
                                 viewNode.rawReference!!.progress =
-                                    if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) 0.0
+                                    if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) 0.0
                                     else 100.0 * viewNode.rawReference!!.value!!.power
                             }
                             notifyItemRangeChanged(0, adapterPosition + 1)
@@ -865,7 +867,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             val input = EditText(recyclerView.context)
                             AppUtils().seekbarDialog(
                                 recyclerView.context as Activity,
-                                viewNode.rawReference!!.progress.toInt(),
+                                viewNode.rawReference!!.progress!!.toInt(),
                                 viewNode.rawReference!!.value!!.power * 100
 
                             ) { progress, _, _ ->
