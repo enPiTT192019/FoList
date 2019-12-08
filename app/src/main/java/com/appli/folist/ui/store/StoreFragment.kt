@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.dialog_show_seed.view.*
 import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import kotlin.concurrent.thread
 
 
 class StoreFragment : Fragment() {
@@ -360,15 +361,19 @@ class StoreFragment : Fragment() {
         super.onStart()
         activity!!.setTitle(com.appli.folist.R.string.menu_store)
 
-        search("", STORE_SHOW_LATEST_NUM) { seeds ->
-            setList(seeds)
-        }
+        thread {
 
-        storeSearchButton.setOnClickListener {
-            search(storeSearchEditor.text.toString()) { seeds ->
+            search("", STORE_SHOW_LATEST_NUM) { seeds ->
                 setList(seeds)
             }
+
+            storeSearchButton.setOnClickListener {
+                search(storeSearchEditor.text.toString()) { seeds ->
+                    setList(seeds)
+                }
+            }
         }
+
 
     }
 }

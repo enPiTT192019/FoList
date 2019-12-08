@@ -147,9 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var doNotCloseDrawer=false
         navController.popBackStack()
         when(item.title){
-            getString(R.string.menu_store)->{
-                navController.navigate(R.id.nav_store)
-            }
+            getString(R.string.menu_store)-> navController.navigate(R.id.nav_store)
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
