@@ -242,9 +242,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     //TODO:confirm?
                     if (viewNode.parent != null) {
                         realm.executeTransactionIfNotInTransaction {
-
                             viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
-
 
                             if (viewNode.parent != null) {
                                 viewNode.parent!!.children.remove(viewNode)
@@ -260,11 +258,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 adapterPosition,
                                 viewNode.getDisplayedNodeNumber()
                             )
-//                            notifyItemRangeChanged(0,adapterPosition+1)
+
+                            viewNode.rawReference!!.firebaseRefPath=null
                             notifyDataSetChanged()
-
-//                            viewNode.rawReference!!.deleteFromRealm()
-
                         }
                     } else {//level2 node
                         realm.executeTransactionIfNotInTransaction {
@@ -341,19 +337,53 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             node.refreshView = {
 //                                    notifyItemRangeChanged(0,adapterPosition+1)
                 Log.d("refresh", "${it.value.toString()}")
-                notifyItemChanged(adapterPosition + 1)
+//                if(!it.value?.str.isNullOrBlank()){
+                if(it.viewNodeRef?.position!=null && it.viewNodeRef?.position!!>0){
+                    notifyItemChanged( it.viewNodeRef!!.position!!)
+                }
+//                }
             }
         }
         private fun setNodeChildAdded(node:RawTreeNode){
-            node.refreshChildAdded={
-                notifyItemChanged(adapterPosition + 1)
+            node.refreshChildAdded={parent,viewNode,child->
+                if(viewNode.isExpanded){
+                    //add to last
+                    val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
+                    viewNode.children.add(viewNode.children.size-1,newViewNode)
+                    val pos=viewNode.position!!+viewNode.getDisplayedNodeNumber()-2
+                    newViewNode.position=pos
+
+                    viewNodes.add(pos,newViewNode)
+                    notifyItemInserted(pos)
+                }
             }
         }
         private fun setNodeChildRemoved(node:RawTreeNode){
             node.refreshChildRemoved= {node,viewNode->
                 if(viewNode.position!=null){
                     viewNodes.remove(viewNode)
-                    notifyItemRemoved(viewNode.position!!)
+//                    //TODO:remove children of this node
+                    if(viewNode.position!=null && viewNode.position!!>=0) {
+//                        notifyItemRemoved(viewNode.position!!)
+//                    }
+//                    if(viewNode.position==null || viewNode.position!!<0)return
+
+                        if (viewNode.parent != null) {
+                            viewNode.parent!!.children.remove(viewNode)
+                            fun deleteFromViewNodes(viewNode: ViewTreeNode) {
+                                if (viewNode.children.size > 0) {
+                                    viewNode.children.forEach { deleteFromViewNodes(it) }
+                                }
+                                if (viewNode in viewNodes) viewNodes.remove(viewNode)
+                            }
+                            deleteFromViewNodes(viewNode)
+                        }
+                        notifyItemRangeRemoved(
+                            adapterPosition,
+                            viewNode.getDisplayedNodeNumber()
+                        )
+                        notifyDataSetChanged()
+                    }
                 }
             }
         }
@@ -741,7 +771,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 else R.drawable.ic_unchecked
             )
 
-            if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()) {
+            if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()
+                && !viewNode.rawReference!!.value!!.str.isNullOrBlank()) {
                 FirebaseDatabase.getInstance()
                     .getReference(viewNode.rawReference!!.firebaseRefPath!!)
                     .child("progress").setValue(viewNode.rawReference!!.progress)
@@ -766,7 +797,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                 if (viewNode.rawReference!=null
                     &&!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()
-                    && !viewNode.rawReference!!.value!!.str.isNullOrBlank()) {
+                    && !viewNode.rawReference!!.value!!.str.isNullOrBlank()
+                    ) {
                     Log.d("firebase","progress update:$progress")
                     FirebaseDatabase.getInstance()
                         .getReference(viewNode.rawReference!!.firebaseRefPath!!)

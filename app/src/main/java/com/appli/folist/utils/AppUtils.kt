@@ -166,7 +166,7 @@ class AppUtils {
 //                    //特に意味なし
 //                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
 //                })
-                addChild(RawTreeNode(NodeValue("２０１９年の目標"),this,mRealm=realm).apply {
+                addChild(RawTreeNode(NodeValue("協力ノード"),this,mRealm=realm).apply {
                     //特に意味なし
                     //TODO:delete
                     firebaseRefPath="synced-nodes/-Lval6ac-hvYZoHeLhZM/data"
@@ -175,13 +175,13 @@ class AppUtils {
                         override fun onDataChange(p0: DataSnapshot) {
                             val remote = p0.getValue(NodeForFirebase::class.java)
                             if (remote != null) {
-                                reset(remote, parent, mRealm)
+                                resetWithoutChildren(remote, parent, realm)
                                 setSync()
                             }
                         }
                     })
 
-                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
+//                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
                 addChild(RawTreeNode(NodeValue("ショッピングリスト"),this,mRealm=realm).apply {
                     //Seedsのアピール
