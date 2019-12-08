@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //日本語に設定
         val config=resources.configuration
-        config.setLocale(Locale.JAPANESE)
+//        config.setLocale(Locale.JAPANESE)
+        config.setLocale(Locale.ENGLISH)
         resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
