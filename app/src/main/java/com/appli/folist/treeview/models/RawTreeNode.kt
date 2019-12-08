@@ -136,7 +136,10 @@ open class RawTreeNode(
         }
         realm.executeTransactionIfNotInTransaction {
             val uuid = remoteNode.uuid
-            val nodeValue = realm.createObject(NodeValue::class.java, remoteNode.value.uuid).apply {
+
+            val nodeValue = realm.where(NodeValue::class.java).equalTo("uuid", remoteNode.value.uuid).findFirst()
+                ?:realm.createObject(NodeValue::class.java, remoteNode.value.uuid)
+            nodeValue.apply {
                 str = remoteNode.value.str
                 type = remoteNode.value.type
                 mediaUri = remoteNode.value.mediaUri
@@ -166,9 +169,22 @@ open class RawTreeNode(
 
     init {
         if (firebaseRefPath != null) {
-            setSync()
+            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                 override fun onDataChange(p0: DataSnapshot) {
+                     val remote = p0.getValue(NodeForFirebase::class.java)
+                     if(remote!=null){
+                         reset(remote, parent, realm)
+                         setSync()
+
+                     }
+                }
+
+            })
         }
     }
+
+
 
 
     fun findFirstSyncedNode(): RawTreeNode? {
@@ -180,9 +196,7 @@ open class RawTreeNode(
             parent!!.findFirstSyncedNode()
         }
     }
-
     private fun setSync() {
-//        if (!syncedId.isNullOrBlank()) {
         if (firebaseRefPath != null) {
             val ref = getRef()
             if (ref != null) {
@@ -194,7 +208,6 @@ open class RawTreeNode(
                         if (remote != null&& !remote.value.str.isNullOrBlank()) {
                             Log.d("firebase", "node changed:${remote.toString()}")
                             mRealm?.executeTransactionIfNotInTransaction {
-
                                 this@RawTreeNode.progress = remote.progress
                                 this@RawTreeNode.notice = remote.notice
                                 this@RawTreeNode.sharedId = remote.sharedId
@@ -225,8 +238,7 @@ open class RawTreeNode(
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
                     override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
-                    //TODO:child wont be deleted even if deleted in fb
-                    //TODO:refresh view
+
                     override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
                         val remote = dataSnapshot.getValue(NodeForFirebase::class.java)
                         if (remote != null
