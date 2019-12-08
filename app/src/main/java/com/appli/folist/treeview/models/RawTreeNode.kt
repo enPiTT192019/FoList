@@ -162,26 +162,25 @@ open class RawTreeNode(
 //            this.children = RealmList()
 //            this.removeAllChild { true }
             remoteNode.children.forEach { (k, v) ->
-                this.addChild(RawTreeNode(v, this, this.mRealm))
+                this.addChild(RawTreeNode(v, this, realm))
             }
         }
     }
 
     init {
-        if (firebaseRefPath != null) {
-            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
-                override fun onCancelled(p0: DatabaseError) {}
-                 override fun onDataChange(p0: DataSnapshot) {
-                     val remote = p0.getValue(NodeForFirebase::class.java)
-                     if(remote!=null){
-                         reset(remote, parent, realm)
-                         setSync()
-
-                     }
-                }
-
-            })
-        }
+//        if (firebaseRefPath != null) {
+//            getRef()?.addListenerForSingleValueEvent(object :ValueEventListener{
+//                override fun onCancelled(p0: DatabaseError) {}
+//                 override fun onDataChange(p0: DataSnapshot) {
+//                     val remote = p0.getValue(NodeForFirebase::class.java)
+//                     if(remote!=null){
+//                         reset(remote, parent, realm)
+//                         setSync()
+//                     }
+//                }
+//
+//            })
+//        }
     }
 
 

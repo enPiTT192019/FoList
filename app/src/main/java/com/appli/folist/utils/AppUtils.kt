@@ -164,7 +164,7 @@ class AppUtils {
 //                })
                 addChild(RawTreeNode(NodeValue("２０１９年の目標"),this,mRealm=realm).apply {
                     //特に意味なし
-//                    firebaseRefPath="synced-nodes/-LvaROej6wDDOF6QWtIi/data"
+                    firebaseRefPath="synced-nodes/-Lvaa3Pmvv3Km7grWhGu/data"
                     addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
                 addChild(RawTreeNode(NodeValue("ショッピングリスト"),this,mRealm=realm).apply {
