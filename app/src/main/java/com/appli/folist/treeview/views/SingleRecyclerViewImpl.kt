@@ -346,16 +346,21 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildAdded(node:RawTreeNode){
             node.refreshChildAdded={parent,viewNode,child->
+
+
+                val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
+                viewNode.children.add(viewNode.children.size-1,newViewNode)
                 if(viewNode.isExpanded){
                     //add to last
-                    val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
-                    viewNode.children.add(viewNode.children.size-1,newViewNode)
                     val pos=viewNode.position!!+viewNode.getDisplayedNodeNumber()-2
                     newViewNode.position=pos
 
                     viewNodes.add(pos,newViewNode)
                     notifyItemInserted(pos)
+
                 }
+
+                notifyDataSetChanged()
             }
         }
         private fun setNodeChildRemoved(node:RawTreeNode){
