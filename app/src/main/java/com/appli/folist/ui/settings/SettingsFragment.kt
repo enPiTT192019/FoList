@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
+
 import com.appli.folist.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -31,14 +31,19 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        nightModeSwitch.setOnCheckedChangeListener{ buttonView, isChecked ->
+            if(isChecked) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
         copyrightTextView?.setOnClickListener {
             val intent= Intent(this.context, AboutActivity::class.java)
             startActivity(intent)
-        }
-
-        nightModeButton.setOnClickListener{
-            val defaultNightMode = MODE_NIGHT_YES
-            AppCompatDelegate.setDefaultNightMode(defaultNightMode)
         }
 
         activity!!.setTitle(R.string.menu_settings)

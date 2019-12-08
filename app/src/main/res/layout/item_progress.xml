@@ -26,7 +26,7 @@
                   android:id="@+id/itemLinearLayout"
 
                   android:orientation="horizontal"
-                  android:background="#eeeeee">
+                  android:background="@color/colorBackground">
         <Space
                 android:id="@+id/indentation"
                 android:layout_width="wrap_content"
@@ -41,7 +41,11 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:ems="10"
-                android:id="@+id/progressNodeText" android:layout_weight="1" tools:text="node-value-str" android:textSize="18sp"/>
+                android:id="@+id/progressNodeText"
+                android:layout_weight="1"
+                android:textColor="@color/colorSoftText"
+                tools:text="node-value-str"
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </RelativeLayout>

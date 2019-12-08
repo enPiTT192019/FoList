@@ -54,7 +54,7 @@
     <string name="node_value_uuid">Value ID</string>
     <string name="node_children_number">Subtask Number</string>
     <string name="node_parent">Parent</string>
-    <string name="node_progress">Progress</string>
+    <string name="node_progress">進捗状況</string>
     <string name="node_notice">Notice</string>
     <string name="node_notice_notset">Not set. click to set</string>
     <string name="node_shared_id">Shared ID</string>

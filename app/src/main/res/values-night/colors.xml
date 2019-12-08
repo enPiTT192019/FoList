@@ -1,0 +1,12 @@
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#212121</color>
+    <color name="colorBackground">#313131</color>
+    <color name="colorText">#ffffff</color>
+    <color name="colorBlack">#FFFFFF</color>
+    <color name="colorWhite">#000000</color>
+    <color name="colorInkya">#000000</color>
+    <color name="colorSoftText">#99FFFFFF</color>
+    <color name="colorTimeline">#646464</color>
+</resources>

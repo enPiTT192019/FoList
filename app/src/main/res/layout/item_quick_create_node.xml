@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
 
     android:layout_margin="0dp"
-    android:background="#eeeeee"
+    android:background="@color/colorBackground"
     android:orientation="horizontal"
     android:focusable="true"
     android:focusableInTouchMode="true">
@@ -39,6 +39,7 @@
         android:maxLines="1"
         android:inputType="text"
         android:completionThreshold="1"
+        android:textColorHint="@color/colorSoftText"
         android:hint="@string/create_a_new_node"
         android:imeOptions="actionDone"/>
 
@@ -47,14 +48,16 @@
         android:layout_width="40dp"
         android:layout_height="36dp"
         android:layout_marginTop="1dp"
-        android:background="#eeeeee"
+        android:background="@color/colorBackground"
+        android:tint="@color/colorBlack"
         app:srcCompat="@drawable/ic_seeds_small" />
     <ImageView
         android:id="@+id/createButton"
         android:layout_width="40dp"
         android:layout_height="36dp"
         android:layout_marginTop="1dp"
-        android:background="#eeeeee"
+        android:background="@color/colorBackground"
+        android:tint="@color/colorBlack"
         app:srcCompat="@drawable/ic_create_small" />
 
 

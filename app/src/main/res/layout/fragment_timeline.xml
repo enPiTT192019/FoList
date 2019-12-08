@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/toolbar"
-            android:background="@color/colorWhite">
+            android:background="@color/colorBackground">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/TextAppearance.MaterialComponents.Headline6"
@@ -72,7 +72,7 @@
         android:paddingLeft="18dp"
         android:paddingEnd="18dp"
         android:paddingRight="18dp"
-        android:text="ADDPOST"
+        android:text="投稿"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:textColor="@android:color/white"
         android:textSize="12sp"
