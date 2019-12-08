@@ -10,7 +10,6 @@ import android.view.SubMenu
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
@@ -148,7 +147,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var doNotCloseDrawer=false
         navController.popBackStack()
         when(item.title){
-            getString(R.string.menu_store)->navController.navigate(R.id.nav_store)
+            getString(R.string.menu_store)->{
+                navController.navigate(R.id.nav_store)
+            }
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
