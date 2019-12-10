@@ -112,6 +112,31 @@
     <string name="ad_title">登録</string>
     <string name="ad_content">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
 
+    <string name="order_id_mock" translatable="false"># 1234–5678</string>
+    <string name="price_mock" translatable="false">25円</string>
+    <string name="requests_count_mock" translatable="false">5</string>
+    <string name="requests_count_badge" translatable="false">REQUESTS</string>
+    <string name="weight_mock" translatable="false">50 </string>
+    <string name="weight_badge" translatable="false">WEIGHT</string>
+    <string name="pledge_mock" translatable="false">150円</string>
+    <string name="pledge_badge" translatable="false">PLEDGE</string>
+    <string name="sender_badge" translatable="false">SENDER</string>
+    <string name="client_name_mock" translatable="false">ksiwbtg</string>
+    <string name="rating_mock" translatable="false">(26)</string>
+    <string name="from_badge" translatable="false">FROM</string>
+    <string name="to_badge" translatable="false">TO</string>
+    <string name="delivery_date_badge" translatable="false">投稿</string>
+    <string name="delivery_time_mock" translatable="false">6:30 pm</string>
+    <string name="delivery_date_mock" translatable="false">May 16, 2016</string>
+    <string name="deadline_badge" translatable="false">期限</string>
+    <string name="deadline_time_mock" translatable="false">24 分</string>
+    <string name="request_btn_text" translatable="false">買う</string>
+    <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
+    <string name="content_from1_mock">木の名前</string>
+    <string name="content_from2_mock">投稿者</string>
+    <string name="content_to1_mock">東京</string>
+    <string name="content_to2_mock">新宿</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 
 

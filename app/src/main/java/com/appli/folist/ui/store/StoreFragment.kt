@@ -8,7 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
@@ -17,10 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.algolia.search.helper.deserialize
 import com.algolia.search.model.ObjectID
 import com.algolia.search.model.search.Query
-import com.appli.folist.CommentActivity
-import com.appli.folist.MainActivity
-import com.appli.folist.R
-import com.appli.folist.STORE_SHOW_LATEST_NUM
+import com.appli.folist.*
 import com.appli.folist.models.SharedViewModel
 import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.treeview.models.TreeSeedNode
@@ -37,6 +36,9 @@ class StoreFragment : Fragment() {
 
     private lateinit var storeViewModel: StoreViewModel
     private lateinit var sharedModel: SharedViewModel
+    lateinit var theListView: ListView
+    lateinit var items: ArrayList<Item>
+    lateinit var adapter: FoldingCellListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +51,18 @@ class StoreFragment : Fragment() {
             activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        theListView = view.findViewById(R.id.storeList) as ListView
+
+        // prepare elements to display
+        items = Item.getTestingList()
+
+        // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
+        adapter = FoldingCellListAdapter(this.context, items)
+        // get our list view
     }
 
     @Serializable
@@ -99,6 +113,7 @@ class StoreFragment : Fragment() {
         val storeShareButton: View
     )
 
+    //鯖
     class StoreAdapter : ArrayAdapter<StoreListItem> {
         private var inflater: LayoutInflater? =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
@@ -142,7 +157,7 @@ class StoreFragment : Fragment() {
             viewHolder.storeItemTitle.text = listItem!!.title
             viewHolder.storeItemContent.text = listItem.description
             viewHolder.storeItemPriceText.text =
-                if (listItem.price > 0) "￥${listItem.price}" else ""
+                if (listItem.price > 0) "￥${listItem.price}" else "無料"
 
             //TODO: if author, enable delete
             //TODO: if downloaded disable download
@@ -370,6 +385,37 @@ class StoreFragment : Fragment() {
             }
         }
 
+        // add custom btn handler to first list item
+//        items.get(0).setRequestBtnClickListener(View.OnClickListener {
+//            Toast.makeText(
+//                getApplicationContext(),
+//                "CUSTOM HANDLER FOR FIRST BUTTON",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        })
+//
+//        // add default btn handler for each request btn on each item if custom handler not found
+//        adapter.setDefaultRequestBtnClickListener(View.OnClickListener {
+//            Toast.makeText(
+//                getApplicationContext(),
+//                "DEFAULT HANDLER FOR ALL BUTTONS",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        })
+
+        // set elements to adapter
+        theListView.adapter = adapter
+
+        // set on click event listener to list view
+        theListView.onItemClickListener =
+            AdapterView.OnItemClickListener { adapterView, view, pos, l ->
+                // toggle clicked cell state
+                (view as FoldingCell).toggle(false)
+                // register in adapter that state for selected cell is toggled
+                adapter.registerToggle(pos)
+            }
+
     }
+
 }
 
