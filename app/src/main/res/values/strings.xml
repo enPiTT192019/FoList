@@ -2,7 +2,7 @@
     <string name="app_name">FoList</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Please Login</string>
+    <string name="nav_header_title">Appli2019</string>
     <string name="nav_header_subtitle">" "</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">設定</string>
@@ -10,7 +10,7 @@
     <string name="menu_timeline">タイムライン</string>
     <string name="menu_node">ノード</string>
     <string name="menu_task">タスク</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">スライドショー</string>
     <string name="menu_tools">ツール</string>
     <string name="menu_store">ストア</string>
     <string name="menu_settings">設定</string>
@@ -21,9 +21,9 @@
     <string name="menu_input_task_title">タスクタイトルの入力</string>
 
 
-    <string name="title_confirm">Confirm</string>
+    <string name="title_confirm">確認</string>
     <string name="title_download">ダウンロード</string>
-    <string name="title_add_to_task">Add to Task</string>
+    <string name="title_add_to_task">タスクを追加</string>
     <string name="title_seed_content">シード名</string>
     <string name="msg_confirm_delete">%1$sを本当に削除しますか?</string>
     <string name="msg_confirm_download_free">%1$sをダウンロードしますか?</string>
@@ -31,9 +31,9 @@
     <string name="msg_confirm_add_to_task">%1$sをマイタスクに追加しますか?</string>
     <string name="msg_confirm_overwrite_task">同じ名前のタスクが存在します。%1$sを上書きしますか?</string>
     <string name="msg_confirm_publish">%1$sをアップロードしますか?</string>
-    <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
+    <string name="msg_duplicated_task_title">同じ名前のタスクが存在します。他の名前にしてください。</string>
     <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
-    <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite %1$s?</string>
+    <string name="msg_duplicated_seed_confirm_question">同じ名前のタスクがシード内に存在します。%1$sを上書きしますか?</string>
     <string name="msg_no_permissions">No Permissions?</string>
 
 
@@ -85,7 +85,7 @@
     <string name="seed_content">Content</string>
     <string name="seed_download_from">ダウンロード元: %1$s</string>
     <string name="seed_download_origin">Origin</string>
-    <string name="seed_not_found">シードが無いです。ストアからダウンロードするか、マイノードからシードを追加してください。</string>
+    <string name="seed_not_found">シードが無いです。ストアからダウンロードするか、マイタスクのノードからシードに追加してください。</string>
 
 
     <string name="store_title">タイトル</string>
@@ -102,8 +102,8 @@
     <string name="action_ok">OK</string>
     <string name="action_cancel">キャンセル</string>
     <string name="action_confirm">確認</string>
-    <string name="action_yes">Yes</string>
-    <string name="action_no">No</string>
+    <string name="action_yes">はい</string>
+    <string name="action_no">いいえ</string>
     <string name="action_delete">削除</string>
     <string name="action_add_to_task">新ノード</string>
     <string name="action_publish">アップロード</string>
@@ -115,13 +115,13 @@
     <string name="order_id_mock" translatable="false"># 1234–5678</string>
     <string name="price_mock" translatable="false">25円</string>
     <string name="requests_count_mock" translatable="false">5</string>
-    <string name="requests_count_badge" translatable="false">REQUESTS</string>
-    <string name="weight_mock" translatable="false">50 </string>
-    <string name="weight_badge" translatable="false">WEIGHT</string>
+    <string name="requests_count_badge" translatable="false"></string>
+    <string name="weight_mock" translatable="false"></string>
+    <string name="weight_badge" translatable="false"></string>
     <string name="pledge_mock" translatable="false">150円</string>
-    <string name="pledge_badge" translatable="false">PLEDGE</string>
-    <string name="sender_badge" translatable="false">SENDER</string>
-    <string name="client_name_mock" translatable="false">ksiwbtg</string>
+    <string name="pledge_badge" translatable="false"></string>
+    <string name="sender_badge" translatable="false">投稿者</string>
+    <string name="client_name_mock" translatable="false">澤田 健汰</string>
     <string name="rating_mock" translatable="false">(26)</string>
     <string name="from_badge" translatable="false">FROM</string>
     <string name="to_badge" translatable="false">TO</string>
@@ -133,7 +133,7 @@
     <string name="request_btn_text" translatable="false">買う</string>
     <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
     <string name="content_from1_mock">木の名前</string>
-    <string name="content_from2_mock">投稿者</string>
+    <string name="content_from2_mock"></string>
     <string name="content_to1_mock">東京</string>
     <string name="content_to2_mock">新宿</string>
     <string name="title_activity_main2">Main2Activity</string>
@@ -151,7 +151,7 @@
 
 
 
-    <string name="app_name_english">Timeline</string>
+    <string name="app_name_english">FoList</string>
     <string name="navigation_drawer_open_english">Open navigation drawer</string>
     <string name="navigation_drawer_close_english">Close navigation drawer</string>
     <string name="nav_header_title_english">Please Login</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/bgContent"
@@ -76,7 +77,7 @@
             android:fadingEdge="horizontal"
             android:singleLine="true"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="22sp" />
 
         <ImageView
             android:id="@+id/title_from_to_dots_divider"
@@ -99,7 +100,6 @@
             android:singleLine="true"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
-
 
         <TextView
             android:id="@+id/title_requests_count"
@@ -149,6 +149,16 @@
             android:layout_above="@id/title_pledge"
             android:layout_alignStart="@id/title_pledge"
             android:text="@string/pledge_badge" />
+
+        <ImageButton
+            android:id="@+id/detailOpenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:srcCompat="@drawable/ic_down" />
 
     </RelativeLayout>
 </LinearLayout>

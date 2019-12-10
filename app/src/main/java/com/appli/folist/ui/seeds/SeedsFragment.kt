@@ -151,7 +151,7 @@ class SeedsFragment : Fragment() {
                             it.value.toString() == title
                         }
                     }
-                    if(sharedModel.seedRoot.value!!.children.size==0){
+                    if(sharedModel.seedRoot.value!!.children.size == 0){
                         (context as MainActivity).getFragment(SeedsFragment::class.java)?.refreshView()
                     }
                 }

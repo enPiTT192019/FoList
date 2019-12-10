@@ -8,9 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
@@ -31,14 +30,18 @@ import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 
+var storeItems = ArrayList<Item>()
+lateinit var adapter: FoldingCellListAdapter
+lateinit var inkyaview: View
+
 
 class StoreFragment : Fragment() {
 
     private lateinit var storeViewModel: StoreViewModel
     private lateinit var sharedModel: SharedViewModel
-    lateinit var theListView: ListView
-    lateinit var items: ArrayList<Item>
-    lateinit var adapter: FoldingCellListAdapter
+//    lateinit var theListView: ListView
+//    lateinit var items: ArrayList<Item>
+//    lateinit var adapter: FoldingCellListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,19 +52,21 @@ class StoreFragment : Fragment() {
         val root = inflater.inflate(com.appli.folist.R.layout.fragment_store, container, false)
         sharedModel =
             activity?.run { ViewModelProviders.of(this).get(SharedViewModel::class.java) }!!
+        inkyaview = inflater.inflate(R.layout.cell_title_layout, container, false)
 
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        theListView = view.findViewById(R.id.storeList) as ListView
+//        theListView = view.findViewById(R.id.storeList) as ListView
+//
+//        // prepare elements to display
 
-        // prepare elements to display
-        items = Item.getTestingList()
-
-        // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-        adapter = FoldingCellListAdapter(this.context, items)
+        adapter = FoldingCellListAdapter(this.context, storeItems)
+//
+//        // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
+//        adapter = FoldingCellListAdapter(this.context, storeItems)
         // get our list view
     }
 
@@ -110,7 +115,12 @@ class StoreFragment : Fragment() {
         val storeItemDeleteButton: View,
         val storeItemContent: TextView,
         val storeItemPriceText: TextView,
-        val storeShareButton: View
+        val storeShareButton: View,
+        val detailOpenButton: View,
+        val detailCloseButton: View,
+        val openedTopText: TextView,
+        val openedPrice: TextView,
+        val treeViewButton: Button
     )
 
     //鯖
@@ -146,7 +156,12 @@ class StoreFragment : Fragment() {
                     view.findViewById(R.id.storeItemDeleteButton),
                     view.findViewById(R.id.storeItemContent),
                     view.findViewById(R.id.storeItemPriceText),
-                    view.findViewById(R.id.storeShareButton)
+                    view.findViewById(R.id.storeShareButton),
+                    view.findViewById(R.id.detailOpenButton),
+                    view.findViewById(R.id.detailCloseButton),
+                    view.findViewById(R.id.openedTopText),
+                    view.findViewById(R.id.openedPrice),
+                    view.findViewById(R.id.treeViewButton)
                 )
                 view.tag = viewHolder
             } else {
@@ -156,8 +171,13 @@ class StoreFragment : Fragment() {
 
             viewHolder.storeItemTitle.text = listItem!!.title
             viewHolder.storeItemContent.text = listItem.description
+            viewHolder.openedTopText.text = listItem!!.title
             viewHolder.storeItemPriceText.text =
                 if (listItem.price > 0) "￥${listItem.price}" else "無料"
+            viewHolder.openedPrice.text =
+                if (listItem.price > 0) "￥${listItem.price}" else "無料"
+
+            storeItems.add(Item("￥${listItem.price}", "", listItem!!.title, listItem.description, 0, "今日", "05:10 PM"))
 
             //TODO: if author, enable delete
             //TODO: if downloaded disable download
@@ -176,6 +196,26 @@ class StoreFragment : Fragment() {
                     .setTitle(context.getString(R.string.title_seed_content))
                     .setPositiveButton(context.getString(R.string.action_ok)) { dialog, _ -> dialog.cancel() }
                     .show()
+            }
+
+            viewHolder.detailOpenButton.setOnClickListener{ //store展開
+                (view as FoldingCell).toggle(false)
+                adapter.registerToggle(0)
+            }
+
+            viewHolder.detailCloseButton.setOnClickListener{
+                (view as FoldingCell).toggle(false)
+                adapter.registerToggle(0)
+            }
+
+            viewHolder.treeViewButton.setOnClickListener {
+                TreeSeedNode().download(listItem.key) { seed ->
+                    if (seed != null) {
+                        showStoreSeedContent(seed)
+                    } else {
+                        //TODO
+                    }
+                }
             }
 
             viewHolder.storeItemTitle.setOnClickListener {
@@ -204,10 +244,11 @@ class StoreFragment : Fragment() {
                     context.getString(R.string.title_confirm),
                     context.getString(R.string.msg_confirm_delete, listItem.title)
                 ) { _, _ ->
+                    (view as FoldingCell).toggle(true)
+                    adapter.registerToggle(0)
                     runBlocking {
                         sharedModel.seedsIndex.value!!.deleteObject(ObjectID(listItem.objectID))
                     }
-
                     this.remove(listItem)
                     this.notifyDataSetChanged()
                 }
@@ -266,6 +307,8 @@ class StoreFragment : Fragment() {
                     (context as MainActivity).refreshTasksMenu()
                 }
             }
+
+
 
             viewHolder.storeItemAddToTaskButton.setOnClickListener {
                 val downloaded = listItem.key in sharedModel.seedRoot.value!!.children.map { it.downloadFrom }
@@ -385,6 +428,11 @@ class StoreFragment : Fragment() {
             }
         }
 
+
+
+        // attach click listener to fold btn
+
+
         // add custom btn handler to first list item
 //        items.get(0).setRequestBtnClickListener(View.OnClickListener {
 //            Toast.makeText(
@@ -404,16 +452,19 @@ class StoreFragment : Fragment() {
 //        })
 
         // set elements to adapter
-        theListView.adapter = adapter
 
-        // set on click event listener to list view
-        theListView.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, view, pos, l ->
-                // toggle clicked cell state
-                (view as FoldingCell).toggle(false)
-                // register in adapter that state for selected cell is toggled
-                adapter.registerToggle(pos)
-            }
+
+
+//        theListView.adapter = adapter
+//
+//        // set on click event listener to list view
+//        theListView.onItemClickListener =
+//            AdapterView.OnItemClickListener { adapterView, view, pos, l ->
+//                // toggle clicked cell state
+//                (view as FoldingCell).toggle(false)
+//                // register in adapter that state for selected cell is toggled
+//                adapter.registerToggle(pos)
+//            }
 
     }
 

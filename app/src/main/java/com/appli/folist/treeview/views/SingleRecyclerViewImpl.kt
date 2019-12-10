@@ -450,8 +450,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     nodeSyncedIdEditor.text = id
                                 }
                             }
-
                         }
+
                     AlertDialog.Builder(recyclerView.context).setView(dialogView)
                         .setTitle(R.string.edit_node)
                         .setPositiveButton(recyclerView.context.getString(R.string.action_ok)) { dialog, _ ->

@@ -82,7 +82,7 @@ class TimelineFragment : Fragment() {
     private fun setDataListItems() {    //チュートリアル文
         mDataList.add(TimeLineModel("FoListへようこそ.\nFoListは、あなたの目標達成の手助けをします." , "2019-12-19 09:00", OrderStatus.ACTIVE))
         mDataList.add(TimeLineModel("タイムラインについて\n\nタイムラインは、皆のタスクの進捗状況、タスクの紹介、発信ができます。右下の「投稿」ボタンから投稿できます。", "2019-12-19 09:00", OrderStatus.ACTIVE))
-        mDataList.add(TimeLineModel("タスクについて\n\nFoListは、今までにない木構造のタスク管理アプリです。一つの目標を大きめのタスクに分割し、さらにそれを噛み砕いて小さいタスクにしていきましょう。早速、「新規タスク作成」から木を植えてみましょう!\n\nタスクノードを左にスライドすると、オプションが表示されます。タスクのシードへの追加、編集、削除はそちらから行えます", "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("タスクについて\n\nFoListは、今までにない木構造のタスク管理アプリです。一つの目標を大きめのタスクに分割し、さらにそれを噛み砕いて小さいタスクにしていきましょう。早速、「新規タスク作成」から木を植えてみましょう!\n\nタスクノードを左にスライドすると、オプションが表示されます。タスクのシードへの追加、編集、削除はそちらから行えます。", "2019-12-19 09:00", OrderStatus.ACTIVE))
         mDataList.add(TimeLineModel("シードについて\n\nシードは、大きいタスクを再利用、ストアにアップロードすることができる機能です。シードへの追加は、どの大きさのタスクでも追加することができます。シードに追加されたタスクは、他のタスクツリーに追加したり、新しいタスクとして0から始めたい時に便利です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
         mDataList.add(TimeLineModel("ストアについて\n\nストアは、皆がシェアした数々のタスクツリーを閲覧、ダウンロードすることが可能です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
         mDataList.add(TimeLineModel("ナイトモード\n\n設定から、昼間モード、ナイトモードの切り替えが可能です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
