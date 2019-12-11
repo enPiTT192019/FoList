@@ -108,7 +108,6 @@ class AppUtils {
             .setNegativeButton(android.R.string.no){dialog, whichButton ->
                 cancelCallback(dialog,whichButton)
             }.show()
-
     }
 
     fun seekbarDialog(context:Activity,

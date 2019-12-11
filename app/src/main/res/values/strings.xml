@@ -55,8 +55,8 @@
     <string name="node_children_number">Subtask Number</string>
     <string name="node_parent">Parent</string>
     <string name="node_progress">進捗状況</string>
-    <string name="node_notice">Notice</string>
-    <string name="node_notice_notset">Not set. click to set</string>
+    <string name="node_notice">リマインド</string>
+    <string name="node_notice_notset">未設定です。こちらをタップして設定できます。</string>
     <string name="node_shared_id">Shared ID</string>
     <string name="node_synced_id">Synced Path</string>
     <string name="node_shared_id_not_shared">Not shared. click button to share</string>
@@ -69,9 +69,9 @@
     <string name="node_generate_seed_title">シードに追加</string>
     <string name="node_generate_seed_msg">シードに追加・保存しますか?</string>
 
-    <string name="picker_date">Date</string>
-    <string name="picker_time">Time</string>
-    <string name="picker_title">Select Datatime</string>
+    <string name="picker_date">日付</string>
+    <string name="picker_time">時刻</string>
+    <string name="picker_title">通知時刻の設定</string>
     <string name="picker_format">yy/MM/dd HH:mm</string>
 
     <string name="seekbar_title">進捗</string>
@@ -111,7 +111,9 @@
 
     <string name="ad_title">登録</string>
     <string name="ad_content">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
-
+//トップレベルのタスクが無限に作れる、（今はかけてない)、シードも無限、どこでもいつでも同期可能、他人と協力してノード編集が可能、新しい機能いろいろ
+    //500yen/month 法人ユーザには　気軽に連絡どうぞカスタマイズもできるぞ　使いたい人はれんらくいいよ　例えば英単語長のテスト機能、ジム向けの健康アプリの連携、有料会員大量オーダーには法人価格で対応します
+    //emailはxxx,telはxxx
     <string name="order_id_mock" translatable="false"># 1234–5678</string>
     <string name="price_mock" translatable="false">25円</string>
     <string name="requests_count_mock" translatable="false">5</string>
@@ -151,120 +153,120 @@
 
 
 
-    <string name="app_name_english">FoList</string>
-    <string name="navigation_drawer_open_english">Open navigation drawer</string>
-    <string name="navigation_drawer_close_english">Close navigation drawer</string>
-    <string name="nav_header_title_english">Please Login</string>
-    <string name="nav_header_subtitle_english">" "</string>
-    <string name="nav_header_desc_english">Navigation header</string>
-    <string name="action_settings_english">Settings</string>
+<!--    <string name="app_name_english">FoList</string>-->
+<!--    <string name="navigation_drawer_open_english">Open navigation drawer</string>-->
+<!--    <string name="navigation_drawer_close_english">Close navigation drawer</string>-->
+<!--    <string name="nav_header_title_english">Please Login</string>-->
+<!--    <string name="nav_header_subtitle_english">" "</string>-->
+<!--    <string name="nav_header_desc_english">Navigation header</string>-->
+<!--    <string name="action_settings_english">Settings</string>-->
 
-    <string name="menu_timeline_english">Timeline</string>
-    <string name="menu_node_english">Node</string>
-    <string name="menu_task_english">Task</string>
-    <string name="menu_slideshow_english">Slideshow</string>
-    <string name="menu_tools_english">Tools</string>
-    <string name="menu_store_english">Store</string>
-    <string name="menu_settings_english">Settings</string>
-    <string name="menu_functions_english">Functions</string>
-    <string name="menu_tasks_english">Tasks</string>
-    <string name="menu_create_new_task_english">Create New Task</string>
-    <string name="menu_seeds_english">Seeds</string>
-    <string name="menu_input_task_title_english">Input Task Title</string>
-
-
-    <string name="title_confirm_english">Confirm</string>
-    <string name="title_download_english">Download</string>
-    <string name="title_add_to_task_english">Add to Task</string>
-    <string name="title_seed_content_english">Seed Content</string>
-    <string name="msg_confirm_delete_english">Delete %1$s?</string>
-    <string name="msg_confirm_download_free_english">Download %1$s?</string>
-    <string name="msg_confirm_download_purchase_english">Purchase %1$s?\n Price:%2$d yen</string>
-    <string name="msg_confirm_add_to_task_english">Add %1$s to Top-Level Task?</string>
-    <string name="msg_confirm_overwrite_task_english">Task exists, Overwrite %1$s?</string>
-    <string name="msg_confirm_publish_english">Publish %1$s?</string>
-    <string name="msg_duplicated_task_title_english">Duplicated task title, please consider another title.</string>
-    <string name="msg_field_blank_english">Some necessary field is blank, please confirm and try again.</string>
-    <string name="msg_duplicated_seed_confirm_question_english">Duplicated seed title, do you want to overwrite %1$s?</string>
-    <string name="msg_no_permissions_english">No Permissions?</string>
+<!--    <string name="menu_timeline_english">Timeline</string>-->
+<!--    <string name="menu_node_english">Node</string>-->
+<!--    <string name="menu_task_english">Task</string>-->
+<!--    <string name="menu_slideshow_english">Slideshow</string>-->
+<!--    <string name="menu_tools_english">Tools</string>-->
+<!--    <string name="menu_store_english">Store</string>-->
+<!--    <string name="menu_settings_english">Settings</string>-->
+<!--    <string name="menu_functions_english">Functions</string>-->
+<!--    <string name="menu_tasks_english">Tasks</string>-->
+<!--    <string name="menu_create_new_task_english">Create New Task</string>-->
+<!--    <string name="menu_seeds_english">Seeds</string>-->
+<!--    <string name="menu_input_task_title_english">Input Task Title</string>-->
 
 
-    <string name="img_cd_expand_ic_english">expand</string>
-    <string name="create_a_new_node_english">Create a New Node or Select from Seeds</string>
-    <string name="plus_mark_english">+</string>
-    <string name="edit_node_english">Edit Node</string>
-    <string name="node_title_english">Title</string>
-    <string name="node_value_type_english">Value Type</string>
-    <string name="node_type_tree_english">TREE</string>
-    <string name="node_media_uri_english">Media URI</string>
-    <string name="node_media_english">Media</string>
-    <string name="node_detail_english">Detail</string>
-    <string name="node_link_english">Link</string>
-    <string name="node_link_valid_english">Valid</string>
-    <string name="node_link_invalid_english">Invalid</string>
-    <string name="node_power_english">Power</string>
-    <string name="node_value_uuid_english">Value ID</string>
-    <string name="node_children_number_english">Subtask Number</string>
-    <string name="node_parent_english">Parent</string>
-    <string name="node_progress_english">Progress</string>
-    <string name="node_notice_english">Notice</string>
-    <string name="node_notice_notset_english">Not set. click to set</string>
-    <string name="node_shared_id_english">Shared ID</string>
-    <string name="node_synced_id_english">Synced Path</string>
-    <string name="node_shared_id_not_shared_english">Not shared. click button to share</string>
-    <string name="node_uuid_english">Node ID</string>
-    <string name="node_relative_english">Relative</string>
-    <string name="node_info_english">Information</string>
-    <string name="node_type_binary_node_english">BINARY_NODE</string>
-    <string name="node_type_progress_node_english">PROGRESS_NODE</string>
-    <string name="node_info_content_english">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
-    <string name="node_generate_seed_title_english">Generate Seed</string>
-    <string name="node_generate_seed_msg_english">Generate Seed and Save Locally?</string>
-
-    <string name="picker_date_english">Date</string>
-    <string name="picker_time_english">Time</string>
-    <string name="picker_title_english">Select Datatime</string>
-    <string name="picker_format_english">yy/MM/dd HH:mm</string>
-
-    <string name="seekbar_title_english">Progress</string>
+<!--    <string name="title_confirm_english">Confirm</string>-->
+<!--    <string name="title_download_english">Download</string>-->
+<!--    <string name="title_add_to_task_english">Add to Task</string>-->
+<!--    <string name="title_seed_content_english">Seed Content</string>-->
+<!--    <string name="msg_confirm_delete_english">Delete %1$s?</string>-->
+<!--    <string name="msg_confirm_download_free_english">Download %1$s?</string>-->
+<!--    <string name="msg_confirm_download_purchase_english">Purchase %1$s?\n Price:%2$d yen</string>-->
+<!--    <string name="msg_confirm_add_to_task_english">Add %1$s to Top-Level Task?</string>-->
+<!--    <string name="msg_confirm_overwrite_task_english">Task exists, Overwrite %1$s?</string>-->
+<!--    <string name="msg_confirm_publish_english">Publish %1$s?</string>-->
+<!--    <string name="msg_duplicated_task_title_english">Duplicated task title, please consider another title.</string>-->
+<!--    <string name="msg_field_blank_english">Some necessary field is blank, please confirm and try again.</string>-->
+<!--    <string name="msg_duplicated_seed_confirm_question_english">Duplicated seed title, do you want to overwrite %1$s?</string>-->
+<!--    <string name="msg_no_permissions_english">No Permissions?</string>-->
 
 
-    <string name="seed_upload_english">Publish</string>
-    <string name="seed_title_english">Title</string>
-    <string name="seed_description_english">Description</string>
-    <string name="seed_price_english">Price</string>
-    <string name="seed_password_english">Password</string>
-    <string name="seed_content_english">Content</string>
-    <string name="seed_download_from_english">Download From:%1$s</string>
-    <string name="seed_download_origin_english">Origin</string>
-    <string name="seed_not_found_english">No seeds found, you can download seeds from store, or generate a seed by seed button.</string>
+<!--    <string name="img_cd_expand_ic_english">expand</string>-->
+<!--    <string name="create_a_new_node_english">Create a New Node or Select from Seeds</string>-->
+<!--    <string name="plus_mark_english">+</string>-->
+<!--    <string name="edit_node_english">Edit Node</string>-->
+<!--    <string name="node_title_english">Title</string>-->
+<!--    <string name="node_value_type_english">Value Type</string>-->
+<!--    <string name="node_type_tree_english">TREE</string>-->
+<!--    <string name="node_media_uri_english">Media URI</string>-->
+<!--    <string name="node_media_english">Media</string>-->
+<!--    <string name="node_detail_english">Detail</string>-->
+<!--    <string name="node_link_english">Link</string>-->
+<!--    <string name="node_link_valid_english">Valid</string>-->
+<!--    <string name="node_link_invalid_english">Invalid</string>-->
+<!--    <string name="node_power_english">Power</string>-->
+<!--    <string name="node_value_uuid_english">Value ID</string>-->
+<!--    <string name="node_children_number_english">Subtask Number</string>-->
+<!--    <string name="node_parent_english">Parent</string>-->
+<!--    <string name="node_progress_english">Progress</string>-->
+<!--    <string name="node_notice_english">Notice</string>-->
+<!--    <string name="node_notice_notset_english">Not set. click to set</string>-->
+<!--    <string name="node_shared_id_english">Shared ID</string>-->
+<!--    <string name="node_synced_id_english">Synced Path</string>-->
+<!--    <string name="node_shared_id_not_shared_english">Not shared. click button to share</string>-->
+<!--    <string name="node_uuid_english">Node ID</string>-->
+<!--    <string name="node_relative_english">Relative</string>-->
+<!--    <string name="node_info_english">Information</string>-->
+<!--    <string name="node_type_binary_node_english">BINARY_NODE</string>-->
+<!--    <string name="node_type_progress_node_english">PROGRESS_NODE</string>-->
+<!--    <string name="node_info_content_english">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>-->
+<!--    <string name="node_generate_seed_title_english">Generate Seed</string>-->
+<!--    <string name="node_generate_seed_msg_english">Generate Seed and Save Locally?</string>-->
+
+<!--    <string name="picker_date_english">Date</string>-->
+<!--    <string name="picker_time_english">Time</string>-->
+<!--    <string name="picker_title_english">Select Datatime</string>-->
+<!--    <string name="picker_format_english">yy/MM/dd HH:mm</string>-->
+
+<!--    <string name="seekbar_title_english">Progress</string>-->
+
+
+<!--    <string name="seed_upload_english">Publish</string>-->
+<!--    <string name="seed_title_english">Title</string>-->
+<!--    <string name="seed_description_english">Description</string>-->
+<!--    <string name="seed_price_english">Price</string>-->
+<!--    <string name="seed_password_english">Password</string>-->
+<!--    <string name="seed_content_english">Content</string>-->
+<!--    <string name="seed_download_from_english">Download From:%1$s</string>-->
+<!--    <string name="seed_download_origin_english">Origin</string>-->
+<!--    <string name="seed_not_found_english">No seeds found, you can download seeds from store, or generate a seed by seed button.</string>-->
 
 
 
 
-    <string name="store_title_english">Title</string>
-    <string name="store_description_english">Description</string>
-    <string name="store_seed_id_english">Seed ID</string>
-    <string name="store_author_id_english">Author UID</string>
-    <string name="store_price_english">Price</string>
-    <string name="store_search_english">Search</string>
-    <string name="store_search_failed_msg_english">Search failed. Are you connected to the internet?</string>
+<!--    <string name="store_title_english">Title</string>-->
+<!--    <string name="store_description_english">Description</string>-->
+<!--    <string name="store_seed_id_english">Seed ID</string>-->
+<!--    <string name="store_author_id_english">Author UID</string>-->
+<!--    <string name="store_price_english">Price</string>-->
+<!--    <string name="store_search_english">Search</string>-->
+<!--    <string name="store_search_failed_msg_english">Search failed. Are you connected to the internet?</string>-->
 
 
-    <string name="copyright_english">©2019 Appli All Rights Reserved</string>
-    <string name="action_done_english">Done</string>
-    <string name="action_ok_english">OK</string>
-    <string name="action_cancel_english">Cancel</string>
-    <string name="action_confirm_english">Confirm</string>
-    <string name="action_yes_english">Yes</string>
-    <string name="action_no_english">No</string>
-    <string name="action_delete_english">Delete</string>
-    <string name="action_add_to_task_english">New Task</string>
-    <string name="action_publish_english">Publish</string>
+<!--    <string name="copyright_english">©2019 Appli All Rights Reserved</string>-->
+<!--    <string name="action_done_english">Done</string>-->
+<!--    <string name="action_ok_english">OK</string>-->
+<!--    <string name="action_cancel_english">Cancel</string>-->
+<!--    <string name="action_confirm_english">Confirm</string>-->
+<!--    <string name="action_yes_english">Yes</string>-->
+<!--    <string name="action_no_english">No</string>-->
+<!--    <string name="action_delete_english">Delete</string>-->
+<!--    <string name="action_add_to_task_english">New Task</string>-->
+<!--    <string name="action_publish_english">Publish</string>-->
 
 
-    <string name="ad_title_english">Subscribe</string>
-    <string name="ad_content_english">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
+<!--    <string name="ad_title_english">Subscribe</string>-->
+<!--    <string name="ad_content_english">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>-->
 
 
 </resources>

@@ -181,7 +181,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="15sp"
             android:text="@string/node_notice_notset" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -212,7 +214,8 @@
             android:id="@+id/nodeShareButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            app:srcCompat="@drawable/ic_shared_add" />
+            app:srcCompat="@drawable/ic_shared_add"
+            tools:ignore="VectorDrawableCompat" />
     </LinearLayout>
 
     <LinearLayout
@@ -243,7 +246,8 @@
             android:id="@+id/nodeSyncButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            app:srcCompat="@drawable/ic_sync" />
+            app:srcCompat="@drawable/ic_sync"
+            tools:ignore="VectorDrawableCompat" />
     </LinearLayout>
 
     <LinearLayout

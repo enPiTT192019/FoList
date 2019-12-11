@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
@@ -334,6 +335,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 //TODO:誰か直してくれ
                 if (slideButtonCalledTime++ % 2 == 0 && realm != null) {
                     val node = viewNode.rawReference!!
+                    var noticeTime: Date? = null
                     val dialogView = ((recyclerView.context as Activity)
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                         .inflate(R.layout.dialog_edit_node, null).apply {
@@ -342,12 +344,16 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             nodeTitleEditor.setText(node.value!!.str)
                             nodeProgressEditor.setText(node.progress.toString())
                             nodePowerEditor.setText(node.value!!.power.toString())
+
                             nodeNoticeEditor.text = node.notice?.toString()
                                 ?: context.getString(R.string.node_notice_notset)
+
                             nodeSharedIdEditor.text =
                                 if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
+
                             nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
                             nodeLinkEditor.setText(node.value!!.link)
+
                             nodeLinkEditor.addTextChangedListener {
                                 if (URLUtil.isValidUrl(it.toString()) || it.toString().isBlank()) {
                                     nodelinkValidText.text =
@@ -363,11 +369,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 AppUtils().datatimeDialog(context as MainActivity) { view, _, _ ->
                                     val d = view.datePicker
                                     val t = view.timePicker
-                                    val time =
+                                    noticeTime =
                                         Date(d.year, d.month, d.dayOfMonth, t.hour, t.minute, 0)
                                     val format =
                                         SimpleDateFormat(context.getString(R.string.picker_format))
-                                    nodeNoticeEditor.text = format.format(time)
+                                    nodeNoticeEditor.text = format.format(noticeTime)
                                 }
                             }
                             fun resetMedia(uri: String?) {
@@ -463,6 +469,14 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 realm.executeTransactionIfNotInTransaction {
                                     node.value!!.str = title
                                 }
+
+//                                if(noticeTime != null){
+//                                    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+//                                        .setSmallIcon(R.drawable.folist_icon)
+//                                        .setContentTitle("FoList")
+//                                        .setContentText(textContent)
+//                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                                }
 
                                 if (!node.firebaseRefPath.isNullOrBlank()) {
                                     FirebaseDatabase.getInstance()
