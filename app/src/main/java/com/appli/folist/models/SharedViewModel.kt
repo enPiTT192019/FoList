@@ -16,6 +16,7 @@ import io.realm.Realm
 class SharedViewModel : ViewModel() {
     val realm = MutableLiveData<Realm>()
     private val auth =  FirebaseAuth.getInstance()
+    private val usrInfo = FirebaseAuth.getInstance().currentUser
     val user = MutableLiveData<FirebaseUser>()
     val root = MutableLiveData<RawTreeNode>()
     val seedRoot = MutableLiveData<TreeSeedNode>()
@@ -23,7 +24,7 @@ class SharedViewModel : ViewModel() {
     val seedsIndex = MutableLiveData<Index>()
     var tempImageUri = MutableLiveData<String?>()
 
-    fun login(activity: AppCompatActivity,email:String,password:String ) {
+    fun login(activity: AppCompatActivity, email: String, password: String ) {
         UserUtils(activity, auth).login(email,password,
             callback = {
                 Toast.makeText(activity, "user-uid:${it?.uid ?: "null"}", Toast.LENGTH_SHORT).show()

@@ -43,17 +43,23 @@ class SeedsFragment : Fragment() {
 
     fun refreshView(){
         activity!!.setTitle(R.string.menu_seeds)
+
         val arrayAdapter = SeedsAdapter(context!!, 0, sharedModel)
-        if(sharedModel.seedRoot.value!!.children.size>0){
-            noSeedFoundText.text=""
+
+        if(sharedModel.seedRoot.value!!.children.size > 0){
+            noSeedFoundText.text = ""
+
             sharedModel.seedRoot.value!!.children.forEach {
                 arrayAdapter.add(SeedListItem(it.value.toString()))
             }
+
             seedListView.adapter = arrayAdapter
-        }else{
+
+        } else {
             noSeedFoundText.text=getString(R.string.seed_not_found)
         }
     }
+
     override fun onStart() {
         super.onStart()
         refreshView()
@@ -202,6 +208,7 @@ class SeedsFragment : Fragment() {
                                     }
 
                                 }
+
                         AlertDialog.Builder(context).setView(dialogView)
                             .setTitle(seed.value.toString())
                             .setPositiveButton(context.getString(R.string.seed_upload)) { dialog, _ ->

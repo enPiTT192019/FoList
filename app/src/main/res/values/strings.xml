@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Timeline</string>
+
+
+
+    <string name="app_name">Folist</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Please Login</string>
@@ -86,6 +89,8 @@
     <string name="seed_download_from">Download From:%1$s</string>
     <string name="seed_download_origin">Origin</string>
     <string name="seed_not_found">No seeds found, you can download seeds from store, or generate a seed by seed button.</string>
+
+
 
 
     <string name="store_title">Title</string>

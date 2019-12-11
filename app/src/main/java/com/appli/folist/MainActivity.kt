@@ -37,9 +37,14 @@ import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
+
+
 val mDataList = ArrayList<TimeLineModel>()
+var loggedIn: Boolean = false
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -55,25 +60,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // タイトルバーを中央寄せさせる
-/*
-        val t_vg = getWindow().getDecorView() as ViewGroup
-        val t_ll = t_vg.getChildAt(0) as LinearLayout
-        val t_fl = t_ll.getChildAt(0) as FrameLayout
-        val title = t_fl.getChildAt(0) as TextView
-        title.gravity = Gravity.CENTER
-*/
-
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setNavigationViewListener()
+
+        //日本語に設定
+        val config=resources.configuration
+//        config.setLocale(Locale.JAPANESE)
+        config.setLocale(Locale.ENGLISH)
+        resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
         NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
-        sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
@@ -86,7 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //メニュー初期化
         navNodesItems = mutableListOf()
         tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
-
         refreshTasksMenu()
         functionsMenu = nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
@@ -97,19 +98,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //ログインとナビのユーザー情報の更新
         //TODO:ログインダイアログ
-        sharedModel.login(this,"enpit@totoro.com","password")
-        sharedModel.user.observe(this, Observer {
-            if(it!=null) {
-                sharedModel.user.value?.setAttribute("name","TestUser")
-                userEmail.text = "email:${it.email} uid:${it.uid}"
-                it.getAttribute("name") {
-                    userName.text = it?:"no name"
+        if(loggedIn == false) {
+            sharedModel.login(this, "appli@test.com", "password")
+            sharedModel.user.observe(this, Observer {
+                if (it != null) {
+                    sharedModel.user.value?.setAttribute("name", "TestUser")
+                    userEmail.text = "email:${it.email} uid:${it.uid}"
+                    it.getAttribute("name") {
+                        name.text = it ?: "no name"
+                    }
                 }
-            }
-        })
+            })
+            loggedIn = true
+        }
     }
-
-
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
         val navHostFragment = this.supportFragmentManager.fragments.first() as NavHostFragment
@@ -149,12 +151,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 progress>=10->"%d".format(progress.roundToInt())
                 else->"%.1f".format(progress)
             }
-//
-/*            var intent = Intent(this, NodeFragment::class.java)
-            intent.putExtra("TASK", it.value!!.str )*/
-
-
-//
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
         }
         }
@@ -165,7 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var doNotCloseDrawer=false
         navController.popBackStack()
         when(item.title){
-            getString(R.string.menu_store)->navController.navigate(R.id.nav_store)
+            getString(R.string.menu_store)-> navController.navigate(R.id.nav_store)
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
@@ -198,6 +194,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         AppUtils().hideKeyboard(this)
                     }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
+
             //タスク
             else->{
                 //[...%]ThisIsATitle -> ThisIsATitle

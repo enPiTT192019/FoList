@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/toolbar"
-            android:background="@color/colorWhite">
+            android:background="@color/colorBackground">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/TextAppearance.MaterialComponents.Headline6"
@@ -42,16 +42,11 @@
         android:paddingRight="10dp"
         android:paddingBottom="60dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_timeline" />
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="right"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@drawable/ic_comment_black_24dp" />-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
@@ -68,7 +63,7 @@
         android:paddingLeft="18dp"
         android:paddingEnd="18dp"
         android:paddingRight="18dp"
-        android:text="ADDPOST"
+        android:text="投稿"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:textColor="@android:color/white"
         android:textSize="12sp"

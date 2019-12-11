@@ -53,7 +53,8 @@ class NodeUtils {
                     ViewTreeNode(
                         root,
                         null,
-                        (view.adapter as TreeAdapter).viewNodes.firstOrNull()
+                        (view.adapter as TreeAdapter).viewNodes.firstOrNull(),
+                        position = null
                     )
                 )
             )
@@ -68,7 +69,8 @@ class NodeUtils {
                         root,
                         null,
                         (view.adapter as TreeAdapter).viewNodes.firstOrNull(),
-                        onlyText = true
+                        onlyText = true,
+                        position = null
                     )
                 )
             )
