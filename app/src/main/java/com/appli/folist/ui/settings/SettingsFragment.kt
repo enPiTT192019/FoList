@@ -6,14 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
 import com.appli.folist.R
-import com.appli.folist.utils.AppUtils
 import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.fragment_settings.languageGroup
 import java.util.*
 
 
@@ -33,24 +31,24 @@ class SettingsFragment : Fragment() {
         // 言語の切替え
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        languageGroup.setOnCheckedChangeListener {
-            RadioGroup1, radioId ->
-            val config=resources.configuration
-            locale =  when (radioId) {
-                    R.id.radio_en -> Locale.ENGLISH
-                    R.id.radio_jp ->  Locale.JAPANESE
-                    R.id.radio_ch ->  Locale.CHINESE
-                else->Locale.JAPANESE
-                }
-            Log.d("folist-lang",locale.toString())
+//        RadioGroup1.setOnCheckedChangeListener { _, radioId ->
+//            val config=resources.configuration
+//            locale =  when (radioId) {
+//                    R.id.radio_en -> Locale.ENGLISH
+//                    R.id.radio_jp ->  Locale.JAPANESE
+//                    R.id.radio_ch ->  Locale.CHINESE
+//                    else->Locale.JAPANESE
+//            }
+//            Log.d("folist-lang",locale.toString())
+//
+//                AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())
+//
+//            config.setLocale(locale) // 新しいロケールを設定
+//            resources.updateConfiguration(config,resources.displayMetrics)
+//
+//
+//        }
 
-                AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())
-
-            config.setLocale(locale) // 新しいロケールを設定
-            resources.updateConfiguration(config,resources.displayMetrics)
-
-
-        }
 
         val root = inflater.inflate(R.layout.fragment_settings, container, false)
 
@@ -67,6 +65,29 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
+        languageSelector.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
+
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                val config=resources.configuration
+                var locale = Locale.ENGLISH
+                Log.d("folist-lang",locale.toString())
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+
+                val config=resources.configuration
+                var locale = Locale.ENGLISH
+                Log.d("folist-lang",locale.toString())
+            }
+
+        }
         activity!!.setTitle(R.string.menu_settings)
     }
 }
