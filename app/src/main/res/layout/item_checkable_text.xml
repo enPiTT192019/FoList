@@ -42,7 +42,7 @@
                   android:layout_height="wrap_content"
                   android:id="@+id/itemLinearLayout"
                   android:orientation="horizontal"
-                  android:background="#eeeeee"
+                  android:background="@color/colorBackground"
         >
 
         <Space
@@ -61,6 +61,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:button="@drawable/ic_check_box_button"
+                    android:textColor="@color/colorBlack"
                     tools:text="Text"
                 android:height="48dp"
             />

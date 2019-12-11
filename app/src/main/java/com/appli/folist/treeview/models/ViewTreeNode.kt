@@ -14,7 +14,8 @@ class ViewTreeNode(
     var parent: ViewTreeNode?,
     @Expose var children: MutableList<ViewTreeNode>,
     @Expose override var isExpanded: Boolean =false,
-    var rawReference: RawTreeNode?=null
+    var rawReference: RawTreeNode?=null,
+    var position:Int?= null
 ) : HasId, Expandable {
     override val id: Long by lazy {
         IdGenerator.generate()
@@ -27,8 +28,9 @@ class ViewTreeNode(
     constructor(value: NodeValue, children: MutableList<ViewTreeNode>) : this(value,ViewNodeTypes.NODE, null, children)
 
     constructor(raw: RawTreeNode, parent:ViewTreeNode?=null,
-                before:ViewTreeNode?=null,onlyText:Boolean=false):this(NodeValue()){
+                before:ViewTreeNode?=null,onlyText:Boolean=false,position: Int?):this(NodeValue()){
         this.parent=parent
+        this.position=position
         this.isExpanded=(before!=null && before.isExpanded)
         this.value=raw.value!!
         this.children.clear()
@@ -38,11 +40,12 @@ class ViewTreeNode(
         }
         if(onlyText)this.type=ViewNodeTypes.ONLY_TEXT
         this.rawReference=raw
+        this.rawReference!!.viewNodeRef=this
         raw.children.forEach {
             val childBefore= before?.children?.findLast {it2->
                 it2.value.uuid== it.value?.uuid
             }
-            this.addChild(ViewTreeNode(it,this,childBefore,onlyText=onlyText))
+            this.addChild(ViewTreeNode(it,this,childBefore,onlyText=onlyText,position = null))
         }
         if(!onlyText)this.addChild(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
     }
@@ -112,19 +115,7 @@ class ViewTreeNode(
         while(result.parent!=null)result= result.parent!!
         return result
     }
-//    fun deleteRaw(realm: Realm){
-//        if(parent!=null){
-//            children.filter { type==ViewNodeTypes.QUICK_CREATE_NODE }.forEach {
-//                it.deleteRaw(realm)
-//            }
-//            parent!!.children.remove(this)
-//            AppUtils().executeTransactionIfNotInTransaction(realm){
-//                rawReference!!.parent!!.children.remove(rawReference)
-////                realm.where(RawTreeNode::class.java).equalTo("uuid",rawReference!!.uuid)
-////                    .findAllAsync().deleteAllFromRealm()
-//            }
-//        }
-//    }
+
     fun toList():MutableList<ViewTreeNode>{
         var result= mutableListOf(this)
         children.forEach {

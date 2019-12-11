@@ -37,7 +37,7 @@
         android:id="@+id/itemLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
+        android:background="@color/colorBackground"
         android:orientation="horizontal">
 
         <Space
@@ -50,6 +50,7 @@
             android:id="@+id/itemFrameLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
             android:layout_weight="1">
 
             <ImageView
@@ -66,8 +67,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
+                android:textColor="@color/colorBlack"
                 android:text="TextView"
-                android:textColor="@android:color/background_dark"
                 android:textSize="18sp" />
 
 

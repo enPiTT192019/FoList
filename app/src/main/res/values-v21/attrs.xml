@@ -3,6 +3,13 @@
     <declare-styleable name="CheckBoxEx">
         <attr name="state_indeterminate" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="ds" >
+        <attr name="backgroundcolor" format="color" />
+        <attr name="cardbackground" format="color" />
+        <attr name="textcolor" format="color" />
+        <attr name="tintcolor" format="color" />
+        <attr name="buttoncolor" format="color" />
+    </declare-styleable>
     <declare-styleable name="TimelineView" >
         <attr name="marker" format="color|reference"/>
         <attr name="markerSize" format="dimension"/>

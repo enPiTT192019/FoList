@@ -24,7 +24,7 @@
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:text="@string/seed_title"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textColor="@color/colorBlack"
             android:textSize="18sp" />
 
         <ImageView
@@ -69,6 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorSoftText"
             android:text="TextView" />
     </LinearLayout>
 

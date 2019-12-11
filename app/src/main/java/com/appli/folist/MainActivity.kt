@@ -37,10 +37,12 @@ import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-
 val mDataList = ArrayList<TimeLineModel>()
+var loggedIn: Boolean = false
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +62,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
+        //日本語に設定
+        val config=resources.configuration
+//        config.setLocale(Locale.JAPANESE)
+        config.setLocale(Locale.ENGLISH)
+        resources.updateConfiguration(config,resources.displayMetrics)
+
         //テスト用
         NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
 
@@ -78,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //メニュー初期化
         navNodesItems = mutableListOf()
         tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
-
         refreshTasksMenu()
         functionsMenu = nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
@@ -89,16 +96,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //ログインとナビのユーザー情報の更新
         //TODO:ログインダイアログ
-        sharedModel.login(this,"enpit@totoro.com","password")
-        sharedModel.user.observe(this, Observer {
-            if(it!=null) {
-                sharedModel.user.value?.setAttribute("name","TestUser")
-                userEmail.text = "email:${it.email} uid:${it.uid}"
-                it.getAttribute("name") {
-                    userName.text = it?:"no name"
+        if(loggedIn == false) {
+            sharedModel.login(this, "appli@test.com", "password")
+            sharedModel.user.observe(this, Observer {
+                if (it != null) {
+                    sharedModel.user.value?.setAttribute("name", "TestUser")
+                    userEmail.text = "email:${it.email} uid:${it.uid}"
+                    it.getAttribute("name") {
+                        name.text = it ?: "no name"
+                    }
                 }
-            }
-        })
+            })
+            loggedIn = true
+        }
     }
 
 
@@ -188,6 +198,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         AppUtils().hideKeyboard(this)
                     }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
+
             //タスク
             else->{
                 //[...%]ThisIsATitle -> ThisIsATitle

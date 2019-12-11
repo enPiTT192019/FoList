@@ -18,7 +18,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
@@ -750,7 +749,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             ).show()
                             return@setOnClickListener
                         }
-                        newNode = RawTreeNode(seed, realm)
+                        newNode = RawTreeNode(seed,viewParent.rawReference!! ,realm)
 
                         realm.executeTransactionIfNotInTransaction {
                             viewParent.rawReference?.addChild(newNode!!)

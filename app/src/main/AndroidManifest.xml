@@ -21,7 +21,7 @@
         <activity
             android:name=".AboutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".tweetActivity"></activity>
+        <activity android:name=".tweetActivity" />
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="true"

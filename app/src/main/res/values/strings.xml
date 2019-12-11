@@ -119,6 +119,35 @@
     <string name="Bright_color">Bright_color</string>
     <string name="Dark_color">Dark_color</string>
 
-<!--    name="<string name> + _english"-->
+
+    <string name="order_id_mock" translatable="false"># 1234–5678</string>
+    <string name="price_mock" translatable="false">25円</string>
+    <string name="requests_count_mock" translatable="false">5</string>
+    <string name="requests_count_badge" translatable="false"></string>
+    <string name="weight_mock" translatable="false"></string>
+    <string name="weight_badge" translatable="false"></string>
+    <string name="pledge_mock" translatable="false">150円</string>
+    <string name="pledge_badge" translatable="false"></string>
+    <string name="sender_badge" translatable="false">投稿者</string>
+    <string name="client_name_mock" translatable="false">澤田 健汰</string>
+    <string name="rating_mock" translatable="false">(26)</string>
+    <string name="from_badge" translatable="false">FROM</string>
+    <string name="to_badge" translatable="false">TO</string>
+    <string name="delivery_date_badge" translatable="false">投稿</string>
+    <string name="delivery_time_mock" translatable="false">6:30 pm</string>
+    <string name="delivery_date_mock" translatable="false">May 16, 2016</string>
+    <string name="deadline_badge" translatable="false">期限</string>
+    <string name="deadline_time_mock" translatable="false">24 分</string>
+    <string name="request_btn_text" translatable="false">買う</string>
+    <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
+    <string name="content_from1_mock">木の名前</string>
+    <string name="content_from2_mock"></string>
+    <string name="content_to1_mock">東京</string>
+    <string name="content_to2_mock">新宿</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+
+
+    <!--    name="<string name> + _english"-->
 
 </resources>
