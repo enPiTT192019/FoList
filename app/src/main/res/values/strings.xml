@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Timeline</string>
+    <string name="app_name">FoList</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Please Login</string>
@@ -111,6 +111,14 @@
 
     <string name="ad_title">Subscribe</string>
     <string name="ad_content">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
+    <string name="language">language</string>
+    <string name="English">English</string>
+    <string name="Japanese">Japanese</string>
+    <string name="Chinese">Chinese</string>
+    <string name="background_color">background_color</string>
+    <string name="Bright_color">Bright_color</string>
+    <string name="Dark_color">Dark_color</string>
 
+<!--    name="<string name> + _english"-->
 
 </resources>

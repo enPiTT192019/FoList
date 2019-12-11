@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlin.math.roundToInt
 
+
 val mDataList = ArrayList<TimeLineModel>()
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -54,15 +55,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // タイトルバーを中央寄せさせる
-/*
-        val t_vg = getWindow().getDecorView() as ViewGroup
-        val t_ll = t_vg.getChildAt(0) as LinearLayout
-        val t_fl = t_ll.getChildAt(0) as FrameLayout
-        val title = t_fl.getChildAt(0) as TextView
-        title.gravity = Gravity.CENTER
-*/
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -149,12 +141,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 progress>=10->"%d".format(progress.roundToInt())
                 else->"%.1f".format(progress)
             }
-//
-/*            var intent = Intent(this, NodeFragment::class.java)
-            intent.putExtra("TASK", it.value!!.str )*/
 
-
-//
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
         }
         }
@@ -194,6 +181,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 navController.navigate(R.id.nav_node,bundle)
                                 (nav_view.parent as DrawerLayout).closeDrawer(nav_view)
                             }
+//tnk 12/06
+                            sharedModel.task_name.value = title
+//tnk
                         }
                         AppUtils().hideKeyboard(this)
                     }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
@@ -202,6 +192,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else->{
                 //[...%]ThisIsATitle -> ThisIsATitle
                 val title= """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
+//tnk 12/06
+                sharedModel.task_name.value = title
+//tnk
                 val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
                 if(id!=null){
                     val bundle = bundleOf("nodeId" to id)
@@ -210,6 +203,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         if(!doNotCloseDrawer)(nav_view.parent as DrawerLayout).closeDrawer(nav_view)
+        sharedModel.task_name.value =
         return true
     }
 

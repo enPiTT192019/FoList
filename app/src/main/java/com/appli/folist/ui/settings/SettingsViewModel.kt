@@ -10,4 +10,6 @@ class SettingsViewModel : ViewModel() {
         value = "This is settings Fragment"
     }
     val text: LiveData<String> = _text
+
 }
+
