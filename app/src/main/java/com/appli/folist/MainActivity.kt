@@ -10,7 +10,6 @@ import android.view.SubMenu
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
@@ -34,7 +33,11 @@ import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
+
+
 
 val mDataList = ArrayList<TimeLineModel>()
 var loggedIn: Boolean = false
@@ -56,6 +59,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setNavigationViewListener()
+
+        //日本語に設定
+        val config=resources.configuration
+//        config.setLocale(Locale.JAPANESE)
+        config.setLocale(Locale.ENGLISH)
+        resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
         NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
@@ -148,7 +157,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var doNotCloseDrawer=false
         navController.popBackStack()
         when(item.title){
-            getString(R.string.menu_store)->navController.navigate(R.id.nav_store)
+            getString(R.string.menu_store)-> navController.navigate(R.id.nav_store)
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)

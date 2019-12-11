@@ -106,6 +106,9 @@ class SingleRecyclerViewImpl : RecyclerView,
             notifyItemRangeRemoved(0, beforeCount)
 
             viewNodes = nodesList
+            nodesList.forEachIndexed { index, viewTreeNode ->
+                viewTreeNode.position=index
+            }
             notifyItemRangeInserted(0, viewNodes.size)
 //            notifyDataSetChanged()
         }
@@ -327,6 +330,33 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
         }
 
+        fun setNodeRefreshFunctions(node:RawTreeNode){
+            setNodeRefreshView(node)
+            setNodeChildAdded(node)
+            setNodeChildRemoved(node)
+            node.children.forEach { setNodeRefreshFunctions(it) }
+        }
+        private fun setNodeRefreshView(node:RawTreeNode){
+            node.refreshView = {
+//                                    notifyItemRangeChanged(0,adapterPosition+1)
+                Log.d("refresh", "${it.value.toString()}")
+                notifyItemChanged(adapterPosition + 1)
+            }
+        }
+        private fun setNodeChildAdded(node:RawTreeNode){
+            node.refreshChildAdded={
+                notifyItemChanged(adapterPosition + 1)
+            }
+        }
+        private fun setNodeChildRemoved(node:RawTreeNode){
+            node.refreshChildRemoved= {node,viewNode->
+                if(viewNode.position!=null){
+                    viewNodes.remove(viewNode)
+                    notifyItemRemoved(viewNode.position!!)
+                }
+            }
+        }
+
         @SuppressLint("NewApi")
         private fun bindEdit(viewNode: ViewTreeNode) {
             itemView.slideEdit.setOnClickListener {
@@ -446,14 +476,15 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 //TODO:upload to frebase and set shared-id
                             }
                             nodeSyncButton.setOnClickListener {
-                                node.refreshView = {
-                                    //TODO:refresh view
-//                                    notifyItemRangeChanged(0,adapterPosition+1)
-                                    Log.d("refresh", "${it.value.toString()}")
-                                    notifyItemChanged(adapterPosition + 1)
-                                }
+                               // node.refreshView = {
+                               //     //TODO:refresh view
+//                            //        notifyItemRangeChanged(0,adapterPosition+1)
+                               //     Log.d("refresh", "${it.value.toString()}")
+                             //       notifyItemChanged(adapterPosition + 1)
+                             //   }
                                 node.upload { id ->
                                     nodeSyncedIdEditor.text = id
+                                    setNodeRefreshFunctions(node)
                                 }
                             }
                         }
@@ -587,6 +618,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
 
         private fun bindCommon(viewNode: ViewTreeNode) {
+            setNodeRefreshFunctions(viewNode.rawReference!!)
             bindIndentation(viewNode)
             bindDelete(viewNode)
             bindGenerateSeed(viewNode)
@@ -610,7 +642,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 itemView.seedButton.isVisible =
                     (NodeUtils().getSeedRoot(realm).children.find { it.value.toString() == text.toString() } != null)
             }
-            
 
             //新規ノード
             itemView.createButton.setOnClickListener {
@@ -645,8 +676,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewParent.children.remove(viewNode)
                         viewNodes.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition + 1)
-
-                        val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
+                        val newViewNode = ViewTreeNode(newNode!!, viewParent,before =  null,onlyText = false,position = adapterPosition+1)
                         viewParent.addChild(newViewNode)
                         viewNodes.add(adapterPosition, newViewNode)
                         viewParent.addChild(viewNode)
@@ -700,7 +730,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewNodes.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition + 1)
                         //create new view-node of new-node, update ui
-                        val newViewNode = ViewTreeNode(newNode!!, viewParent, null)
+                        val newViewNode = ViewTreeNode(newNode!!, viewParent, null,position = adapterPosition+1)
                         viewParent.addChild(newViewNode)
                         viewNodes.add(adapterPosition, newViewNode)
                         //add create-node
@@ -746,7 +776,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     else -> " %.2f".format(progress)
                 }
 
-                if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()) {
+                if (viewNode.rawReference!=null
+                    &&!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()
+                    && !viewNode.rawReference!!.value!!.str.isNullOrBlank()) {
+                    Log.d("firebase","progress update:$progress")
                     FirebaseDatabase.getInstance()
                         .getReference(viewNode.rawReference!!.firebaseRefPath!!)
                         .child("progress").setValue(progress)

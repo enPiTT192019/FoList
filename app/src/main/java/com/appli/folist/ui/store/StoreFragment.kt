@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getMainExecutor
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.dialog_show_seed.view.*
 import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import kotlin.concurrent.thread
 
 var storeItems = ArrayList<Item>()
 lateinit var adapter: FoldingCellListAdapter
@@ -398,19 +400,25 @@ class StoreFragment : Fragment() {
     ) {
         val index = sharedModel.seedsIndex.value
         if (index != null) {
-            runBlocking {
                 try {
                     val query = Query().apply {
                         query = str
                         if (num != null) hitsPerPage = num
                     }
-                    val result = index.search(query)
-                    val seeds = result.hits.deserialize(SeedResult.serializer())
-                    callback(seeds)
+                    thread {
+                    runBlocking {
+
+                        val result = index.search(query)
+                        val seeds = result.hits.deserialize(SeedResult.serializer())
+                        getMainExecutor(this@StoreFragment.context).execute {
+
+                            callback(seeds)
+                        }
+                    }
+                    }
                 } catch (e: RuntimeException) {
                     failed()
                 }
-            }
         }
     }
 
@@ -418,15 +426,20 @@ class StoreFragment : Fragment() {
         super.onStart()
         activity!!.setTitle(com.appli.folist.R.string.menu_store)
 
-        search("", STORE_SHOW_LATEST_NUM) { seeds ->
-            setList(seeds)
-        }
+//        thread {
 
-        storeSearchButton.setOnClickListener {
-            search(storeSearchEditor.text.toString()) { seeds ->
+            search("", STORE_SHOW_LATEST_NUM,callback ={ seeds ->
                 setList(seeds)
+            })
+
+            storeSearchButton.setOnClickListener {
+                search(storeSearchEditor.text.toString(),callback ={ seeds ->
+                    setList(seeds)
+                })
+
             }
-        }
+//        }
+
 
 
 
