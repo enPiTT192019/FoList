@@ -23,6 +23,7 @@ class SharedViewModel : ViewModel() {
     val algolia = MutableLiveData<ClientSearch>()
     val seedsIndex = MutableLiveData<Index>()
     var tempImageUri = MutableLiveData<String?>()
+    var task_name = MutableLiveData<String?>()
 
     fun login(activity: AppCompatActivity, email: String, password: String ) {
         UserUtils(activity, auth).login(email,password,

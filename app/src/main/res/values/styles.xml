@@ -11,6 +11,7 @@
     <style name = "Animation" parent = "AppTheme">
         <item name = "android:windowAnimationStyle">@style/AnimationActivity</item>
 
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
 
@@ -69,6 +70,7 @@
         <item name="android:activityCloseEnterAnimation">@animator/open_enter</item>
         <item name="android:activityCloseExitAnimation">@animator/open_exit</item>
     </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

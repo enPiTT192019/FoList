@@ -2,8 +2,12 @@ package com.appli.folist
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextPaint
+import android.text.style.TypefaceSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
@@ -37,8 +41,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-
-
 val mDataList = ArrayList<TimeLineModel>()
 var loggedIn: Boolean = false
 
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
-        sharedModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
@@ -108,6 +110,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             loggedIn = true
         }
     }
+
+
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
         val navHostFragment = this.supportFragmentManager.fragments.first() as NavHostFragment
@@ -147,6 +151,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 progress>=10->"%d".format(progress.roundToInt())
                 else->"%.1f".format(progress)
             }
+
             tasksMenu.add("[%s%%] %s".format(progressText,it.value!!.str)).setIcon(R.drawable.ic_node)
         }
         }
@@ -157,13 +162,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var doNotCloseDrawer=false
         navController.popBackStack()
         when(item.title){
-            getString(R.string.menu_store)-> navController.navigate(R.id.nav_store)
+            getString(R.string.menu_store)->navController.navigate(R.id.nav_store)
             getString(R.string.menu_settings)->navController.navigate(R.id.nav_settings)
             getString(R.string.menu_timeline)->navController.navigate(R.id.nav_timeline)
             getString(R.string.menu_seeds)->navController.navigate(R.id.nav_seeds)
 
             //新規Level2ノード（以下、タスク）
-            getString(R.string.menu_create_new_task) -> {
+            getString(R.string.menu_create_new_task)->{
                 doNotCloseDrawer=true
                 val input = EditText(this)
                 input.inputType = InputType.TYPE_CLASS_TEXT
@@ -172,37 +177,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
                         val title = input.text.toString()
                         //同じ名前のタスク・空の入力を不可とする
-                        if(title.isBlank() || title in sharedModel.root.value!!.children.map { it.value!!.str }){
+                        if(title.isBlank()||title in sharedModel.root.value!!.children.map { it.value!!.str }){
                             AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
-                        } else {
+                        }else{
                             sharedModel.realm.value!!.executeTransaction{
-                                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title), sharedModel.root.value!!, sharedModel.realm.value!!))
+                                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title),sharedModel.root.value!!,sharedModel.realm.value!!))
                             }
                             refreshTasksMenu()
                             AppUtils().hideKeyboard(this@MainActivity)  //Keyboard排除?できてないかもsk
-                            val id = sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
-                            if(id != null){
+                            val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
+                            if(id!=null){
                                 val bundle = bundleOf("nodeId" to id)
                                 navController.navigate(R.id.nav_node,bundle)
                                 (nav_view.parent as DrawerLayout).closeDrawer(nav_view)
                             }
+//tnk 12/06
+                            sharedModel.task_name.value = title
+//tnk
                         }
                         AppUtils().hideKeyboard(this)
-                    }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }.show()
+                    }.setNegativeButton(getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel()}.show()
             }
 
             //タスク
-            else -> {
+            else->{
                 //[...%]ThisIsATitle -> ThisIsATitle
-                val title = """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
-                val id = sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
-                if(id != null){
+                val title= """%\] (.*)${'$'}""".toRegex().find(item.title)?.groupValues?.get(1)
+//tnk 12/06
+                sharedModel.task_name.value = title
+//tnk
+                val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
+                if(id!=null){
                     val bundle = bundleOf("nodeId" to id)
                     navController.navigate(R.id.nav_node,bundle)
                 }
             }
         }
         if(!doNotCloseDrawer)(nav_view.parent as DrawerLayout).closeDrawer(nav_view)
+        sharedModel.task_name.value =
         return true
     }
 
@@ -213,5 +225,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 sharedModel.tempImageUri.value = data?.data.toString()
             } catch (e: Exception) { }
         }
+    }
+}
+
+class CustomTypefaceSpan(family: String, private val mTypeface: Typeface) : TypefaceSpan(family) {
+
+    override fun updateDrawState(textPaint: TextPaint) {
+        applyCustomTypeFace(textPaint, mTypeface)
+    }
+
+    override fun updateMeasureState(textPaint: TextPaint) {
+        applyCustomTypeFace(textPaint, mTypeface)
+    }
+
+    private fun applyCustomTypeFace(paint: Paint, typeface: Typeface) {
+        val oldStyle: Int
+        val old = paint.getTypeface()
+        if (old == null) {
+            oldStyle = 0
+        } else {
+            oldStyle = old!!.getStyle()
+        }
+
+        val fake = oldStyle and typeface.style.inv()
+        if (fake and Typeface.BOLD != 0) {
+            paint.setFakeBoldText(true)
+        }
+
+        if (fake and Typeface.ITALIC != 0) {
+            paint.setTextSkewX(-0.25f)
+        }
+
+        paint.setTypeface(typeface)
     }
 }

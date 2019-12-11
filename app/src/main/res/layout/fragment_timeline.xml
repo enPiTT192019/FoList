@@ -32,15 +32,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--    <ImageButton-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="right"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@drawable/ic_comment_black_24dp" />-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentView"
         android:layout_width="match_parent"

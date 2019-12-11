@@ -454,12 +454,15 @@ class StoreFragment : Fragment() {
                     }
                     thread {
                     runBlocking {
+                        try {
+                            val result = index.search(query)
+                            val seeds = result.hits.deserialize(SeedResult.serializer())
+                            getMainExecutor(this@StoreFragment.context).execute {
 
-                        val result = index.search(query)
-                        val seeds = result.hits.deserialize(SeedResult.serializer())
-                        getMainExecutor(this@StoreFragment.context).execute {
-
-                            callback(seeds)
+                                callback(seeds)
+                            }
+                        }catch (e:Exception){
+                            Log.e("err",e.stackTrace.toString())
                         }
                     }
                     }

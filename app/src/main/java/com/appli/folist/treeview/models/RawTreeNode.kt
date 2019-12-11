@@ -28,9 +28,9 @@ open class RawTreeNode(
     @Ignore
     var refreshView: ((RawTreeNode) -> Unit)? = null
     @Ignore
-    var refreshChildAdded: ((RawTreeNode,ViewTreeNode,RawTreeNode) -> Unit)? = null
+    var refreshChildAdded: ((RawTreeNode,ViewTreeNode?,RawTreeNode) -> Unit)? = null
     @Ignore
-    var refreshChildRemoved: ((RawTreeNode,ViewTreeNode) -> Unit)? = null
+    var refreshChildRemoved: ((RawTreeNode,ViewTreeNode?) -> Unit)? = null
     @Ignore
     var viewNodeRef:ViewTreeNode?=null
 
@@ -136,7 +136,7 @@ open class RawTreeNode(
     }
 
     constructor(remoteNode: NodeForFirebase, parent: RawTreeNode?, realm: Realm?) : this(mRealm = realm) {
-        reset(remoteNode, parent, realm)
+        resetWithoutChildren(remoteNode, parent, realm)
         setSync()
     }
 
@@ -218,8 +218,6 @@ open class RawTreeNode(
             this.progress = remoteNode.progress
             this.notice = remoteNode.notice
             this.firebaseRefPath = remoteNode.path
-//            this.children = RealmList()
-//            this.removeAllChild { true }
         }
     }
 
@@ -230,7 +228,7 @@ open class RawTreeNode(
                  override fun onDataChange(p0: DataSnapshot) {
                      val remote = p0.getValue(NodeForFirebase::class.java)
                      if(remote!=null){
-                         reset(remote, parent, mRealm)
+                         resetWithoutChildren(remote, parent, mRealm)
                          setSync()
                      }
                 }
@@ -309,10 +307,15 @@ open class RawTreeNode(
                                 this@RawTreeNode,
                                 this@RawTreeNode.mRealm
                             )
+
+                            newChild.refreshView=this@RawTreeNode.refreshView
+                            newChild.refreshChildAdded=this@RawTreeNode.refreshChildAdded
+                            newChild.refreshChildRemoved=this@RawTreeNode.refreshChildRemoved
+
                             this@RawTreeNode.addChild(
                                 newChild, needUpload = false
                             )
-                            this@RawTreeNode.refreshChildAdded?.invoke(this@RawTreeNode,this@RawTreeNode.viewNodeRef!!,newChild)
+                            this@RawTreeNode.refreshChildAdded?.invoke(this@RawTreeNode,this@RawTreeNode.viewNodeRef,newChild)
                         }
                     }
 
@@ -330,7 +333,7 @@ open class RawTreeNode(
                             }
                             this@RawTreeNode.removeAllChild(needUpload = false) { it.uuid == remote.uuid }
                             if(v!=null){
-                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode,v!!)
+                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode,v)
                             }
                         }else{
                             Log.d("firebase","child removed but do nothing")

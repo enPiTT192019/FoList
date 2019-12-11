@@ -18,7 +18,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
@@ -347,21 +346,26 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildAdded(node:RawTreeNode){
             node.refreshChildAdded={parent,viewNode,child->
-                if(viewNode.isExpanded){
-                    //add to last
-                    val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
-                    viewNode.children.add(viewNode.children.size-1,newViewNode)
-                    val pos=viewNode.position!!+viewNode.getDisplayedNodeNumber()-2
-                    newViewNode.position=pos
+                if(viewNode!=null) {
+                    val newViewNode = ViewTreeNode(child, parent = viewNode, position = 0)
+                    viewNode!!.children.add(viewNode.children.size - 1, newViewNode)
 
-                    viewNodes.add(pos,newViewNode)
-                    notifyItemInserted(pos)
+                    if (viewNode!!.isExpanded) {
+                        //add to last
+                        val pos = viewNode.position!! + viewNode.getDisplayedNodeNumber() - 2
+                        newViewNode.position = pos
+
+                        viewNodes.add(pos, newViewNode)
+                        notifyItemInserted(pos)
+                    }
+
+                    notifyDataSetChanged()
                 }
             }
         }
         private fun setNodeChildRemoved(node:RawTreeNode){
             node.refreshChildRemoved= {node,viewNode->
-                if(viewNode.position!=null){
+                if(viewNode!=null&&viewNode!!.position!=null){
                     viewNodes.remove(viewNode)
 //                    //TODO:remove children of this node
                     if(viewNode.position!=null && viewNode.position!!>=0) {
@@ -409,7 +413,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                             nodeNoticeEditor.text = node.notice?.toString()
                                 ?: context.getString(R.string.node_notice_notset)
-
                             nodeSharedIdEditor.text =
                                 if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
 
@@ -750,7 +753,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             ).show()
                             return@setOnClickListener
                         }
-                        newNode = RawTreeNode(seed, realm)
+                        newNode = RawTreeNode(seed,viewParent.rawReference!! ,realm)
 
                         realm.executeTransactionIfNotInTransaction {
                             viewParent.rawReference?.addChild(newNode!!)
