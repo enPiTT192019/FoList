@@ -122,7 +122,8 @@ class StoreFragment : Fragment() {
         val detailCloseButton: View,
         val openedTopText: TextView,
         val openedPrice: TextView,
-        val treeViewButton: Button
+        val treeViewButton: Button,
+        val itemDownloadButton: Button
     )
 
     //鯖
@@ -163,7 +164,8 @@ class StoreFragment : Fragment() {
                     view.findViewById(R.id.detailCloseButton),
                     view.findViewById(R.id.openedTopText),
                     view.findViewById(R.id.openedPrice),
-                    view.findViewById(R.id.treeViewButton)
+                    view.findViewById(R.id.treeViewButton),
+                    view.findViewById(R.id.itemDownloadButton)
                 )
                 view.tag = viewHolder
             } else {
@@ -355,6 +357,36 @@ class StoreFragment : Fragment() {
             }
 
             viewHolder.storeItemDownloadButton.setOnClickListener {
+                AppUtils().confirmDialog(
+                    context,
+                    context.getString(R.string.title_download),
+                    if (listItem.price == 0) context.getString(R.string.msg_confirm_download_free, listItem.title)
+                    else context.getString(R.string.msg_confirm_download_purchase, listItem.title, listItem.price)
+                ) { _, _ ->
+                    TreeSeedNode().download(listItem.key) { seed ->
+                        if (seed != null) {
+                            if (seed.value.toString() in sharedModel.seedRoot.value!!.children.map { it.value.toString() }) {
+                                AppUtils().confirmDialog(
+                                    context,
+                                    context.getString(R.string.action_confirm),
+                                    context.getString(R.string.msg_duplicated_seed_confirm_question,seed.value.toString())
+                                ){_,_->
+                                    sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
+                                        sharedModel.seedRoot.value!!.children.removeAll {
+                                            it.value.toString() == seed.value!!.toString()
+                                        }
+                                    }
+                                    saveSeedToRealm(seed)
+                                }
+                            } else {
+                                saveSeedToRealm(seed)
+                            }
+                        }
+                    }
+                }
+            }
+
+            viewHolder.itemDownloadButton.setOnClickListener {
                 AppUtils().confirmDialog(
                     context,
                     context.getString(R.string.title_download),

@@ -18,6 +18,8 @@ import com.appli.folist.models.TimeLineModel
 import com.appli.folist.models.TimelineAttributes
 import kotlinx.android.synthetic.main.fragment_timeline.*
 
+private var isSet: Boolean = true
+
 class TimelineFragment : Fragment() {
 
     private lateinit var timelineViewModel: TimelineViewModel
@@ -68,7 +70,11 @@ class TimelineFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setDataListItems()
+        if(isSet == true){
+            setDataListItems()
+            isSet = false
+        }
+
         initRecyclerView()
 
         mAttributes.onOrientationChanged = { oldValue, newValue ->
