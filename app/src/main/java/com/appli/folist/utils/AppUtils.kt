@@ -20,8 +20,12 @@ import com.algolia.search.model.ApplicationID
 import com.appli.folist.ALGOLIA_API_KEY
 import com.appli.folist.ALGOLIA_APP_ID
 import com.appli.folist.R
+import com.appli.folist.treeview.models.NodeForFirebase
 import com.appli.folist.treeview.models.NodeValue
 import com.appli.folist.treeview.models.RawTreeNode
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.realm.Realm
@@ -155,9 +159,28 @@ class AppUtils {
     fun fillTestNodes(realm: Realm,root:RawTreeNode){
         realm.executeTransaction {
             root.apply {
-                addChild(RawTreeNode(NodeValue("２０１９年の目標"),this,mRealm=realm).apply {
+
+                //-LvaL_KCf583Cr7ZVj56
+//                addChild(RawTreeNode(NodeValue("２０１９年の目標"),this,mRealm=realm).apply {
+//                    //特に意味なし
+//                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
+//                })
+                addChild(RawTreeNode(NodeValue("協力ノード"),this,mRealm=realm).apply {
                     //特に意味なし
-                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
+                    //TODO:delete
+                    firebaseRefPath="synced-nodes/-Lval6ac-hvYZoHeLhZM/data"
+                    getRef()?.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(p0: DatabaseError) {}
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val remote = p0.getValue(NodeForFirebase::class.java)
+                            if (remote != null) {
+                                resetWithoutChildren(remote, parent, realm)
+                                setSync()
+                            }
+                        }
+                    })
+
+//                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
                 addChild(RawTreeNode(NodeValue("ショッピングリスト"),this,mRealm=realm).apply {
                     //Seedsのアピール

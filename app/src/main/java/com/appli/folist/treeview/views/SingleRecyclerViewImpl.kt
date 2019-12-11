@@ -243,6 +243,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     //TODO:confirm?
                     if (viewNode.parent != null) {
                         realm.executeTransactionIfNotInTransaction {
+                            viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
 
                             if (viewNode.parent != null) {
                                 viewNode.parent!!.children.remove(viewNode)
@@ -258,12 +259,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 adapterPosition,
                                 viewNode.getDisplayedNodeNumber()
                             )
-//                            notifyItemRangeChanged(0,adapterPosition+1)
+
+                            viewNode.rawReference!!.firebaseRefPath=null
                             notifyDataSetChanged()
-
-                            viewNode.rawReference!!.parent!!.removeChild(viewNode.rawReference!!)
-//                            viewNode.rawReference!!.deleteFromRealm()
-
                         }
                     } else {//level2 node
                         realm.executeTransactionIfNotInTransaction {
@@ -340,19 +338,53 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             node.refreshView = {
 //                                    notifyItemRangeChanged(0,adapterPosition+1)
                 Log.d("refresh", "${it.value.toString()}")
-                notifyItemChanged(adapterPosition + 1)
+//                if(!it.value?.str.isNullOrBlank()){
+                if(it.viewNodeRef?.position!=null && it.viewNodeRef?.position!!>0){
+                    notifyItemChanged( it.viewNodeRef!!.position!!)
+                }
+//                }
             }
         }
         private fun setNodeChildAdded(node:RawTreeNode){
-            node.refreshChildAdded={
-                notifyItemChanged(adapterPosition + 1)
+            node.refreshChildAdded={parent,viewNode,child->
+                if(viewNode.isExpanded){
+                    //add to last
+                    val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
+                    viewNode.children.add(viewNode.children.size-1,newViewNode)
+                    val pos=viewNode.position!!+viewNode.getDisplayedNodeNumber()-2
+                    newViewNode.position=pos
+
+                    viewNodes.add(pos,newViewNode)
+                    notifyItemInserted(pos)
+                }
             }
         }
         private fun setNodeChildRemoved(node:RawTreeNode){
             node.refreshChildRemoved= {node,viewNode->
                 if(viewNode.position!=null){
                     viewNodes.remove(viewNode)
-                    notifyItemRemoved(viewNode.position!!)
+//                    //TODO:remove children of this node
+                    if(viewNode.position!=null && viewNode.position!!>=0) {
+//                        notifyItemRemoved(viewNode.position!!)
+//                    }
+//                    if(viewNode.position==null || viewNode.position!!<0)return
+
+                        if (viewNode.parent != null) {
+                            viewNode.parent!!.children.remove(viewNode)
+                            fun deleteFromViewNodes(viewNode: ViewTreeNode) {
+                                if (viewNode.children.size > 0) {
+                                    viewNode.children.forEach { deleteFromViewNodes(it) }
+                                }
+                                if (viewNode in viewNodes) viewNodes.remove(viewNode)
+                            }
+                            deleteFromViewNodes(viewNode)
+                        }
+                        notifyItemRangeRemoved(
+                            adapterPosition,
+                            viewNode.getDisplayedNodeNumber()
+                        )
+                        notifyDataSetChanged()
+                    }
                 }
             }
         }
@@ -520,11 +552,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             if (power >= 0 && power != node.value!!.power) {
                                 realm.executeTransactionIfNotInTransaction {
                                     node.value!!.power = power
-                                    if (node.progress > power * 100) {
+                                    if (node.progress!! > power * 100) {
                                         node.progress = (power * 100).toDouble()
                                     } else {
                                         node.progress =
-                                            (node.progress / node.value!!.power * power).toDouble()
+                                            (node.progress!! / node.value!!.power * power).toDouble()
                                     }
                                 }
 
@@ -545,7 +577,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     node.value!!.type = type
                                     if (type == NodeTypes.BINARY_NODE.name) {
                                         node.progress =
-                                            (if (node.progress > 0) node.value!!.power * 100 else 0).toDouble()
+                                            (if (node.progress!! > 0) node.value!!.power * 100 else 0).toDouble()
                                     }
 
                                 }
@@ -749,11 +781,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindBinary(viewNode: ViewTreeNode) {
             itemView.nodeBinaryBox.isVisible = true
             itemView.nodeBinaryBox.setImageResource(
-                if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
+                if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) R.drawable.ic_checked
                 else R.drawable.ic_unchecked
             )
 
-            if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()) {
+            if (!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()
+                && !viewNode.rawReference!!.value!!.str.isNullOrBlank()) {
                 FirebaseDatabase.getInstance()
                     .getReference(viewNode.rawReference!!.firebaseRefPath!!)
                     .child("progress").setValue(viewNode.rawReference!!.progress)
@@ -778,7 +811,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                 if (viewNode.rawReference!=null
                     &&!viewNode.rawReference!!.firebaseRefPath.isNullOrBlank()
-                    && !viewNode.rawReference!!.value!!.str.isNullOrBlank()) {
+                    && !viewNode.rawReference!!.value!!.str.isNullOrBlank()
+                    ) {
                     Log.d("firebase","progress update:$progress")
                     FirebaseDatabase.getInstance()
                         .getReference(viewNode.rawReference!!.firebaseRefPath!!)
@@ -869,7 +903,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         viewNode.rawReference!!.value!!.type == NodeTypes.BINARY_NODE.name -> {
                             realm!!.executeTransaction {
                                 viewNode.rawReference!!.progress =
-                                    if (viewNode.rawReference!!.progress >= 100 * viewNode.rawReference!!.value!!.power) 0.0
+                                    if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) 0.0
                                     else 100.0 * viewNode.rawReference!!.value!!.power
                             }
                             notifyItemRangeChanged(0, adapterPosition + 1)
@@ -879,7 +913,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             val input = EditText(recyclerView.context)
                             AppUtils().seekbarDialog(
                                 recyclerView.context as Activity,
-                                viewNode.rawReference!!.progress.toInt(),
+                                viewNode.rawReference!!.progress!!.toInt(),
                                 viewNode.rawReference!!.value!!.power * 100
 
                             ) { progress, _, _ ->
