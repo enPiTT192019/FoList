@@ -346,7 +346,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildAdded(node:RawTreeNode){
             node.refreshChildAdded={parent,viewNode,child->
-                if(viewNode.isExpanded){
+                if(viewNode!=null&&viewNode.isExpanded){
                     //add to last
                     val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
                     viewNode.children.add(viewNode.children.size-1,newViewNode)
@@ -360,7 +360,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildRemoved(node:RawTreeNode){
             node.refreshChildRemoved= {node,viewNode->
-                if(viewNode.position!=null){
+                if(viewNode!=null&&viewNode!!.position!=null){
                     viewNodes.remove(viewNode)
 //                    //TODO:remove children of this node
                     if(viewNode.position!=null && viewNode.position!!>=0) {

@@ -28,9 +28,9 @@ open class RawTreeNode(
     @Ignore
     var refreshView: ((RawTreeNode) -> Unit)? = null
     @Ignore
-    var refreshChildAdded: ((RawTreeNode,ViewTreeNode,RawTreeNode) -> Unit)? = null
+    var refreshChildAdded: ((RawTreeNode,ViewTreeNode?,RawTreeNode) -> Unit)? = null
     @Ignore
-    var refreshChildRemoved: ((RawTreeNode,ViewTreeNode) -> Unit)? = null
+    var refreshChildRemoved: ((RawTreeNode,ViewTreeNode?) -> Unit)? = null
     @Ignore
     var viewNodeRef:ViewTreeNode?=null
 
@@ -312,7 +312,7 @@ open class RawTreeNode(
                             this@RawTreeNode.addChild(
                                 newChild, needUpload = false
                             )
-                            this@RawTreeNode.refreshChildAdded?.invoke(this@RawTreeNode,this@RawTreeNode.viewNodeRef!!,newChild)
+                            this@RawTreeNode.refreshChildAdded?.invoke(this@RawTreeNode,this@RawTreeNode.viewNodeRef,newChild)
                         }
                     }
 
@@ -330,7 +330,7 @@ open class RawTreeNode(
                             }
                             this@RawTreeNode.removeAllChild(needUpload = false) { it.uuid == remote.uuid }
                             if(v!=null){
-                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode,v!!)
+                                this@RawTreeNode.refreshChildRemoved?.invoke(this@RawTreeNode,v)
                             }
                         }else{
                             Log.d("firebase","child removed but do nothing")
