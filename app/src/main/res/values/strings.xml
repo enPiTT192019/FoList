@@ -132,10 +132,11 @@
     <string name="delivery_date_mock" translatable="false">May 16, 2016</string>
     <string name="deadline_badge" translatable="false">期限</string>
     <string name="deadline_time_mock" translatable="false">24 分</string>
-    <string name="request_btn_text" translatable="false">買う</string>
+    <string name="request_btn_text" translatable="false">木を購入</string>
     <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
     <string name="content_from1_mock">木の名前</string>
     <string name="content_from2_mock"></string>
+    <string name="tree_view">木の閲覧</string>
     <string name="content_to1_mock">東京</string>
     <string name="content_to2_mock">新宿</string>
     <string name="title_activity_main2">Main2Activity</string>
