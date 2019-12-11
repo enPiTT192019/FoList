@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
@@ -9,6 +8,9 @@ apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 29
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
     defaultConfig {
         applicationId "com.appli.folist"
         minSdkVersion 23
@@ -60,7 +62,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-database:19.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -74,6 +76,6 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0'
     implementation 'com.github.florent37:singledateandtimepicker:2.1.5'
-    //implementation 'com.jakewharton:butterknife:8.5.1'
-    //apt 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'com.mikhaellopez:circularimageview:3.2.0'
+    implementation "com.android.support:support-compat:28.0.0"
 }

@@ -130,7 +130,7 @@ class UserUtils(
     private fun setName(user: FirebaseUser?){
         if(user != null && user.displayName == null){
                 val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName("Kei Jiro")
+                    .setDisplayName("Kenta Sawada")
                     .build()
 
                 user?.updateProfile(profileUpdates)

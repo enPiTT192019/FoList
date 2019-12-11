@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#E65100</color>
+    <color name="colorPrimaryDark">#BD3E00</color>
     <color name="material_grey_500">#9E9E9E</color>
     <color name="colorAccent">#D81B60</color>
-
+    <color name="colorText">#000000</color>
+    <color name="colorInkya">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="color">#228B22</color>
+    <color name="colorSoftText">#99000000</color>
 
+    <color name="bgBackSideColor">#f4f0ff</color>
+    <color name="bgTitleLeft">#594691</color>
+    <color name="bgTitleRight">#ffffff</color>
+    <color name="bgContentTop">#594691</color>
+    <color name="bgContent">#ffffff</color>
+    <color name="contentDividerLine">#e0e0e0</color>
+    <color name="contentBadgeTitle">#a9a9a9</color>
+    <color name="titleBadgeTitle">#adafb1</color>
+    <color name="titleBadgeText">#adafb1</color>
+    <color name="mainTextColor">#343d43</color>
+    <color name="btnRequest">#ffbf12</color>
+    <color name="colorTransparentBlack">#bc500d3b</color>
+
+    <color name="black_overlay">#66000000</color>
+
+
+    <color name="colorTimeline">#fafafa</color>
     <color name="colorGrey50">#fafafa</color>
     <color name="colorGrey100">#f5f5f5</color>
     <color name="colorGrey200">#eeeeee</color>
@@ -25,5 +44,5 @@
     <color name="colorBackground">#eeeeee</color>
 
     <color name="material_amber_500">#FFC107</color>
-    <color name="dsb_progress_color">#009688</color>
+    <color name="dsb_progress_color">#FFB300</color>
 </resources>

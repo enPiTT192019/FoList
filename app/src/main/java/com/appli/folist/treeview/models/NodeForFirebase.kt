@@ -7,7 +7,7 @@ data class NodeForFirebase(
     var children: HashMap<String,NodeForFirebase>,
     var uuid: String = "",
     var sharedId: String? = null,
-    var progress: Double = 0.0,
+    var progress: Double? = 0.0,
     var notice: Date? = null,
     var path:String?=null
 ) {

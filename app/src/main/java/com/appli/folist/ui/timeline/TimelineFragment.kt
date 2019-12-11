@@ -12,9 +12,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appli.folist.*
+import com.appli.folist.models.OrderStatus
 import com.appli.folist.models.Orientation
+import com.appli.folist.models.TimeLineModel
 import com.appli.folist.models.TimelineAttributes
 import kotlinx.android.synthetic.main.fragment_timeline.*
+
+private var isSet: Boolean = true
 
 class TimelineFragment : Fragment() {
 
@@ -66,7 +70,11 @@ class TimelineFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        setDataListItems()
+        if(isSet == true){
+            setDataListItems()
+            isSet = false
+        }
+
         initRecyclerView()
 
         mAttributes.onOrientationChanged = { oldValue, newValue ->
@@ -77,17 +85,15 @@ class TimelineFragment : Fragment() {
 
     }
 
-//    private fun setDataListItems() {    //Sample Post
-//        mDataList.add(TimeLineModel("Item successfully delivered", "", OrderStatus.INACTIVE))
-//        mDataList.add(TimeLineModel("Courier is out to delivery your order", "2017-02-12 08:00", OrderStatus.ACTIVE))
-//        mDataList.add(TimeLineModel("Item has reached courier facility at New Delhi", "2017-02-11 21:00", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Item has been given to the courier", "2017-02-11 18:00", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Item is packed and will dispatch soon", "2017-02-11 09:30", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Order is being readied for dispatch", "2017-02-11 08:00", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Order processing initiated", "2017-02-10 15:00", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Order confirmed by seller", "2017-02-10 14:30", OrderStatus.COMPLETED))
-//        mDataList.add(TimeLineModel("Order placed successfully", "2017-02-10 14:00", OrderStatus.COMPLETED))
-//    }
+    private fun setDataListItems() {    //チュートリアル文
+        mDataList.add(TimeLineModel("FoListへようこそ.\nFoListは、あなたの目標達成の手助けをします." , "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("タイムラインについて\n\nタイムラインは、皆のタスクの進捗状況、タスクの紹介、発信ができます。右下の「投稿」ボタンから投稿できます。", "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("タスクについて\n\nFoListは、今までにない木構造のタスク管理アプリです。一つの目標を大きめのタスクに分割し、さらにそれを噛み砕いて小さいタスクにしていきましょう。早速、「新規タスク作成」から木を植えてみましょう!\n\nタスクノードを左にスライドすると、オプションが表示されます。タスクのシードへの追加、編集、削除はそちらから行えます。", "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("シードについて\n\nシードは、大きいタスクを再利用、ストアにアップロードすることができる機能です。シードへの追加は、どの大きさのタスクでも追加することができます。シードに追加されたタスクは、他のタスクツリーに追加したり、新しいタスクとして0から始めたい時に便利です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("ストアについて\n\nストアは、皆がシェアした数々のタスクツリーを閲覧、ダウンロードすることが可能です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
+        mDataList.add(TimeLineModel("ナイトモード\n\n設定から、昼間モード、ナイトモードの切り替えが可能です。" , "2019-12-19 09:00", OrderStatus.ACTIVE))
+//        mDataList.add(TimeLineModel("" , "2019-12-19 09:00", OrderStatus.ACTIVE))
+    }
 
     private fun initRecyclerView() {
         initAdapter()

@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.appli.folist.TimelineView
 import com.appli.folist.models.Orientation
 import com.appli.folist.models.TimeLineModel
 import com.appli.folist.models.TimelineAttributes
 import com.appli.folist.utils.DateTimeUtils
+import com.appli.folist.utils.usersName
 import kotlinx.android.synthetic.main.item_timeline.view.*
-
 
 class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mAttributes: TimelineAttributes) : RecyclerView.Adapter<TimeLineAdapter.TimeLineViewHolder>() {
 
@@ -19,7 +18,7 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {
-        val  layoutInflater = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         val view: View
 
         view = if (mAttributes.orientation == Orientation.HORIZONTAL) {
@@ -41,7 +40,11 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
             holder.date.visibility = View.GONE
 
         holder.message.text = timeLineModel.message
-
+        if(usersName != null && usersName != "") {
+            holder.userName.text = usersName
+        } else {
+            holder.userName.text = "Appli2019"
+        }
         holder.userButton.setOnClickListener {
             //TODO
             //プロフ画像押下時。プロフィール画面表示
@@ -54,5 +57,6 @@ class TimeLineAdapter(private val mFeedList: List<TimeLineModel>, private var mA
         val date = itemView.text_timeline_date
         val message = itemView.text_timeline_title
         val userButton = itemView.user_button
+        val userName = itemView.name
     }
 }

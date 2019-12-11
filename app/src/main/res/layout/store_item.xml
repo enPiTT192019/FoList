@@ -1,88 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<com.appli.folist.FoldingCell xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    folding-cell:additionalFlipsCount="2"
+    folding-cell:animationDuration="1300"
+    folding-cell:backSideColor="@color/bgBackSideColor"
+    folding-cell:cameraHeight="30">
 
-    android:focusable="true" android:focusableInTouchMode="true">
+    <!-- CONTENT (UNFOLDED) LAYOUT (MUST BE AT LEAST 2x times BIGGER than content layout bellow)-->
+    <include layout="@layout/cell_content_layout" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingBottom="5dp">
+    <!-- TITLE (FOLDED) LAYOUT (MUST BE AT LEAST 2x times SMALLER than content layout above) -->
+    <include layout="@layout/cell_title_layout" />
 
-        <TextView
-            android:id="@+id/storeItemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="@string/store_title"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/storeItemPriceText"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:text="￥2000"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/storeItemAddToTaskButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="1dp"
-            android:tint="@android:color/holo_green_light"
-            app:srcCompat="@drawable/ic_create" />
-        <ImageView
-            android:id="@+id/storeItemDownloadButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="1dp"
-            android:tint="@android:color/holo_blue_light"
-            app:srcCompat="@drawable/ic_download" />
-
-<!--        if author-->
-        <ImageView
-            android:id="@+id/storeItemDeleteButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="1dp"
-            android:tint="@android:color/holo_red_light"
-            app:srcCompat="@drawable/ic_delete" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="20dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingBottom="5dp">
-
-        <TextView
-            android:id="@+id/storeItemContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
-    </LinearLayout>
-
-
-</LinearLayout>
+</com.appli.folist.FoldingCell>

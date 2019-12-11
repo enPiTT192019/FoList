@@ -14,9 +14,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_stop_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Animation"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PaidSubscriberAdActivity"></activity>
+        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".PaidSubscriberAdActivity" />
         <activity
             android:name=".AboutActivity"
             android:screenOrientation="portrait" />

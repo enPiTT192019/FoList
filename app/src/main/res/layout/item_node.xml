@@ -38,7 +38,7 @@
         android:id="@+id/itemLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
+        android:background="@color/colorBackground"
         android:orientation="horizontal">
 
         <Space
@@ -53,11 +53,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
+            <View
+                android:id="@+id/leftView"
+                android:layout_width="56dp"
+                android:layout_height="48dp"
+                android:background="@color/colorBackground"
+                android:layout_marginStart="0dp" />
+
+            <View
+                android:id="@+id/middleView"
+                android:layout_width="44dp"
+                android:layout_height="48dp"
+                android:background="@color/colorBackground"
+                android:layout_marginStart="40dp" />
+
+            <View
+                android:id="@+id/rightView"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/colorBackground"
+                android:layout_marginStart="86dp" />
             <ImageView
                 android:id="@+id/nodeToggle"
                 android:layout_width="36dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="10dp"
+                android:tint="@color/colorBlack"
                 app:srcCompat="@drawable/ic_right" />
 
             <ProgressBar
@@ -77,6 +98,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="4dp"
+                android:tint="@color/colorBlack"
                 app:srcCompat="@drawable/ic_unchecked" />
 
             <TextView
@@ -85,38 +107,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="39dp"
                 android:layout_marginTop="14dp"
+                android:textColor="@color/colorSoftText"
                 android:text="79.99"
                 android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/nodeTitle"
+                android:textColor="@color/colorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="49dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
-                android:textColor="@android:color/background_dark"
                 android:textSize="18sp" />
-
-
-            <View
-                android:id="@+id/leftView"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="0dp" />
-
-            <View
-                android:id="@+id/middleView"
-                android:layout_width="44dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="40dp" />
-
-            <View
-                android:id="@+id/rightView"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="86dp" />
 
         </FrameLayout>
 
