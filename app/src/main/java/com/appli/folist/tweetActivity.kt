@@ -17,12 +17,9 @@ class tweetActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tweet)
-        val shareTreeIdtxt: TextView = findViewById(R.id.shareTreeIdtxt)
         val inflater: LayoutInflater = LayoutInflater.from(this)
         val seedTitle: String? = intent.getStringExtra("SEEDTITLE")
-        if(seedTitle != null) {
-            shareTreeIdtxt.text = "木の共有: " + seedTitle
-        }
+
         button.setOnClickListener {
             if(tweetText.text.toString().length != 0) {
                 var tweetId = 1
