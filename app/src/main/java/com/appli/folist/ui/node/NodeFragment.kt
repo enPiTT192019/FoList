@@ -45,10 +45,8 @@ class NodeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-//tnk 12/06
         val task= sharedModel.task_name.value.toString()
         activity!!.setTitle(task)
         AppUtils().hideKeyboard(context as Activity)
-//tnk
     }
 }

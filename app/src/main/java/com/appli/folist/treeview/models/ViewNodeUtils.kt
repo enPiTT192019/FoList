@@ -19,7 +19,7 @@ class ViewNodeUtils{
             ViewNodeTypes.QUICK_CREATE_NODE.ordinal->R.layout.item_quick_create_node
             ViewNodeTypes.PROGRESS_NODE.ordinal->R.layout.item_progress
             ViewNodeTypes.ONLY_TEXT.ordinal->R.layout.item_only_text
-            ViewNodeTypes.TEST_NODE.ordinal->R.layout.item_only_text
+            ViewNodeTypes.TEST_NODE.ordinal-> R.layout.item_node
             else-> R.layout.item_node
         }
     }

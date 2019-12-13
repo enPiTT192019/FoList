@@ -45,6 +45,7 @@ open class NodeValue(
     }
 
     fun setDetail(key:String,value:String?){
+        if(detail==null)detail=NodeDetailMap()
         detail?.set(key,value)
     }
 

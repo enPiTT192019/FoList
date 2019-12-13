@@ -103,13 +103,11 @@ class SingleRecyclerViewImpl : RecyclerView,
             val beforeCount = viewNodes.size
             viewNodes.clear()
             notifyItemRangeRemoved(0, beforeCount)
-
             viewNodes = nodesList
             nodesList.forEachIndexed { index, viewTreeNode ->
                 viewTreeNode.position=index
             }
             notifyItemRangeInserted(0, viewNodes.size)
-//            notifyDataSetChanged()
         }
     }
 
@@ -649,8 +647,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
         }
 
+        fun bindLink(viewNode: ViewTreeNode){
+            if(!viewNode.rawReference?.value?.link.isNullOrBlank()){
+                itemView.rightView.setOnLongClickListener {
+                    //TODO
+                    val browserIntent=Intent(Intent.ACTION_VIEW, Uri.parse(viewNode.rawReference?.value?.link))
+                    (recyclerView.context as Activity).startActivity(browserIntent)
+                    true
+                }
+            }
+        }
+
         private fun bindCommon(viewNode: ViewTreeNode) {
             setNodeRefreshFunctions(viewNode.rawReference!!)
+            bindLink(viewNode)
             bindIndentation(viewNode)
             bindDelete(viewNode)
             bindGenerateSeed(viewNode)
@@ -687,7 +697,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 }
 
                 if (viewNode.parent != null) {
-                    //todo 高速化
                     //get variables
                     val inputStr = itemView.editText.text.toString()
                     val viewParent = viewNode.parent as ViewTreeNode
@@ -856,16 +865,23 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         private fun bindTest(viewNode: ViewTreeNode) {
             bindCommon(viewNode)
             bindNodeToggle(viewNode, false)
+            itemView.nodeBinaryBox.isVisible = false
+            bindProgress(viewNode)
+            itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
+            itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
             itemView.nodeTitle.text = viewNode.value.toString()
 
+            itemView.middleView.setOnClickListener {
+                //TODO
+
+                AppUtils().toast(recyclerView.context,"test")
+            }
             itemView.leftView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)
             }
-            itemView.middleView.setOnClickListener {
-                expandCollapseToggleHandler(viewNode, this)
-            }
             itemView.rightView.setOnClickListener {
-                expandCollapseToggleHandler(viewNode, this)
+                //TODO
+                AppUtils().toast(recyclerView.context,"test")
             }
         }
 
