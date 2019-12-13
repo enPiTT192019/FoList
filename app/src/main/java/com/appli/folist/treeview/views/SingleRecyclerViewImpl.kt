@@ -857,6 +857,22 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
         }
 
+        private fun bindTest(viewNode: ViewTreeNode) {
+            bindCommon(viewNode)
+            bindNodeToggle(viewNode, false)
+            itemView.nodeTitle.text = viewNode.value.toString()
+
+            itemView.leftView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.middleView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.rightView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+        }
+
         private fun bindNode(viewNode: ViewTreeNode) {
             bindCommon(viewNode)
             itemView.nodeProgress.isVisible = false
@@ -946,6 +962,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
                 ViewNodeTypes.ONLY_TEXT -> bindOnlyText(viewNode)
+                ViewNodeTypes.TEST_NODE->bindTest(viewNode)
                 else -> bindNode(viewNode)
             }
         }

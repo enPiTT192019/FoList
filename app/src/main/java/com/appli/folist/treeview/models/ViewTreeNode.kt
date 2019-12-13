@@ -36,6 +36,7 @@ class ViewTreeNode(
         this.children.clear()
         this.type=when(value.type){
             NodeTypes.PROGRESS_NODE.name->ViewNodeTypes.PROGRESS_NODE
+            NodeTypes.TEST_NODE.name-> ViewNodeTypes.TEST_NODE
             else->ViewNodeTypes.NODE
         }
         if(onlyText)this.type=ViewNodeTypes.ONLY_TEXT
@@ -47,7 +48,9 @@ class ViewTreeNode(
             }
             this.addChild(ViewTreeNode(it,this,childBefore,onlyText=onlyText,position = null))
         }
-        if(!onlyText)this.addChild(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
+        if(!onlyText && type!=ViewNodeTypes.TEST_NODE){
+            this.addChild(ViewTreeNode(NodeValue(checked = true),ViewNodeTypes.QUICK_CREATE_NODE,this, mutableListOf()))
+        }
     }
 
     fun addChild(child:ViewTreeNode){

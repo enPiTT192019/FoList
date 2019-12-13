@@ -19,6 +19,7 @@ import com.algolia.search.model.APIKey
 import com.algolia.search.model.ApplicationID
 import com.appli.folist.ALGOLIA_API_KEY
 import com.appli.folist.ALGOLIA_APP_ID
+import com.appli.folist.NodeTypes
 import com.appli.folist.R
 import com.appli.folist.treeview.models.NodeForFirebase
 import com.appli.folist.treeview.models.NodeValue
@@ -239,6 +240,7 @@ class AppUtils {
                 addChild(RawTreeNode(NodeValue("『TOEIC単語マスター』"),this,mRealm=realm).apply {
                     //TODO:バーコード連携のアピール
                     //TODO:テスト機能
+                    value!!.type=NodeTypes.TEST_NODE.name
                     addChild(RawTreeNode(NodeValue("Chapter1"),this,mRealm=realm).apply {//TODO: can be clicked, -> test
                         addChild(RawTreeNode(NodeValue("hello"),this,mRealm=realm))//TODO: can not be clicked
                         addChild(RawTreeNode(NodeValue("nice"),this,mRealm=realm))

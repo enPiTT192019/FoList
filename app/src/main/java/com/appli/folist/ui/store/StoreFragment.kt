@@ -34,7 +34,7 @@ import kotlin.concurrent.thread
 
 var storeItems = ArrayList<Item>()
 lateinit var adapter: FoldingCellListAdapter
-lateinit var inkyaview: View
+lateinit var inkyaview: View//TODO:WHAT IS THIS??
 
 
 class StoreFragment : Fragment() {

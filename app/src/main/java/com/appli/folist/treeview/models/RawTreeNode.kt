@@ -52,7 +52,7 @@ open class RawTreeNode(
 //            })
         }
     }
-    public fun getRef(): DatabaseReference? {
+    fun getRef(): DatabaseReference? {
         return if (!firebaseRefPath.isNullOrBlank()) {
             FirebaseDatabase.getInstance().getReference(firebaseRefPath!!)
         } else {
