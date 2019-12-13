@@ -1,119 +1,116 @@
-    <resources>
+<resources>
         <string name="app_name">FoList</string>
         <string name="navigation_drawer_open">Open navigation drawer</string>
         <string name="navigation_drawer_close">Close navigation drawer</string>
-        <string name="nav_header_title">Appli2019</string>
+        <string name="nav_header_title">Please Login</string>
         <string name="nav_header_subtitle">" "</string>
         <string name="nav_header_desc">Navigation header</string>
-        <string name="action_settings">設定</string>
+        <string name="action_settings">Settings</string>
 
-        <string name="menu_timeline">タイムライン</string>
-        <string name="menu_node">ノード</string>
-        <string name="menu_task">タスク</string>
-        <string name="menu_slideshow">スライドショー</string>
-        <string name="menu_tools">ツール</string>
-        <string name="menu_store">ストア</string>
-        <string name="menu_settings">設定</string>
-        <string name="menu_functions">機能</string>
-        <string name="menu_tasks">タスク</string>
-        <string name="menu_create_new_task">新規タスク作成</string>
-        <string name="menu_seeds">シード</string>
-        <string name="menu_input_task_title">タスクタイトルの入力</string>
+        <string name="menu_timeline">Timeline</string>
+        <string name="menu_node">Node</string>
+        <string name="menu_task">Task</string>
+        <string name="menu_slideshow">Slideshow</string>
+        <string name="menu_tools">Tools</string>
+        <string name="menu_store">Store</string>
+        <string name="menu_settings">Settings</string>
+        <string name="menu_functions">Functions</string>
+        <string name="menu_tasks">Tasks</string>
+        <string name="menu_create_new_task">Create New Task</string>
+        <string name="menu_seeds">Seeds</string>
+        <string name="menu_input_task_title">Input Task Title</string>
 
 
-        <string name="title_confirm">確認</string>
-        <string name="title_download">ダウンロード</string>
-        <string name="title_add_to_task">タスクを追加</string>
-        <string name="title_seed_content">シード名</string>
-        <string name="msg_confirm_delete">%1$sを本当に削除しますか?</string>
-        <string name="msg_confirm_download_free">%1$sをダウンロードしますか?</string>
-        <string name="msg_confirm_download_purchase">%1$sを購入しますか?\n 価格: %2$d円</string>
-        <string name="msg_confirm_add_to_task">%1$sをマイタスクに追加しますか?</string>
-        <string name="msg_confirm_overwrite_task">同じ名前のタスクが存在します。%1$sを上書きしますか?</string>
-        <string name="msg_confirm_publish">%1$sをアップロードしますか?</string>
-        <string name="msg_duplicated_task_title">同じ名前のタスクが存在します。他の名前にしてください。</string>
+        <string name="title_confirm">Confirm</string>
+        <string name="title_download">Download</string>
+        <string name="title_add_to_task">Add to Task</string>
+        <string name="title_seed_content">Seed Content</string>
+        <string name="msg_confirm_delete">Delete %1$s?</string>
+        <string name="msg_confirm_download_free">Download %1$s?</string>
+        <string name="msg_confirm_download_purchase">Purchase %1$s?\n Price:%2$d yen</string>
+        <string name="msg_confirm_add_to_task">Add %1$s to Top-Level Task?</string>
+        <string name="msg_confirm_overwrite_task">Task exists, Overwrite %1$s?</string>
+        <string name="msg_confirm_publish">Publish %1$s?</string>
+        <string name="msg_duplicated_task_title">Duplicated task title, please consider another title.</string>
         <string name="msg_field_blank">Some necessary field is blank, please confirm and try again.</string>
-        <string name="msg_duplicated_seed_confirm_question">同じ名前のタスクがシード内に存在します。%1$sを上書きしますか?</string>
+        <string name="msg_duplicated_seed_confirm_question">Duplicated seed title, do you want to overwrite %1$s?</string>
         <string name="msg_no_permissions">No Permissions?</string>
 
 
         <string name="img_cd_expand_ic">expand</string>
-        <string name="create_a_new_node">ノード追加、またはシードから追加</string>
+        <string name="create_a_new_node">Create a New Node or Select from Seeds</string>
         <string name="plus_mark">+</string>
-        <string name="edit_node">ノードの編集</string>
-        <string name="node_title">タイトル</string>
+        <string name="edit_node">Edit Node</string>
+        <string name="node_title">Title</string>
         <string name="node_value_type">Value Type</string>
         <string name="node_type_tree">TREE</string>
         <string name="node_media_uri">Media URI</string>
-        <string name="node_media">メディア</string>
+        <string name="node_media">Media</string>
         <string name="node_detail">Detail</string>
-        <string name="node_link">リンク</string>
+        <string name="node_link">Link</string>
         <string name="node_link_valid">Valid</string>
         <string name="node_link_invalid">Invalid</string>
-        <string name="node_power">重み</string>
+        <string name="node_power">Power</string>
         <string name="node_value_uuid">Value ID</string>
         <string name="node_children_number">Subtask Number</string>
         <string name="node_parent">Parent</string>
-        <string name="node_progress">進捗状況</string>
-        <string name="node_notice">リマインド</string>
-        <string name="node_notice_notset">未設定です。こちらをタップして設定できます。</string>
+        <string name="node_progress">Progress</string>
+        <string name="node_notice">Notice</string>
+        <string name="node_notice_notset">Not set. click to set</string>
         <string name="node_shared_id">Shared ID</string>
         <string name="node_synced_id">Synced Path</string>
         <string name="node_shared_id_not_shared">Not shared. click button to share</string>
         <string name="node_uuid">Node ID</string>
         <string name="node_relative">Relative</string>
-        <string name="node_info">ノード情報</string>
+        <string name="node_info">Information</string>
         <string name="node_type_binary_node">BINARY_NODE</string>
         <string name="node_type_progress_node">PROGRESS_NODE</string>
         <string name="node_info_content">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
-        <string name="node_generate_seed_title">シードに追加</string>
-        <string name="node_generate_seed_msg">シードに追加・保存しますか?</string>
+        <string name="node_generate_seed_title">Generate Seed</string>
+        <string name="node_generate_seed_msg">Generate Seed and Save Locally?</string>
 
-        <string name="picker_date">日付</string>
-        <string name="picker_time">時刻</string>
-        <string name="picker_title">通知時刻の設定</string>
+        <string name="picker_date">Date</string>
+        <string name="picker_time">Time</string>
+        <string name="picker_title">Select Datatime</string>
         <string name="picker_format">yy/MM/dd HH:mm</string>
 
-        <string name="seekbar_title">進捗</string>
+        <string name="seekbar_title">Progress</string>
 
 
         <string name="seed_upload">Publish</string>
-        <string name="seed_title">タイトル</string>
+        <string name="seed_title">Title</string>
         <string name="seed_description">Description</string>
-        <string name="seed_price">価格</string>
-        <string name="seed_password">パスワード</string>
+        <string name="seed_price">Price</string>
+        <string name="seed_password">Password</string>
         <string name="seed_content">Content</string>
-        <string name="seed_download_from">ダウンロード元: %1$s</string>
+        <string name="seed_download_from">Download From:%1$s</string>
         <string name="seed_download_origin">Origin</string>
-        <string name="seed_not_found">シードが無いです。ストアからダウンロードするか、マイタスクのノードからシードに追加してください。</string>
+        <string name="seed_not_found">No seeds found, you can download seeds from store, or generate a seed by seed button.</string>
 
 
-        <string name="store_title">タイトル</string>
-        <string name="store_description">説明</string>
-        <string name="store_seed_id">シードID</string>
-        <string name="store_author_id">著者UID</string>
-        <string name="store_price">価格</string>
-        <string name="store_search">検索</string>
-        <string name="store_search_failed_msg">検索失敗。ネットワーク環境を確認してください</string>
+        <string name="store_title">Title</string>
+        <string name="store_description">Description</string>
+        <string name="store_seed_id">Seed ID</string>
+        <string name="store_author_id">Author UID</string>
+        <string name="store_price">Price</string>
+        <string name="store_search">Search</string>
+        <string name="store_search_failed_msg">Search failed. Are you connected to the internet?</string>
 
 
         <string name="copyright">©2019 Appli All Rights Reserved</string>
-        <string name="action_done">シードに追加されました</string>
+        <string name="action_done">Done</string>
         <string name="action_ok">OK</string>
-        <string name="action_cancel">キャンセル</string>
-        <string name="action_confirm">確認</string>
-        <string name="action_yes">はい</string>
-        <string name="action_no">いいえ</string>
-        <string name="action_delete">削除</string>
-        <string name="action_add_to_task">新ノード</string>
-        <string name="action_publish">アップロード</string>
+        <string name="action_cancel">Cancel</string>
+        <string name="action_confirm">Confirm</string>
+        <string name="action_yes">Yes</string>
+        <string name="action_no">No</string>
+        <string name="action_delete">Delete</string>
+        <string name="action_add_to_task">New Task</string>
+        <string name="action_publish">Publish</string>
 
 
-        <string name="ad_title">登録</string>
+        <string name="ad_title">Subscribe</string>
         <string name="ad_content">"- No ads\n- Unlimited top-level tasks\n- Unlimited seed storage\n- Sycnhronize your data everytime and everywhere\n- Share nodes with other for team work\n- New features...\n\n1 month:￥500\n3 month:￥1350 (￥450 per month)\n6 month:￥2400 (￥400 per month)\n12 month:￥4200 (￥ 350 per month)\n\nEnterprise user? please feel free to contact us.\nWe have customizable plugins and additional functions for enterprise users.\n(e.g,. TestNode for English vocabulary books, link progress of a node with another health data app)\nThere are also enterprise plans for bulk order.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
-        //トップレベルのタスクが無限に作れる、（今はかけてない)、シードも無限、どこでもいつでも同期可能、他人と協力してノード編集が可能、新しい機能いろいろ
-        //500yen/month 法人ユーザには　気軽に連絡どうぞカスタマイズもできるぞ　使いたい人はれんらくいいよ　例えば英単語長のテスト機能、ジム向けの健康アプリの連携、有料会員大量オーダーには法人価格で対応します
-        //emailはxxx,telはxxx
         <string name="language">language</string>
         <string name="English">English</string>
         <string name="Japanese">Japanese</string>
@@ -121,6 +118,7 @@
         <string name="background_color">background_color</string>
         <string name="Bright_color">Bright_color</string>
         <string name="Dark_color">Dark_color</string>
+
 
         <string name="order_id_mock" translatable="false"># 1234–5678</string>
         <string name="price_mock" translatable="false">25円</string>
@@ -140,14 +138,14 @@
         <string name="delivery_date_mock" translatable="false">May 16, 2016</string>
         <string name="deadline_badge" translatable="false">期限</string>
         <string name="deadline_time_mock" translatable="false">24 分</string>
-        <string name="request_btn_text" translatable="false">木を購入</string>
+        <string name="request_btn_text" translatable="false">買う</string>
         <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
         <string name="content_from1_mock">木の名前</string>
         <string name="content_from2_mock"></string>
-        <string name="tree_view">木の閲覧</string>
         <string name="content_to1_mock">東京</string>
         <string name="content_to2_mock">新宿</string>
         <string name="title_activity_main2">Main2Activity</string>
+
 
 
         <!--    name="<string name> + _english"-->

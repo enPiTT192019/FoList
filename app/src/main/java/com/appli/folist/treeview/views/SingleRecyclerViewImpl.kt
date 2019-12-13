@@ -273,7 +273,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         )
                         navController.popBackStack()
                         navController.navigate(R.id.nav_timeline)
-                        (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
+                        //(recyclerView.rootView.context as MainActivity).refreshTasksMenu()
                     }
                 }
             }
@@ -822,7 +822,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         .child("progress").setValue(progress)
                 }
             }
-            (recyclerView.context as MainActivity).refreshTasksMenu()
+            //(recyclerView.context as MainActivity).refreshTasksMenu()
         }
 
         private fun bindNodeToggle(viewNode: ViewTreeNode, hasCreateNode: Boolean = true) {
