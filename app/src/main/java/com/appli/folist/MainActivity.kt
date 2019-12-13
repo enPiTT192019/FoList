@@ -92,12 +92,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
         functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
-        //メニューを表示するときだけ完成を再計算
+        //メニューを表示するときだけ完成度を再計算
         (nav_view.parent as DrawerLayout).addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerStateChanged(newState: Int) {}
             override fun onDrawerClosed(drawerView: View) {}
-            override fun onDrawerOpened(drawerView: View) {}
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {
                 refreshTasksMenu()
             }
         })

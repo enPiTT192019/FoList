@@ -909,7 +909,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) 0.0
                                     else 100.0 * viewNode.rawReference!!.value!!.power
                             }
-                            notifyItemRangeChanged(0, adapterPosition + 1)
+                            var p=viewNode.parent
+                            while(p!=null){
+                                notifyItemChanged(p.position!!)
+                                p=p.parent
+                            }
                         }
                         //Progress
                         viewNode.rawReference!!.value!!.type == NodeTypes.PROGRESS_NODE.name -> {
@@ -923,7 +927,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 realm!!.executeTransaction {
                                     viewNode.rawReference!!.progress = progress.toDouble()
                                 }
-                                notifyItemRangeChanged(0, adapterPosition + 1)
+                                var pp=viewNode.parent
+                                while(pp!=null){
+                                    notifyItemChanged(pp.position!!)
+                                    pp=pp.parent
+                                }
                             }
                         }
                         else -> {
