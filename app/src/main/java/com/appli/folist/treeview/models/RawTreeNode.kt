@@ -2,6 +2,7 @@ package com.appli.folist.treeview.models
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.appli.folist.NodeTypes
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import com.google.firebase.database.*
 import io.realm.Realm
@@ -378,6 +379,7 @@ open class RawTreeNode(
     }
 
     fun calcProgress(): Double {
+        if(value!!.type==NodeTypes.TEST_NODE.name)return this.progress!!
         return if (children.size >= 1) {
             ((children.sumByDouble { it.calcProgress() }) / getSumOfPower()) * this.value!!.power
         } else {

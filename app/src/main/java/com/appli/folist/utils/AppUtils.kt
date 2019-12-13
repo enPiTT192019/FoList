@@ -163,9 +163,9 @@ class AppUtils {
     fun TestDialog(
         context: Activity,
         title:String,
-        questions: List<String>,
-        correctAnswers:List<String>,
-        otherAnswers: List<List<String>>,
+        questions: MutableList<String>,
+        correctAnswers:MutableList<String>,
+        otherAnswers: MutableList<MutableList<String>>,
         cancelCallback: (DialogInterface, Int) -> Unit = { dialog, _ -> dialog.cancel() },
         okCallback: (Double) -> Unit
     ) {
@@ -177,12 +177,13 @@ class AppUtils {
             }
         val dia=builder.create()
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.dialog_seek_bar, null).apply {
+            .inflate(R.layout.dialog_test, null).apply {
                 val score=TestScore(0,0)
                 var current = 0
 
                 fun refresh(i: Int) {
                     if (i < questions.size && i<otherAnswers.size &&i<correctAnswers.size) {
+                        testScore.text="score: ${score.correct}/${score.count}"
                         var correctAnswer= Random.Default.nextInt(0,3)
                         val textViews= listOf(testAnswer1,testAnswer2,testAnswer3,testAnswer4)
                         testQuestion.text = questions[i]

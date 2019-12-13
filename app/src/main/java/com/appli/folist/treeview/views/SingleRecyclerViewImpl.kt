@@ -871,17 +871,40 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
             itemView.nodeTitle.text = viewNode.value.toString()
 
-            itemView.middleView.setOnClickListener {
-                //TODO
+            fun showTest(){
+                val node=viewNode
+                val questions= mutableListOf<String>()
+                val correctAnswers=mutableListOf<String>()
+                val otherAnswers=mutableListOf<MutableList<String>>()
 
-                AppUtils().toast(recyclerView.context,"test")
+                node.rawReference!!.children.map{it.value}.forEach{
+                    questions.add(it!!.getDetail("question")?:"question")
+                    correctAnswers.add(it.getDetail("correctAnswer")?:"correct answer")
+                    val oa= mutableListOf(it.getDetail("otherAnswer1")?:"wrong answer",it.getDetail("otherAnswer2")?:"wrong answer",it.getDetail("otherAnswer3")?:"wrong answer")
+                    otherAnswers.add(oa)
+                }
+                AppUtils().TestDialog(recyclerView.context as Activity,node.toString(),questions,correctAnswers,otherAnswers,
+                    okCallback = {progress->
+                        realm!!.executeTransaction {
+                        viewNode.rawReference!!.progress =progress*viewNode.rawReference!!.value!!.power*100
+                        }
+                        var p:ViewTreeNode?=viewNode
+                        while(p!=null){
+                            notifyItemChanged(p.position!!)
+                            p=p.parent
+                        }
+                })
+                Log.d("test-node",node.toString())
+                val a=2
+            }
+            itemView.middleView.setOnClickListener {
+                showTest()
             }
             itemView.leftView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)
             }
             itemView.rightView.setOnClickListener {
-                //TODO
-                AppUtils().toast(recyclerView.context,"test")
+                showTest()
             }
         }
 
@@ -937,7 +960,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) 0.0
                                     else 100.0 * viewNode.rawReference!!.value!!.power
                             }
-                            var p=viewNode.parent
+                            var p:ViewTreeNode?=viewNode
                             while(p!=null){
                                 notifyItemChanged(p.position!!)
                                 p=p.parent
@@ -955,7 +978,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 realm!!.executeTransaction {
                                     viewNode.rawReference!!.progress = progress.toDouble()
                                 }
-                                var pp=viewNode.parent
+                                var pp:ViewTreeNode?=viewNode
                                 while(pp!=null){
                                     notifyItemChanged(pp.position!!)
                                     pp=pp.parent
