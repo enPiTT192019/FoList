@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //メニュー初期化
         navNodesItems = mutableListOf()
         tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
-//        refreshTasksMenu()
         functionsMenu = nav_view.menu.addSubMenu(R.string.menu_functions)
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
@@ -191,7 +190,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             sharedModel.realm.value!!.executeTransaction{
                                 sharedModel.root.value!!.addChild(RawTreeNode(NodeValue(title),sharedModel.root.value!!,sharedModel.realm.value!!))
                             }
-                            //refreshTasksMenu()
                             AppUtils().hideKeyboard(this@MainActivity)  //Keyboard排除?できてないかもsk
                             val id= sharedModel.root.value!!.children.find { it.value!!.str==title }?.uuid
                             if(id!=null){

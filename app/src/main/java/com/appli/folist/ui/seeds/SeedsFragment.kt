@@ -184,7 +184,6 @@ class SeedsFragment : Fragment() {
                                 realm.copyToRealmOrUpdate(newNode)
                             }
                         }
-                        //(context as MainActivity).refreshTasksMenu()
                     }
                 }
             }

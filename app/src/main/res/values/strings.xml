@@ -141,7 +141,7 @@
         <string name="request_btn_text" translatable="false">買う</string>
         <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
         <string name="content_from1_mock">木の名前</string>
-        <string name="content_from2_mock"></string>
+        <string name="content_from2_mock"> </string>
         <string name="content_to1_mock">東京</string>
         <string name="content_to2_mock">新宿</string>
         <string name="title_activity_main2">Main2Activity</string>
