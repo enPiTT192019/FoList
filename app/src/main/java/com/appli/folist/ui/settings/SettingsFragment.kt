@@ -27,28 +27,10 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-//言語変更　設計中
+
         var locale: Locale = Locale.getDefault() // アプリで使用されているロケール情報を取得
 
         // 言語の切替え
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
-
-
-//        1.update
-//        2.save
-//
-//        ----
-//                fragmet:
-//        1.load(ui)
-//
-//        ---
-//                main:
-//        1.load(setting)
-//
-//
-//        }
-
-
         val root = inflater.inflate(R.layout.fragment_settings, container, false)
 
         settingsViewModel =
@@ -81,53 +63,10 @@ class SettingsFragment : Fragment() {
                     var language = spinner?.selectedItem as? String
                     if(language!=null&&nowLanguage!=language){
                         activity!!.recreate()
-                        AppUtils().setSetting(activity as AppCompatActivity,"lang",language!!)                //保存
+                        AppUtils().setSetting(activity as AppCompatActivity,"lang", language)                //保存
                     }
                 }
         }
         activity!!.setTitle(R.string.menu_settings)
     }
 }
-
-//fun initialize(inflater: LayoutInflater, container: ViewGroup?) {
-//
-//    var locale: Locale = Locale.getDefault() // アプリで使用されているロケール情報を取得
-//
-//    // 言語の切替え
-//    val view = inflater.inflate(R.layout.fragment_settings, container, false)
-//    val language: RadioGroup = view.findViewById(R.id.RadioGroup1)
-//
-//    language.setOnCheckedChangeListener {
-//        _, checkedId :Int ->
-//        when (R.id.RadioGroup1) {
-//            R.id.radio_en -> Locale.ENGLISH
-//            R.id.radio_jp -> Locale.JAPAN
-//            R.id.radio_ch -> Locale.CHINESE
-//        }
-//
-//        Locale.setDefault(locale) // 新しいロケールを設定
-//        val config = Configuration()
-//        config.locale = locale
-//        val resources: Resources = getActivity()?.baseContext!!.resources
-//        resources.updateConfiguration(config, null)
-//    }
-//}
-
-    /*   val light: RadioGroup = view.findViewById(R.id.RadioGroup1)
-
-    light.setOnCheckedChangeListener {
-            _, checkedId :Int ->
-        when (R.id.RadioGroup2) {
-            R.id.radio_bright ->
-            R.id.radio_dark ->
-        }
-    }*/
-
-/*    Locale.setDefault(locale) // 新しいロケールを設定
-    val config = VolumeShape.Configuration()
-    config.locale = locale // Resourcesに対するロケールを設定
-    val resources = baseContext.resources
-    resources.updateConfiguration(config, null) // Resourcesに対する新しいロケールを反映
-
-    initialize() // ※ ポイント 初期化し直し再描画させます*/
-

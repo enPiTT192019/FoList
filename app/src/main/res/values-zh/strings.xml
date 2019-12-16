@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FoList</string>
-    <string name="menu_timeline">时间线</string>
+    <string name = "menu_timeline">时间线</string>
+    <string name = "action_add_to_task">新任务</string>
+    <string name = "action_cancel">取消</string>
+    <string name = "action_confirm">确认</string>
+    <string name = "menu_settings">设置</string>
+    <string name = "menu_store">商店</string>
+    <string name = "menu_tools">工具</string>
+    <string name = "menu_seeds">种子</string>
+
+    <string name = "picker_date">日期</string>
+    <string name = "picker_time">时间</string>
+    <string name = "store_title">标题</string>
+    <string name = "store_description">说明</string>
+    <string name = "store_seed_id">种子ID </string>
+    <string name = "store_author_id">作者UID </string>
+    <string name = "store_price">价格</string>
+    <string name = "store_search">搜索</string>
+    <string name="background_color">背景颜色</string>
+    <string name="menu_tasks">任务</string>
+    <string name="menu_task">任务</string>
+    <string name="language">语言</string>
+
+
+    <string name = "nav_header_title">请登录</string>
+    <string name = "menu_functions">通用</string>
+    <string name = "menu_create_new_task">创建新任务</string>
+    <string name = "menu_input_task_title">输入任务标题</string>
+
 </resources>

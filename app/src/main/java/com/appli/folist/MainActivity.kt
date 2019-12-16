@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
-        functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
+        functionsMenu.add(R.string.menu_settings).setIcon(R.drawable.ic_menu_manage)
 
 
         //ログインとナビのユーザー情報の更新
