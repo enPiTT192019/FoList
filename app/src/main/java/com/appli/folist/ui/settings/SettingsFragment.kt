@@ -2,7 +2,6 @@ package com.appli.folist.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,13 +69,7 @@ class SettingsFragment : Fragment() {
         languageSelector.setSelection(resources.getStringArray(R.array.language).indexOf(nowLanguage))
         languageSelector.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    val config=resources.configuration
-                    var locale = Locale.JAPANESE
-                    config.setLocale(locale)
-                    Log.d("folist-lang",locale.toString())
-                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -86,7 +79,6 @@ class SettingsFragment : Fragment() {
                 ) {
                     val spinner = parent as? Spinner
                     var language = spinner?.selectedItem as? String
-
                     if(language!=null&&nowLanguage!=language){
                         activity!!.recreate()
                         AppUtils().setSetting(activity as AppCompatActivity,"lang",language!!)                //保存

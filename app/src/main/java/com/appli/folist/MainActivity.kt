@@ -63,7 +63,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setNavigationViewListener()
 
         //言語設定
-        val locale =  when (AppUtils().getSetting(this,"lang")) {
+        val lang=AppUtils().getSetting(this,"lang")
+        if(lang.isNullOrBlank()){
+            AppUtils().setSetting(this,"lang","日本語")
+        }
+        val locale =  when (lang) {
             "English" ->    Locale.ENGLISH
             "日本語" ->     Locale.JAPANESE
             "中文" ->       Locale.SIMPLIFIED_CHINESE
