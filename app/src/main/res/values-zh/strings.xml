@@ -17,15 +17,42 @@
     <string name = "store_author_id">作者UID </string>
     <string name = "store_price">价格</string>
     <string name = "store_search">搜索</string>
-    <string name="background_color">背景颜色</string>
-    <string name="menu_tasks">任务</string>
-    <string name="menu_task">任务</string>
-    <string name="language">语言</string>
+    <string name = "background_color">背景颜色</string>
+    <string name = "menu_tasks">任务</string>
+    <string name = "menu_task">任务</string>
+    <string name = "language">语言</string>
+    <string name = "Bright_color">明亮的</string>
+    <string name = "Dark_color">黑暗的</string>
+    <string name = "node_title">标题</string>
+    <string name = "node_info">信息</string>
+    <string name = "node_progress">进度</string>
+    <string name = "node_shared_id">共享ID </string>
+    <string name = "node_power">重量</string>
+    <string name = "node_media">媒体</string>
+    <string name = "node_detail">详细信息</string>
+    <string name = "node_link">链接</string>
+    <string name="node_type_tree">树</string>
+    <string name="node_notice">闹钟</string>
+    <string name="action_ok">确定</string>
+    <string name="node_value_type">类型</string>
+    <string name="img_cd_expand_ic">扩大</string>
+    <string name="node_link_valid">有効</string>
+    <string name="node_link_invalid">无效</string>
+    <string name="node_generate_seed_title">造种子</string>
+    <string name="title_seed_content">种子的内容</string>
 
 
-    <string name = "nav_header_title">请登录</string>
+
+    <string name = "nav_header_title">Please Login</string>
     <string name = "menu_functions">通用</string>
     <string name = "menu_create_new_task">创建新任务</string>
     <string name = "menu_input_task_title">输入任务标题</string>
+    <string name="edit_node">编节点</string>
+    <string name="node_notice_notset">没设定,按设定</string>
+    <string name="create_a_new_node">造新节点或者选节点从种子</string>
+    <string name="node_shared_id_not_shared">没共享.按按子和大家共享</string>
+    <string name="seed_not_found">没种子发现,你可以下载种子从商店,或者造种子用种按子</string>
+    <string name="node_generate_seed_msg">造种子或者保存在手机?</string>
+
 
 </resources>
