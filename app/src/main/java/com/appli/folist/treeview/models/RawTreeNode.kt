@@ -381,11 +381,12 @@ open class RawTreeNode(
     fun calcProgress(): Double {
         if(value!!.type==NodeTypes.TEST_NODE.name)return this.progress!!
         return if (children.size >= 1) {
-            ((children.sumByDouble { it.calcProgress() }) / getSumOfPower()) * this.value!!.power
+            val c=getSumOfPower()
+            if(c<=0)return this.value!!.power*100.0
+            ((children.sumByDouble { it.calcProgress() }) / c* this.value!!.power)
         } else {
             this.progress!!
         }
-//        return this.progress
     }
 
     fun getRoot(): RawTreeNode {

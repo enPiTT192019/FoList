@@ -546,9 +546,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 }
                             }
 
-                            val power = dialogView.nodePowerEditor.text.toString().toInt()
+                            var power = dialogView.nodePowerEditor.text.toString().toInt()
                             if (power >= 0 && power != node.value!!.power) {
                                 realm.executeTransactionIfNotInTransaction {
+                                    if(power>10000)power=10000
+                                    if(power<=0)power=0
                                     node.value!!.power = power
                                     if (node.progress!! > power * 100) {
                                         node.progress = (power * 100).toDouble()
