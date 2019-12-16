@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FoList</string>
+    <string name="menu_timeline">时间线</string>
 </resources>

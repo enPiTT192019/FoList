@@ -62,10 +62,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
-        //日本語に設定
+        //言語設定
+        val locale =  when (AppUtils().getSetting(this,"lang")) {
+            "English" ->    Locale.ENGLISH
+            "日本語" ->     Locale.JAPANESE
+            "中文" ->       Locale.SIMPLIFIED_CHINESE
+            else ->         Locale.JAPANESE
+        }
         val config=resources.configuration
-//        config.setLocale(Locale.JAPANESE)
-        config.setLocale(Locale.ENGLISH)
+        config.setLocale(locale)
         resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用

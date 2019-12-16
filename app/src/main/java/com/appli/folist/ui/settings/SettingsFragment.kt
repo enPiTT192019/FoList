@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
 import com.appli.folist.R
+import com.appli.folist.utils.AppUtils
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.util.*
 
@@ -64,12 +66,10 @@ class SettingsFragment : Fragment() {
         }
 
 
-
+        val nowLanguage=AppUtils().getSetting(activity as AppCompatActivity,"lang")
+        languageSelector.setSelection(resources.getStringArray(R.array.language).indexOf(nowLanguage))
         languageSelector.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-//            initialize()
-//            initialize()    //再描画
 
-//            fun initialize(){
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
                     val config=resources.configuration
@@ -84,28 +84,14 @@ class SettingsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-
                     val spinner = parent as? Spinner
                     var language = spinner?.selectedItem as? String
-                    val config=resources.configuration
 
-                    var locale =  when (language) {
-                                             "English" ->    Locale.ENGLISH
-                                             "日本語" ->     Locale.JAPANESE
-                                             "中文" ->       Locale.CHINESE
-                                             else ->         Locale.JAPANESE
+                    if(language!=null&&nowLanguage!=language){
+                        activity!!.recreate()
+                        AppUtils().setSetting(activity as AppCompatActivity,"lang",language!!)                //保存
                     }
-
-                    config.setLocale(locale)
-                    resources.updateConfiguration(config,resources.displayMetrics)
-
-//                  resources.updateConfiguration(config, null)
-//                  AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())                //保存
-//                  Log.d("folist-lang",locale.toString())
                 }
-//            }
-
-
         }
         activity!!.setTitle(R.string.menu_settings)
     }
