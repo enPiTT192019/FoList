@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
@@ -31,20 +32,17 @@ class SettingsFragment : Fragment() {
         // 言語の切替え
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-//        RadioGroup1.setOnCheckedChangeListener { _, radioId ->
-//            val config=resources.configuration
-//            locale =  when (radioId) {
-//                    R.id.radio_en -> Locale.ENGLISH
-//                    R.id.radio_jp ->  Locale.JAPANESE
-//                    R.id.radio_ch ->  Locale.CHINESE
-//                    else->Locale.JAPANESE
-//            }
-//            Log.d("folist-lang",locale.toString())
+
+//        1.update
+//        2.save
 //
-//                AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())
+//        ----
+//                fragmet:
+//        1.load(ui)
 //
-//            config.setLocale(locale) // 新しいロケールを設定
-//            resources.updateConfiguration(config,resources.displayMetrics)
+//        ---
+//                main:
+//        1.load(setting)
 //
 //
 //        }
@@ -65,27 +63,48 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
-        languageSelector.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
 
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        languageSelector.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+//            initialize()
+//            initialize()    //再描画
 
-                val config=resources.configuration
-                var locale = Locale.ENGLISH
-                Log.d("folist-lang",locale.toString())
-            }
+//            fun initialize(){
+                override fun onNothingSelected(parent: AdapterView<*>?) {
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+                    val config=resources.configuration
+                    var locale = Locale.JAPANESE
+                    config.setLocale(locale)
+                    Log.d("folist-lang",locale.toString())
+                }
 
-                val config=resources.configuration
-                var locale = Locale.ENGLISH
-                Log.d("folist-lang",locale.toString())
-            }
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+
+                    val spinner = parent as? Spinner
+                    var language = spinner?.selectedItem as? String
+                    val config=resources.configuration
+
+                    var locale =  when (language) {
+                                             "English" ->    Locale.ENGLISH
+                                             "日本語" ->     Locale.JAPANESE
+                                             "中文" ->       Locale.CHINESE
+                                             else ->         Locale.JAPANESE
+                    }
+
+                    config.setLocale(locale)
+                    resources.updateConfiguration(config,resources.displayMetrics)
+
+//                  resources.updateConfiguration(config, null)
+//                  AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())                //保存
+//                  Log.d("folist-lang",locale.toString())
+                }
+//            }
+
 
         }
         activity!!.setTitle(R.string.menu_settings)
@@ -133,3 +152,4 @@ class SettingsFragment : Fragment() {
     resources.updateConfiguration(config, null) // Resourcesに対する新しいロケールを反映
 
     initialize() // ※ ポイント 初期化し直し再描画させます*/
+
