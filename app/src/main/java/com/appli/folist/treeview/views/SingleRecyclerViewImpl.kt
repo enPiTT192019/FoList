@@ -103,13 +103,11 @@ class SingleRecyclerViewImpl : RecyclerView,
             val beforeCount = viewNodes.size
             viewNodes.clear()
             notifyItemRangeRemoved(0, beforeCount)
-
             viewNodes = nodesList
             nodesList.forEachIndexed { index, viewTreeNode ->
                 viewTreeNode.position=index
             }
             notifyItemRangeInserted(0, viewNodes.size)
-//            notifyDataSetChanged()
         }
     }
 
@@ -129,9 +127,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             } else {
                 expand(viewHolder.adapterPosition)
             }
-//        itemView.nodeToggle.setImageResource(if (node.isExpanded)R.drawable.ic_down else R.drawable.ic_right)
             notifyItemChanged(viewHolder.adapterPosition)
-//        viewHolder.itemView.expandIndicator.startToggleAnimation(node.isExpanded)
         }
     lateinit var itemOnclick: (ViewTreeNode, ViewHolder) -> Unit
 
@@ -273,7 +269,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         )
                         navController.popBackStack()
                         navController.navigate(R.id.nav_timeline)
-                        (recyclerView.rootView.context as MainActivity).refreshTasksMenu()
                     }
                 }
             }
@@ -346,15 +341,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildAdded(node:RawTreeNode){
             node.refreshChildAdded={parent,viewNode,child->
-                if(viewNode!=null&&viewNode.isExpanded){
-                    //add to last
-                    val newViewNode=ViewTreeNode(child,parent = viewNode,position = 0)
-                    viewNode.children.add(viewNode.children.size-1,newViewNode)
-                    val pos=viewNode.position!!+viewNode.getDisplayedNodeNumber()-2
-                    newViewNode.position=pos
+                if(viewNode!=null) {
+                    val newViewNode = ViewTreeNode(child, parent = viewNode, position = 0)
+                    viewNode!!.children.add(viewNode.children.size - 1, newViewNode)
 
-                    viewNodes.add(pos,newViewNode)
-                    notifyItemInserted(pos)
+                    if (viewNode!!.isExpanded) {
+                        //add to last
+                        val pos = viewNode.position!! + viewNode.getDisplayedNodeNumber() - 2
+                        newViewNode.position = pos
+
+                        viewNodes.add(pos, newViewNode)
+                        notifyItemInserted(pos)
+                    }
+
+                    notifyDataSetChanged()
                 }
             }
         }
@@ -408,7 +408,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                             nodeNoticeEditor.text = node.notice?.toString()
                                 ?: context.getString(R.string.node_notice_notset)
-
                             nodeSharedIdEditor.text =
                                 if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
 
@@ -648,8 +647,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
         }
 
+        fun bindLink(viewNode: ViewTreeNode){
+            if(!viewNode.rawReference?.value?.link.isNullOrBlank()){
+                itemView.rightView.setOnLongClickListener {
+                    //TODO
+                    val browserIntent=Intent(Intent.ACTION_VIEW, Uri.parse(viewNode.rawReference?.value?.link))
+                    (recyclerView.context as Activity).startActivity(browserIntent)
+                    true
+                }
+            }
+        }
+
         private fun bindCommon(viewNode: ViewTreeNode) {
             setNodeRefreshFunctions(viewNode.rawReference!!)
+            bindLink(viewNode)
             bindIndentation(viewNode)
             bindDelete(viewNode)
             bindGenerateSeed(viewNode)
@@ -686,7 +697,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 }
 
                 if (viewNode.parent != null) {
-                    //todo 高速化
                     //get variables
                     val inputStr = itemView.editText.text.toString()
                     val viewParent = viewNode.parent as ViewTreeNode
@@ -818,7 +828,6 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         .child("progress").setValue(progress)
                 }
             }
-            (recyclerView.context as MainActivity).refreshTasksMenu()
         }
 
         private fun bindNodeToggle(viewNode: ViewTreeNode, hasCreateNode: Boolean = true) {
@@ -850,6 +859,52 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
             itemView.rightView.setOnClickListener {
                 expandCollapseToggleHandler(viewNode, this)
+            }
+        }
+
+        private fun bindTest(viewNode: ViewTreeNode) {
+            bindCommon(viewNode)
+            bindNodeToggle(viewNode, false)
+            itemView.nodeBinaryBox.isVisible = false
+            bindProgress(viewNode)
+            itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
+            itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
+            itemView.nodeTitle.text = viewNode.value.toString()
+
+            fun showTest(){
+                val node=viewNode
+                val questions= mutableListOf<String>()
+                val correctAnswers=mutableListOf<String>()
+                val otherAnswers=mutableListOf<MutableList<String>>()
+
+                node.rawReference!!.children.map{it.value}.forEach{
+                    questions.add(it!!.getDetail("question")?:"question")
+                    correctAnswers.add(it.getDetail("correctAnswer")?:"correct answer")
+                    val oa= mutableListOf(it.getDetail("otherAnswer1")?:"wrong answer",it.getDetail("otherAnswer2")?:"wrong answer",it.getDetail("otherAnswer3")?:"wrong answer")
+                    otherAnswers.add(oa)
+                }
+                AppUtils().TestDialog(recyclerView.context as Activity,node.toString(),questions,correctAnswers,otherAnswers,
+                    okCallback = {progress->
+                        realm!!.executeTransaction {
+                        viewNode.rawReference!!.progress =progress*viewNode.rawReference!!.value!!.power*100
+                        }
+                        var p:ViewTreeNode?=viewNode
+                        while(p!=null){
+                            notifyItemChanged(p.position!!)
+                            p=p.parent
+                        }
+                })
+                Log.d("test-node",node.toString())
+                val a=2
+            }
+            itemView.middleView.setOnClickListener {
+                showTest()
+            }
+            itemView.leftView.setOnClickListener {
+                expandCollapseToggleHandler(viewNode, this)
+            }
+            itemView.rightView.setOnClickListener {
+                showTest()
             }
         }
 
@@ -905,7 +960,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                     if (viewNode.rawReference!!.progress!! >= 100 * viewNode.rawReference!!.value!!.power) 0.0
                                     else 100.0 * viewNode.rawReference!!.value!!.power
                             }
-                            notifyItemRangeChanged(0, adapterPosition + 1)
+                            var p:ViewTreeNode?=viewNode
+                            while(p!=null){
+                                notifyItemChanged(p.position!!)
+                                p=p.parent
+                            }
                         }
                         //Progress
                         viewNode.rawReference!!.value!!.type == NodeTypes.PROGRESS_NODE.name -> {
@@ -919,7 +978,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 realm!!.executeTransaction {
                                     viewNode.rawReference!!.progress = progress.toDouble()
                                 }
-                                notifyItemRangeChanged(0, adapterPosition + 1)
+                                var pp:ViewTreeNode?=viewNode
+                                while(pp!=null){
+                                    notifyItemChanged(pp.position!!)
+                                    pp=pp.parent
+                                }
                             }
                         }
                         else -> {
@@ -942,6 +1005,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
                 ViewNodeTypes.ONLY_TEXT -> bindOnlyText(viewNode)
+                ViewNodeTypes.TEST_NODE->bindTest(viewNode)
                 else -> bindNode(viewNode)
             }
         }

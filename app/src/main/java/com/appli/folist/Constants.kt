@@ -27,5 +27,6 @@ enum class NodeTypes{
     TREE_NODE,
     TIME_NODE,//TODO
     MAP_NODE,//TODO
+    TEST_NODE,
     QUICK_CREATE_NODE
 }

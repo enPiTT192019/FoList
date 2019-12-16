@@ -1,5 +1,6 @@
 package com.appli.folist.utils
 
+import com.appli.folist.NodeTypes
 import com.appli.folist.treeview.models.*
 import com.appli.folist.treeview.views.SingleRecyclerViewImpl
 import com.appli.folist.treeview.views.TreeAdapter
@@ -85,7 +86,9 @@ class NodeUtils {
     fun expandAllExceptLeaves(node: ViewTreeNode) {
         node.isExpanded = true
         node.children.forEach {
-            if (it.children.size > 1) expandAllExceptLeaves(it)
+            if (it.children.size > 1 && it.value!!.type!=NodeTypes.TEST_NODE.name) {
+                expandAllExceptLeaves(it)
+            }
         }
     }
 

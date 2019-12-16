@@ -2,6 +2,7 @@ package com.appli.folist.treeview.models
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.appli.folist.NodeTypes
 import com.appli.folist.utils.executeTransactionIfNotInTransaction
 import com.google.firebase.database.*
 import io.realm.Realm
@@ -52,7 +53,7 @@ open class RawTreeNode(
 //            })
         }
     }
-    public fun getRef(): DatabaseReference? {
+    fun getRef(): DatabaseReference? {
         return if (!firebaseRefPath.isNullOrBlank()) {
             FirebaseDatabase.getInstance().getReference(firebaseRefPath!!)
         } else {
@@ -136,7 +137,7 @@ open class RawTreeNode(
     }
 
     constructor(remoteNode: NodeForFirebase, parent: RawTreeNode?, realm: Realm?) : this(mRealm = realm) {
-        reset(remoteNode, parent, realm)
+        resetWithoutChildren(remoteNode, parent, realm)
         setSync()
     }
 
@@ -218,8 +219,6 @@ open class RawTreeNode(
             this.progress = remoteNode.progress
             this.notice = remoteNode.notice
             this.firebaseRefPath = remoteNode.path
-//            this.children = RealmList()
-//            this.removeAllChild { true }
         }
     }
 
@@ -230,7 +229,7 @@ open class RawTreeNode(
                  override fun onDataChange(p0: DataSnapshot) {
                      val remote = p0.getValue(NodeForFirebase::class.java)
                      if(remote!=null){
-                         reset(remote, parent, mRealm)
+                         resetWithoutChildren(remote, parent, mRealm)
                          setSync()
                      }
                 }
@@ -309,6 +308,11 @@ open class RawTreeNode(
                                 this@RawTreeNode,
                                 this@RawTreeNode.mRealm
                             )
+
+                            newChild.refreshView=this@RawTreeNode.refreshView
+                            newChild.refreshChildAdded=this@RawTreeNode.refreshChildAdded
+                            newChild.refreshChildRemoved=this@RawTreeNode.refreshChildRemoved
+
                             this@RawTreeNode.addChild(
                                 newChild, needUpload = false
                             )
@@ -375,6 +379,7 @@ open class RawTreeNode(
     }
 
     fun calcProgress(): Double {
+        if(value!!.type==NodeTypes.TEST_NODE.name)return this.progress!!
         return if (children.size >= 1) {
             ((children.sumByDouble { it.calcProgress() }) / getSumOfPower()) * this.value!!.power
         } else {

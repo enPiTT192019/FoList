@@ -8,7 +8,8 @@ enum class ViewNodeTypes {
     NODE,
     QUICK_CREATE_NODE,
     PROGRESS_NODE,
-    ONLY_TEXT
+    ONLY_TEXT,
+    TEST_NODE
 }
 
 class ViewNodeUtils{
@@ -18,6 +19,7 @@ class ViewNodeUtils{
             ViewNodeTypes.QUICK_CREATE_NODE.ordinal->R.layout.item_quick_create_node
             ViewNodeTypes.PROGRESS_NODE.ordinal->R.layout.item_progress
             ViewNodeTypes.ONLY_TEXT.ordinal->R.layout.item_only_text
+            ViewNodeTypes.TEST_NODE.ordinal-> R.layout.item_node
             else-> R.layout.item_node
         }
     }
