@@ -176,7 +176,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             val insertedSize = node.children.size
             viewNodes.addAll(insertPosition, node.children)
             node.isExpanded = true
-            notifyItemRangeInserted(insertPosition, insertedSize)
+//            notifyItemRangeInserted(insertPosition, insertedSize)
+//            notifyItemChanged(insertPosition)
+            notifyDataSetChanged()
         }
     }
 
@@ -196,7 +198,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
             node.children.forEach { removeChildrenFrom(it) }
             node.isExpanded = false
-            notifyItemRangeRemoved(position + 1, removeCount)
+//            notifyItemRangeRemoved(position + 1, removeCount)
+//            notifyItemChanged(position)
+            notifyDataSetChanged()
         }
     }
 
@@ -1002,6 +1006,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         //TODO: create your bind function here, do not forget setOnClickListener
         internal fun bind(viewNode: ViewTreeNode) {
+            viewNode.position=adapterPosition
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
                 ViewNodeTypes.ONLY_TEXT -> bindOnlyText(viewNode)

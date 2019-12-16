@@ -34,7 +34,6 @@ import com.appli.folist.treeview.models.RawTreeNode
 import com.appli.folist.utils.AppUtils
 import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.getAttribute
-import com.appli.folist.utils.setAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //言語設定
         val lang=AppUtils().getSetting(this,"lang")
-        if(lang.isNullOrBlank()){
+        if(lang.isNullOrBlank()|| lang !in resources.getStringArray(R.array.language)){
             AppUtils().setSetting(this,"lang","日本語")
         }
         val locale =  when (lang) {
@@ -101,7 +100,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
         functionsMenu.add(R.string.menu_settings).setIcon(R.drawable.ic_menu_manage)
-        functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
         //メニューを表示するときだけ完成度を再計算
         (nav_view.parent as DrawerLayout).addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerStateChanged(newState: Int) {}
