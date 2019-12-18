@@ -242,7 +242,7 @@ class AppUtils {
                 addChild(RawTreeNode(NodeValue("協力ノード"), this, mRealm = realm).apply {
                     //特に意味なし
                     //TODO:delete
-                    firebaseRefPath = "synced-nodes/-Lval6ac-hvYZoHeLhZM/data"
+                    firebaseRefPath = "synced-nodes/-LwCXeuy65eOPhtRVXS0/data"
                     getRef()?.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onCancelled(p0: DatabaseError) {}
                         override fun onDataChange(p0: DataSnapshot) {
