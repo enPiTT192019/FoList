@@ -66,6 +66,7 @@ class AppUtils {
     fun getRealm(activity: AppCompatActivity): Realm {
         Realm.init(activity)
         val config = RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build()
+//        val config = RealmConfiguration.Builder().build()
         Realm.setDefaultConfiguration(config)
         return Realm.getDefaultInstance()!!
     }

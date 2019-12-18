@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.TextPaint
 import android.text.style.TypefaceSpan
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -36,6 +38,7 @@ import com.appli.folist.utils.NodeUtils
 import com.appli.folist.utils.getAttribute
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navController:NavController
     private lateinit var navNodesItems:MutableList<MenuItem>
     lateinit var sharedModel: SharedViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +82,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
-        NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+        // 1.この行：「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」の「//」を消して、ビルド・実行する（データを全削除のため）
+        // 2.「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」、「testButton.isVisible=false」をコメントアウト、ビルド・実行する
+        // 3.メニューにある「新規タスク作成」で適当なタイトル（例えば１２３）のノードを作る
+        // 4.目立つボタンを押す
+        // 5.「testButton.isVisible=false」の「//」を消す
+        // 6.ビルド・実行する、先ほど作った適当ノード（例えば１２３）を削除
+        // 7.I　HATE　REALM
+        //NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
+        testButton.isVisible=false
 
         //変数初期化
         navController = findNavController(R.id.nav_host_fragment)
@@ -89,9 +101,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel.algolia.value=AppUtils().getAlgolia()
         sharedModel.seedsIndex.value=sharedModel.algolia.value?.initIndex(IndexName("seeds"))
 
-        //テスト用
-        AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
 
+        Log.d("root-uuid", sharedModel.root.value!!.uuid)
         //メニュー初期化
         navNodesItems = mutableListOf()
         tasksMenu = nav_view.menu.addSubMenu(R.string.menu_tasks)
@@ -128,6 +139,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        testButton.setOnClickListener {
+            //テスト用
+            AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
+//            sharedModel.realm.value!!.executeTransaction{
+//                sharedModel.root.value!!.addChild(RawTreeNode(NodeValue("ssss"),sharedModel.root.value!!,sharedModel.realm.value!!))
+//            }
+
+        }
+    }
 
 
     fun <F : Fragment> getFragment(fragmentClass: Class<F>): F? {
@@ -193,6 +216,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
                         val title = input.text.toString()
                         //同じ名前のタスク・空の入力を不可とする
+//                        if(DEBUG)AppUtils().fillTestNodes(sharedModel.realm.value!!,sharedModel.root.value!!)
+//                        return@setPositiveButton
                         if(title.isBlank()||title in sharedModel.root.value!!.children.map { it.value!!.str }){
                             AppUtils().toast(this,getString(R.string.msg_duplicated_task_title))
                         }else{

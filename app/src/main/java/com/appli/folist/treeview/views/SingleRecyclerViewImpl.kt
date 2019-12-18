@@ -269,7 +269,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         }
 
                         val navController = findNavController(
-                            (recyclerView.rootView.context as Activity),
+                            (recyclerView.context as Activity),
                             R.id.nav_host_fragment
                         )
                         navController.popBackStack()
@@ -352,7 +352,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         }
         private fun setNodeChildAdded(node:RawTreeNode){
             node.refreshChildAdded={parent,viewNode,child->
-                if(viewNode!=null) {
+                if(viewNode!=null&&child!=null) {
                     val newViewNode = ViewTreeNode(child, parent = viewNode, position = 0)
                     viewNode!!.children.add(viewNode.children.size - 1, newViewNode)
 

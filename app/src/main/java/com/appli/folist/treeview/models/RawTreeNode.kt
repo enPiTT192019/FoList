@@ -137,7 +137,7 @@ open class RawTreeNode(
     }
 
     constructor(remoteNode: NodeForFirebase, parent: RawTreeNode?, realm: Realm?) : this(mRealm = realm) {
-        resetWithoutChildren(remoteNode, parent, realm)
+        resetWithoutChildren(remoteNode, parent, mRealm)
         setSync()
     }
 
@@ -194,11 +194,11 @@ open class RawTreeNode(
             Log.e("realm", "no realm")
             return
         }
-        realm.executeTransactionIfNotInTransaction {
+        realm!!.executeTransactionIfNotInTransaction {
             uuid = remoteNode.uuid
 
-            val nodeValue = realm.where(NodeValue::class.java).equalTo("uuid", remoteNode.value.uuid).findFirst()
-                ?:realm.createObject(NodeValue::class.java, remoteNode.value.uuid)
+            val nodeValue = mRealm!!.where(NodeValue::class.java).equalTo("uuid", remoteNode.value.uuid).findFirst()
+                ?:mRealm!!.createObject(NodeValue::class.java, remoteNode.value.uuid)
             nodeValue.apply {
                 str = remoteNode.value.str
                 type = remoteNode.value.type
