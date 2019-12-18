@@ -39,6 +39,7 @@
 
         <string name="img_cd_expand_ic">expand</string>
         <string name="create_a_new_node">Create a New Node or Select from Seeds</string>
+        <string name="create_a_new_node_under">New Node Under %1$s</string>
         <string name="plus_mark">+</string>
         <string name="edit_node">Edit Node</string>
         <string name="node_title">Title</string>

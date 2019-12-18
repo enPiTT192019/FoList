@@ -237,6 +237,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
         private fun bindDelete(viewNode: ViewTreeNode) {
             itemView.slideDelete.setOnClickListener {
+                if(viewNode.getRoot().value.str != "協力ノード"){
                 if (slideButtonCalledTime++ % 2 == 0) {
                     if (realm == null || viewNode.rawReference == null) return@setOnClickListener
                     //TODO:confirm?
@@ -259,7 +260,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 viewNode.getDisplayedNodeNumber()
                             )
 
-                            viewNode.rawReference!!.firebaseRefPath=null
+                            viewNode.rawReference!!.firebaseRefPath = null
                             notifyDataSetChanged()
                         }
                     } else {//level2 node
@@ -274,6 +275,12 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         navController.popBackStack()
                         navController.navigate(R.id.nav_timeline)
                     }
+                }
+                } else {
+                    AlertDialog.Builder(recyclerView.context)
+                        .setTitle("協力ノードは削除できません。")
+                        .setPositiveButton("ok"){ dialog, which ->
+                        }.show()
                 }
             }
         }
@@ -683,9 +690,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                 seedTitles
             )
             itemView.editText.setAdapter<ArrayAdapter<String>>(adapter)
+            itemView.editText.hint = recyclerView.context.getString(R.string.create_a_new_node_under,viewNode.parent?.rawReference?.toString())
             itemView.editText.setOnClickListener { (it as AutoCompleteTextView).showDropDown() }
-            //hide seed button unless a seed title is inputted
+
             itemView.seedButton.isVisible = false
+
             itemView.editText.addTextChangedListener { text ->
                 itemView.seedButton.isVisible =
                     (NodeUtils().getSeedRoot(realm).children.find { it.value.toString() == text.toString() } != null)

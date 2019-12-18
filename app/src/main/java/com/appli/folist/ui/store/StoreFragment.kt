@@ -376,6 +376,10 @@ class StoreFragment : Fragment() {
                                         }
                                     }
                                     saveSeedToRealm(seed)
+                                    AlertDialog.Builder(context)
+                                        .setTitle("ダウンロードが完了しました!\nシードを確認してください。")
+                                        .setPositiveButton("ok"){ dialog, which ->
+                                        }.show()
                                 }
                             } else {
                                 saveSeedToRealm(seed)
@@ -383,11 +387,6 @@ class StoreFragment : Fragment() {
                         }
                     }
                 }
-
-                AlertDialog.Builder(context)
-                    .setTitle("ダウンロードが完了しました!\nシードを確認してください。")
-                    .setPositiveButton("ok"){ dialog, which ->
-                    }.show()
             }
 
             viewHolder.itemDownloadButton.setOnClickListener {
