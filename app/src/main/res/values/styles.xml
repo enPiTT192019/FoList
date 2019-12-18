@@ -1,12 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
+        <item name="color">@color/colorPrimaryBright</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/mplus_1c_light</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name = "Animation" parent = "AppTheme">
@@ -105,4 +109,5 @@
         <item name="android:activityCloseExitAnimation">@animator/open_exit</item>
         <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
+
 </resources>

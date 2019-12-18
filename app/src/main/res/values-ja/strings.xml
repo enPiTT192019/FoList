@@ -55,9 +55,9 @@
     <string name="node_children_number">Subtask Number</string>
     <string name="node_parent">Parent</string>
     <string name="node_progress">進捗状況</string>
-    <string name="node_notice">Notice</string>
-    <string name="node_notice_notset">Not set. click to set</string>
-    <string name="node_shared_id">Shared ID</string>
+    <string name="node_notice">アラーム</string>
+    <string name="node_notice_notset">クリックしてアラームをセット</string>
+    <string name="node_shared_id">共有ID</string>
     <string name="node_synced_id">Synced Path</string>
     <string name="node_shared_id_not_shared">Not shared. click button to share</string>
     <string name="node_uuid">Node ID</string>
@@ -69,9 +69,9 @@
     <string name="node_generate_seed_title">シードに追加</string>
     <string name="node_generate_seed_msg">シードに追加・保存しますか?</string>
 
-    <string name="picker_date">Date</string>
-    <string name="picker_time">Time</string>
-    <string name="picker_title">Select Datatime</string>
+    <string name="picker_date">日付</string>
+    <string name="picker_time">時間</string>
+    <string name="picker_title">アラーム設定</string>
     <string name="picker_format">yy/MM/dd HH:mm</string>
 
     <string name="seekbar_title">進捗</string>

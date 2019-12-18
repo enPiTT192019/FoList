@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
@@ -48,7 +49,13 @@ class SettingsFragment : Fragment() {
 
 
         val nowLanguage=AppUtils().getSetting(activity as AppCompatActivity,"lang")
+//tnk12/18
+        val nowLight=AppUtils().getSetting(activity as AppCompatActivity,"light")
+
         languageSelector.setSelection(resources.getStringArray(R.array.language).indexOf(nowLanguage))
+        radio_bright.isChecked=nowLight=="light"
+        radio_dark.isChecked=nowLight == "dark"
+
         languageSelector.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -67,6 +74,22 @@ class SettingsFragment : Fragment() {
                     }
                 }
         }
+
+        RadioGroup.setOnCheckedChangeListener{
+            _, checkedId ->
+            when(checkedId){
+                R.id.radio_bright -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    AppUtils().setSetting(activity as AppCompatActivity, "light", "light")
+                }
+                R.id.radio_dark -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    AppUtils().setSetting(activity as AppCompatActivity, "light", "dark")
+                }
+
+            }
+        }
+        //tnk12/18
         activity!!.setTitle(R.string.menu_settings)
     }
 }
