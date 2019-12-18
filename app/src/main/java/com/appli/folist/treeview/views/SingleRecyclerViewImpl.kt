@@ -419,10 +419,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
 
                             nodeNoticeEditor.text = node.notice?.toString()
                                 ?: context.getString(R.string.node_notice_notset)
-                            nodeSharedIdEditor.text =
-                                if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
+//                            nodeSharedIdEditor.text =
+//                                if (node.sharedId.isNullOrBlank()) context.getString(R.string.node_shared_id_not_shared) else node.sharedId
 
-                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
+//                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
                             nodeLinkEditor.setText(node.value!!.link)
 
                             nodeLinkEditor.addTextChangedListener {
@@ -506,28 +506,31 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 node.value!!.type == NodeTypes.PROGRESS_NODE.name
                             nodeTypeProgress.isChecked =
                                 node.value!!.type == NodeTypes.PROGRESS_NODE.name
-                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
 
+
+                            //本番環境のため
+//                            nodeShareButton.isVisible = node.sharedId.isNullOrBlank()
 //                            nodeSyncedIdEditor.text=if(node.syncedId.isNullOrBlank())"" else node.syncedId
 //                            nodeSyncButton.isVisible=node.syncedId.isNullOrBlank()
-                            nodeSyncedIdEditor.text = node.firebaseRefPath
-                            nodeSyncButton.isVisible = true
+//                            nodeSyncedIdEditor.text = node.firebaseRefPath
+//                            nodeSyncButton.isVisible = true
 
-                            nodeShareButton.setOnClickListener {
-                                //TODO:upload to frebase and set shared-id
-                            }
-                            nodeSyncButton.setOnClickListener {
-                               // node.refreshView = {
-                               //     //TODO:refresh view
-//                            //        notifyItemRangeChanged(0,adapterPosition+1)
-                               //     Log.d("refresh", "${it.value.toString()}")
-                             //       notifyItemChanged(adapterPosition + 1)
-                             //   }
-                                node.upload { id ->
-                                    nodeSyncedIdEditor.text = id
-                                    setNodeRefreshFunctions(node)
-                                }
-                            }
+//                            nodeShareButton.setOnClickListener {
+//                                //TODO:upload to frebase and set shared-id
+//                            }
+
+//                            nodeSyncButton.setOnClickListener {
+//                               // node.refreshView = {
+//                               //     //TODO:refresh view
+////                            //        notifyItemRangeChanged(0,adapterPosition+1)
+//                               //     Log.d("refresh", "${it.value.toString()}")
+//                             //       notifyItemChanged(adapterPosition + 1)
+//                             //   }
+//                                node.upload { id ->
+////                                    nodeSyncedIdEditor.text = id
+//                                    setNodeRefreshFunctions(node)
+//                                }
+//                            }
                         }
 
                     AlertDialog.Builder(recyclerView.context).setView(dialogView)
@@ -611,20 +614,20 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                                 }
                             }
 
-                            if (dialogView.nodeSharedIdEditor.text.toString() != recyclerView.context.getString(
-                                    R.string.node_shared_id_not_shared
-                                )
-                            ) {
-                                realm.executeTransactionIfNotInTransaction {
-                                    node.sharedId = dialogView.nodeSharedIdEditor.text.toString()
-                                }
-
-                                if (!node.firebaseRefPath.isNullOrBlank()) {
-                                    FirebaseDatabase.getInstance()
-                                        .getReference(node.firebaseRefPath!!)
-                                        .child("sharedId").setValue(node.sharedId)
-                                }
-                            }
+//                            if (dialogView.nodeSharedIdEditor.text.toString() != recyclerView.context.getString(
+//                                    R.string.node_shared_id_not_shared
+//                                )
+//                            ) {
+//                                realm.executeTransactionIfNotInTransaction {
+//                                    node.sharedId = dialogView.nodeSharedIdEditor.text.toString()
+//                                }
+//
+//                                if (!node.firebaseRefPath.isNullOrBlank()) {
+//                                    FirebaseDatabase.getInstance()
+//                                        .getReference(node.firebaseRefPath!!)
+//                                        .child("sharedId").setValue(node.sharedId)
+//                                }
+//                            }
 
                             realm.executeTransactionIfNotInTransaction {
                                 node.value!!.mediaUri = sharedModel.tempImageUri.value

@@ -377,7 +377,7 @@ class StoreFragment : Fragment() {
                                     }
                                     saveSeedToRealm(seed)
                                     AlertDialog.Builder(context)
-                                        .setTitle("ダウンロードが完了しました!\nシードを確認してください。")
+                                        .setTitle(R.string.download_completed)
                                         .setPositiveButton("ok"){ dialog, which ->
                                         }.show()
                                 }
@@ -409,7 +409,7 @@ class StoreFragment : Fragment() {
                                             it.value.toString() == seed.value!!.toString()
                                         }
                                                                             AlertDialog.Builder(context)
-                                        .setTitle("ダウンロードが完了しました!\nシードを確認してください。")
+                                        .setTitle(R.string.download_completed)
                                         .setPositiveButton("ok"){ dialog, which ->
                                         }.show()
                                     }
@@ -419,7 +419,7 @@ class StoreFragment : Fragment() {
                             } else {
                                 saveSeedToRealm(seed)
                                 AlertDialog.Builder(context)
-                                    .setTitle("ダウンロードが完了しました!\nシードを確認してください。")
+                                    .setTitle(R.string.download_completed)
                                     .setPositiveButton("ok"){ dialog, which ->
                                     }.show()
                             }

@@ -69,6 +69,7 @@
         <string name="node_info_content">Parent:%1$s\nChildren Number:%2$d\nNode ID:%3$s\nValue ID:%4$s</string>
         <string name="node_generate_seed_title">Generate Seed</string>
         <string name="node_generate_seed_msg">Generate Seed and Save Locally?</string>
+    <string name="download_completed">Download completed.\nPlease confirm seed.</string>
 
         <string name="picker_date">Date</string>
         <string name="picker_time">Time</string>
