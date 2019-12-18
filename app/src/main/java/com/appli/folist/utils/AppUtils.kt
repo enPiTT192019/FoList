@@ -21,6 +21,7 @@ import com.appli.folist.ALGOLIA_API_KEY
 import com.appli.folist.ALGOLIA_APP_ID
 import com.appli.folist.NodeTypes
 import com.appli.folist.R
+import com.appli.folist.models.SharedViewModel
 import com.appli.folist.models.TestScore
 import com.appli.folist.treeview.models.NodeForFirebase
 import com.appli.folist.treeview.models.NodeValue
@@ -256,6 +257,9 @@ class AppUtils {
 //                    addChild(RawTreeNode(NodeValue("生きる"),this,mRealm=realm))
                 })
 
+                lateinit var sharedModel: SharedViewModel
+
+
                 addChild(RawTreeNode(NodeValue("ショッピングリスト"), this, mRealm = realm).apply {
                     //Seedsのアピール
                     addChild(RawTreeNode(NodeValue("ケンタッキー"), this, mRealm = realm))
@@ -330,85 +334,89 @@ class AppUtils {
                         addChild(RawTreeNode(NodeValue("平成３１年秋"), this, mRealm = realm))
                     })
                 })
+
+                //tnk12/18
                 addChild(RawTreeNode(NodeValue("『TOEIC単語マスター』"), this, mRealm = realm).apply {
                     //TODO:バーコード連携のアピール
                     addChild(RawTreeNode(NodeValue("Chapter1（クリックすると単語テストができる）"), this, mRealm = realm).apply {
                         value!!.type = NodeTypes.TEST_NODE.name
                         addChild(RawTreeNode(NodeValue("hello"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","こんにちは")
+                            value!!.setDetail("otherAnswer1","おはよう")
+                            value!!.setDetail("otherAnswer2","こんばんは")
+                            value!!.setDetail("otherAnswer3","さようなら")
                         })
                         addChild(RawTreeNode(NodeValue("nice"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","素敵な")
+                            value!!.setDetail("otherAnswer1","さわやかな")
+                            value!!.setDetail("otherAnswer2","きれいな")
+                            value!!.setDetail("otherAnswer3","不思議な")
                         })
                         addChild(RawTreeNode(NodeValue("meet"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","会う")
+                            value!!.setDetail("otherAnswer1","肉")
+                            value!!.setDetail("otherAnswer2","ニート")
+                            value!!.setDetail("otherAnswer3","ミント")
                         })
                         addChild(RawTreeNode(NodeValue("you"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","あなたに")
+                            value!!.setDetail("otherAnswer1","私に")
+                            value!!.setDetail("otherAnswer2","彼らに")
+                            value!!.setDetail("otherAnswer3","ヤマミィに")
                         })
                     })
                     addChild(RawTreeNode(NodeValue("Chapter2"), this, mRealm = realm).apply {
                         value!!.type = NodeTypes.TEST_NODE.name
                         addChild(RawTreeNode(NodeValue("my"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","私の")
+                            value!!.setDetail("otherAnswer1","あなたの")
+                            value!!.setDetail("otherAnswer2","彼の")
+                            value!!.setDetail("otherAnswer3","彼らの")
                         })
                         addChild(RawTreeNode(NodeValue("name"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","名前")
+                            value!!.setDetail("otherAnswer1","話")
+                            value!!.setDetail("otherAnswer2","顔")
+                            value!!.setDetail("otherAnswer3","住所")
                         })
                         addChild(RawTreeNode(NodeValue("is"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","でーす")
+                            value!!.setDetail("otherAnswer1","ちょる")
+                            value!!.setDetail("otherAnswer2","どす")
+                            value!!.setDetail("otherAnswer3","やねん")
                         })
                         addChild(RawTreeNode(NodeValue("Yamamoto"), this, mRealm = realm).apply {
                             value!!.setDetail("question", value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer", value.toString())
-                            value!!.setDetail("otherAnswer1", "wrong answer 1")
-                            value!!.setDetail("otherAnswer2", "wrong answer 2")
-                            value!!.setDetail("otherAnswer3", "wrong answer 3")
+                            value!!.setDetail("correctAnswer", "山本")
+                            value!!.setDetail("otherAnswer1", "山口")
+                            value!!.setDetail("otherAnswer2", "山形")
+                            value!!.setDetail("otherAnswer3", "山梨")
                         })
                         addChild(RawTreeNode(NodeValue("what"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","何")
+                            value!!.setDetail("otherAnswer1","どこ")
+                            value!!.setDetail("otherAnswer2","誰")
+                            value!!.setDetail("otherAnswer3","どちら")
                         })
                         addChild(RawTreeNode(NodeValue("your"), this, mRealm = realm).apply {
                             value!!.setDetail("question",value.toString().toJapaneseQuestion())
-                            value!!.setDetail("correctAnswer",value.toString())
-                            value!!.setDetail("otherAnswer1","wrong answer 1")
-                            value!!.setDetail("otherAnswer2","wrong answer 2")
-                            value!!.setDetail("otherAnswer3","wrong answer 3")
+                            value!!.setDetail("correctAnswer","あなたの")
+                            value!!.setDetail("otherAnswer1","山口大学の")
+                            value!!.setDetail("otherAnswer2","ヤマミィの")
+                            value!!.setDetail("otherAnswer3","enPiTの")
                         })
                     })
                 })
+                //tnk12/18
+
                 addChild(RawTreeNode(NodeValue("学園祭の準備"), this, mRealm = realm).apply {
                     //TODO:協力作業のアピール
                     //何をするかがわからないからだれか書いてくれ

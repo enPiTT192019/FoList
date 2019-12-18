@@ -2,15 +2,18 @@ package com.appli.folist.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appli.folist.AboutActivity
 import com.appli.folist.R
+import com.appli.folist.utils.AppUtils
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.util.*
 
@@ -25,31 +28,10 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-//言語変更　設計中
+
         var locale: Locale = Locale.getDefault() // アプリで使用されているロケール情報を取得
 
         // 言語の切替え
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
-
-//        RadioGroup1.setOnCheckedChangeListener { _, radioId ->
-//            val config=resources.configuration
-//            locale =  when (radioId) {
-//                    R.id.radio_en -> Locale.ENGLISH
-//                    R.id.radio_jp ->  Locale.JAPANESE
-//                    R.id.radio_ch ->  Locale.CHINESE
-//                    else->Locale.JAPANESE
-//            }
-//            Log.d("folist-lang",locale.toString())
-//
-//                AppUtils().setSetting(this.activity as AppCompatActivity,"lang",locale.toString())
-//
-//            config.setLocale(locale) // 新しいロケールを設定
-//            resources.updateConfiguration(config,resources.displayMetrics)
-//
-//
-//        }
-
-
         val root = inflater.inflate(R.layout.fragment_settings, container, false)
 
         settingsViewModel =
@@ -65,71 +47,49 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
-        languageSelector.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
 
+        val nowLanguage=AppUtils().getSetting(activity as AppCompatActivity,"lang")
+//tnk12/18
+        val nowLight=AppUtils().getSetting(activity as AppCompatActivity,"light")
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        languageSelector.setSelection(resources.getStringArray(R.array.language).indexOf(nowLanguage))
+        radio_bright.isChecked=nowLight=="light"
+        radio_dark.isChecked=nowLight == "dark"
 
-                val config=resources.configuration
-                var locale = Locale.ENGLISH
-                Log.d("folist-lang",locale.toString())
-            }
+        languageSelector.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                val config=resources.configuration
-                var locale = Locale.ENGLISH
-                Log.d("folist-lang",locale.toString())
-            }
-
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val spinner = parent as? Spinner
+                    var language = spinner?.selectedItem as? String
+                    if(language!=null&&nowLanguage!=language){
+                        activity!!.recreate()
+                        AppUtils().setSetting(activity as AppCompatActivity,"lang", language)                //保存
+                    }
+                }
         }
+
+        RadioGroup.setOnCheckedChangeListener{
+            _, checkedId ->
+            when(checkedId){
+                R.id.radio_bright -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    AppUtils().setSetting(activity as AppCompatActivity, "light", "light")
+                }
+                R.id.radio_dark -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    AppUtils().setSetting(activity as AppCompatActivity, "light", "dark")
+                }
+
+            }
+        }
+        //tnk12/18
         activity!!.setTitle(R.string.menu_settings)
     }
 }
-
-//fun initialize(inflater: LayoutInflater, container: ViewGroup?) {
-//
-//    var locale: Locale = Locale.getDefault() // アプリで使用されているロケール情報を取得
-//
-//    // 言語の切替え
-//    val view = inflater.inflate(R.layout.fragment_settings, container, false)
-//    val language: RadioGroup = view.findViewById(R.id.RadioGroup1)
-//
-//    language.setOnCheckedChangeListener {
-//        _, checkedId :Int ->
-//        when (R.id.RadioGroup1) {
-//            R.id.radio_en -> Locale.ENGLISH
-//            R.id.radio_jp -> Locale.JAPAN
-//            R.id.radio_ch -> Locale.CHINESE
-//        }
-//
-//        Locale.setDefault(locale) // 新しいロケールを設定
-//        val config = Configuration()
-//        config.locale = locale
-//        val resources: Resources = getActivity()?.baseContext!!.resources
-//        resources.updateConfiguration(config, null)
-//    }
-//}
-
-    /*   val light: RadioGroup = view.findViewById(R.id.RadioGroup1)
-
-    light.setOnCheckedChangeListener {
-            _, checkedId :Int ->
-        when (R.id.RadioGroup2) {
-            R.id.radio_bright ->
-            R.id.radio_dark ->
-        }
-    }*/
-
-/*    Locale.setDefault(locale) // 新しいロケールを設定
-    val config = VolumeShape.Configuration()
-    config.locale = locale // Resourcesに対するロケールを設定
-    val resources = baseContext.resources
-    resources.updateConfiguration(config, null) // Resourcesに対する新しいロケールを反映
-
-    initialize() // ※ ポイント 初期化し直し再描画させます*/

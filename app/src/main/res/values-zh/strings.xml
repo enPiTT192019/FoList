@@ -1,4 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FoList</string>
+    <string name = "menu_timeline">时间线</string>
+    <string name = "action_add_to_task">新任务</string>
+    <string name = "action_cancel">取消</string>
+    <string name = "action_confirm">确认</string>
+    <string name = "menu_settings">设置</string>
+    <string name = "menu_store">商店</string>
+    <string name = "menu_tools">工具</string>
+    <string name = "menu_seeds">种子</string>
+
+    <string name = "picker_date">日期</string>
+    <string name = "picker_time">时间</string>
+    <string name = "store_title">标题</string>
+    <string name = "store_description">说明</string>
+    <string name = "store_seed_id">种子ID </string>
+    <string name = "store_author_id">作者UID </string>
+    <string name = "store_price">价格</string>
+    <string name = "store_search">搜索</string>
+    <string name = "background_color">背景颜色</string>
+    <string name = "menu_tasks">任务</string>
+    <string name = "menu_task">任务</string>
+    <string name = "language">语言</string>
+    <string name = "Bright_color">明亮的</string>
+    <string name = "Dark_color">黑暗的</string>
+    <string name = "node_title">标题</string>
+    <string name = "node_info">信息</string>
+    <string name = "node_progress">进度</string>
+    <string name = "node_shared_id">共享ID </string>
+    <string name = "node_power">重量</string>
+    <string name = "node_media">媒体</string>
+    <string name = "node_detail">详细信息</string>
+    <string name = "node_link">链接</string>
+    <string name="node_type_tree">树</string>
+    <string name="node_notice">闹钟</string>
+    <string name="action_ok">确定</string>
+    <string name="node_value_type">类型</string>
+    <string name="img_cd_expand_ic">扩大</string>
+    <string name="node_link_valid">有効</string>
+    <string name="node_link_invalid">无效</string>
+    <string name="node_generate_seed_title">造种子</string>
+    <string name="title_seed_content">种子的内容</string>
+    <string name="title_download">下载</string>
+
+    <string name = "nav_header_title">Please Login</string>
+    <string name = "menu_functions">通用</string>
+    <string name = "menu_create_new_task">创建新任务</string>
+    <string name = "menu_input_task_title">输入任务标题</string>
+    <string name="edit_node">编节点</string>
+    <string name="node_notice_notset">没设定,按设定</string>
+    <string name="create_a_new_node">造新节点或者选节点从种子</string>
+    <string name="node_shared_id_not_shared">没共享.按按子和大家共享</string>
+    <string name="seed_not_found">没种子发现,你可以下载种子从商店,或者造种子用种按子</string>
+    <string name="node_generate_seed_msg">造种子或者保存在手机?</string>
+    <string name="msg_confirm_download_free">下载 %1$s?</string>
+
+
+
+
+    <string name="picker_title">选择日期时间</string>
+    <string name="seekbar_title">进度</string>
+    <string name="seed_upload">公开</string>
+    <string name="seed_title">标题</string>
+    <string name="seed_description">说明</string>
+    <string name="seed_price">价格</string>
+    <string name="seed_password">密码</string>
+    <string name="seed_content">内容</string>
+    <string name="seed_download_from">下载从:%1$s</string>
+    <string name="seed_download_origin">来源</string>
+    <string name="store_search_failed_msg">搜索失败.你是否已连接到互联网？</string>
+    <string name="copyright">©2019 Appli 版权所有</string>
+    <string name="action_done">完成</string>
+    <string name="action_yes">是</string>
+    <string name="action_no">不是</string>
+    <string name="action_delete">删除</string>
+    <string name="action_publish">公开</string>
+    <string name="ad_title">订阅</string>
+    <string name="ad_content">"- No ads\n- 无限的顶级任务\n-无限的种子存储\n- 随时随地同步数据\n- 和其他人共享任务以进行团队合作\n- 新的功能...\n\n1 month:￥500\n三个月:￥1350 (￥450 一个月)\n六个月:￥2400 (￥400 一个月)\n一年:￥4200 (￥ 350 一个月)\n\n企业用户? 请随时与我们联系.\n我们为企业用户提供了可定制的插件和其他功能.\n(e.g,. TestNode英语词汇书籍, 节点的进度与另一个健康数据应用程序链接)\n也有批量订购的企业计划.\n\nEmail: no-reply@appli...\nTel:050-0000-0000\n "</string>
+
+
 </resources>

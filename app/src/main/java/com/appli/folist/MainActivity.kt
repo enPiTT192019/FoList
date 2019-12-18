@@ -62,10 +62,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setNavigationViewListener()
 
-        //日本語に設定
+        //言語設定
+        val lang=AppUtils().getSetting(this,"lang")
+        if(lang.isNullOrBlank()|| lang !in resources.getStringArray(R.array.language)){
+            AppUtils().setSetting(this,"lang","日本語")
+        }
+        val locale =  when (lang) {
+            "English" ->    Locale.ENGLISH
+            "日本語" ->     Locale.JAPANESE
+            "中文" ->       Locale.SIMPLIFIED_CHINESE
+            else ->         Locale.JAPANESE
+        }
         val config=resources.configuration
-//        config.setLocale(Locale.JAPANESE)
-        config.setLocale(Locale.ENGLISH)
+        config.setLocale(locale)
         resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
@@ -90,7 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         functionsMenu.add(R.string.menu_timeline).setIcon(R.drawable.ic_timeline)
         functionsMenu.add(R.string.menu_store).setIcon(R.drawable.ic_store)
         functionsMenu.add(R.string.menu_seeds).setIcon(R.drawable.ic_seeds)
-        functionsMenu.add(R.string.action_settings).setIcon(R.drawable.ic_menu_manage)
+        functionsMenu.add(R.string.menu_settings).setIcon(R.drawable.ic_menu_manage)
         //メニューを表示するときだけ完成度を再計算
         (nav_view.parent as DrawerLayout).addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerStateChanged(newState: Int) {}

@@ -1,11 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
+        <item name="color">@color/colorPrimaryBright</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name = "Animation" parent = "AppTheme">
@@ -19,31 +24,37 @@
         <item name="android:alpha">0.5</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="ContentImageBadgeText" parent="AppTheme">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
 
     </style>
 
     <style name="ContentMainBadgeTitle" parent="AppTheme">
         <item name="android:textColor">@color/contentBadgeTitle</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="TitleBadgeText" parent="AppTheme">
         <item name="android:textColor">@color/titleBadgeText</item>
         <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="TitleBadgeTitle" parent="AppTheme">
         <item name="android:textColor">@color/titleBadgeTitle</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
     <style name="MyTheme" parent="Theme.AppCompat.DayNight">
         <!-- Blah blah -->
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="darktheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -57,11 +68,13 @@
         <item name="tintcolor">#ffffff</item>
         <item name="buttoncolor">#2196F3</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="WindowAnimationTransition">
         <item name="android:windowEnterAnimation" >@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
     <style name="AnimationActivity." parent="android:Animation.Activity">
@@ -69,22 +82,32 @@
         <item name="android:activityOpenExitAnimation">@animator/close_exit</item>
         <item name="android:activityCloseEnterAnimation">@animator/open_enter</item>
         <item name="android:activityCloseExitAnimation">@animator/open_exit</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
+    </style>
 
     <style name="AnimationActivity" parent="android:Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@animator/close_enter</item>
         <item name="android:activityOpenExitAnimation">@animator/close_exit</item>
         <item name="android:activityCloseEnterAnimation">@animator/open_enter</item>
         <item name="android:activityCloseExitAnimation">@animator/open_exit</item>
+        <item name="android:fontFamily">@font/mplus_1c_light</item>
     </style>
+
 </resources>
