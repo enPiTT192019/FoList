@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
@@ -704,6 +705,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             }
 
             //新規ノード
+            if(viewNode?.parent?.rawReference!!.mRealm==null){
+                viewNode!!.parent!!.rawReference!!.mRealm=AppUtils().getRealm(recyclerView.context as AppCompatActivity)
+            }
             itemView.createButton.setOnClickListener {
                 if (itemView.editText.text.toString().isBlank()) {
                     Toast.makeText(
@@ -720,7 +724,7 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     val viewParent = viewNode.parent as ViewTreeNode
 //                    var newNode: RawTreeNode? = null
 
-                    if (viewNode.parent != null && realm != null) {
+                    if (viewNode.parent != null && sharedModel.realm.value != null) {
                         val newNode = RawTreeNode(
                             NodeValue(inputStr),
                             parent = viewParent.rawReference,
@@ -728,8 +732,8 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                         )
                         newNode.progress =
                             if (viewParent.children.size <= 1) viewParent.rawReference!!.progress else 0.0
-                        realm.executeTransactionIfNotInTransaction {
-                            realm.copyToRealmOrUpdate(newNode)
+                        sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
+                            sharedModel.realm.value!!.copyToRealmOrUpdate(newNode)
                         }
                         viewParent.rawReference!!.addChild(newNode)
                         viewParent.children.remove(viewNode)
@@ -765,9 +769,9 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                     val viewParent = viewNode.parent as ViewTreeNode
                     var newNode: RawTreeNode? = null
 
-                    if (viewNode.parent != null && realm != null) {
+                    if (viewNode.parent != null && sharedModel.realm.value!= null) {
                         //create new RawNode
-                        val seed = NodeUtils().getSeedRoot(realm)
+                        val seed = NodeUtils().getSeedRoot(sharedModel.realm.value!!)
                             .children.find { it.value.toString() == inputStr }
                         if (seed == null) {
                             Toast.makeText(
@@ -777,11 +781,11 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
                             ).show()
                             return@setOnClickListener
                         }
-                        newNode = RawTreeNode(seed,viewParent.rawReference!! ,realm)
+                        newNode = RawTreeNode(seed,viewParent.rawReference!! ,sharedModel.realm.value!!)
 
-                        realm.executeTransactionIfNotInTransaction {
+                        sharedModel.realm.value!!.executeTransactionIfNotInTransaction {
                             viewParent.rawReference?.addChild(newNode!!)
-                            realm.copyToRealmOrUpdate(newNode)
+                            sharedModel.realm.value!!.copyToRealmOrUpdate(newNode)
                         }
                         //adjust view nodes list
                         //remove old create-node
@@ -1021,6 +1025,10 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
         //TODO: create your bind function here, do not forget setOnClickListener
         internal fun bind(viewNode: ViewTreeNode) {
             viewNode.position=adapterPosition
+            if(viewNode?.rawReference?.mRealm==null){
+                viewNode?.rawReference?.mRealm=AppUtils().getRealm(recyclerView.context as AppCompatActivity)
+            }
+
             when (viewNode.type) {
                 ViewNodeTypes.QUICK_CREATE_NODE -> bindQuickCreateNode(viewNode)
                 ViewNodeTypes.ONLY_TEXT -> bindOnlyText(viewNode)

@@ -15,17 +15,17 @@ class NodeUtils {
         if(result==null){
             result= RawTreeNode(NodeValue("root"),realm)
             realm.copyToRealmOrUpdate(result)
-        }else{
-            fun setRealm(n:RawTreeNode,realm:Realm){
-                n.mRealm=realm
-                n.children.forEach {
-                    setRealm(it,realm)
-                }
-            }
-            setRealm(result,realm)
-
         }
         if(!inTransaction)realm.commitTransaction()
+
+        fun setRealm(n:RawTreeNode,realm:Realm){
+            n.mRealm=realm
+            n.children.forEach {
+                setRealm(it,realm)
+            }
+        }
+        setRealm(result,realm)
+        result.mRealm=realm
         return result!!
     }
 

@@ -37,6 +37,10 @@ open class RawTreeNode(
 
 
     @Ignore var mRealm: Realm?=mRealm
+    set(value) {
+        val a=this.value.toString()
+        field=value
+    }
     open var firebaseRefPath: String? = null
     set(value) {
         field=value
@@ -141,48 +145,6 @@ open class RawTreeNode(
         setSync()
     }
 
-    @SuppressLint("NewApi")
-    fun reset(
-        remoteNode: NodeForFirebase,
-        parent: RawTreeNode?,
-        realm: Realm?
-    ) {
-        if (realm == null) {
-            Log.e("realm", "no realm")
-            return
-        }
-        realm.executeTransactionIfNotInTransaction {
-             uuid = remoteNode.uuid
-
-            val nodeValue = realm.where(NodeValue::class.java).equalTo("uuid", remoteNode.value.uuid).findFirst()
-                ?:realm.createObject(NodeValue::class.java, remoteNode.value.uuid)
-            nodeValue.apply {
-                str = remoteNode.value.str
-                type = remoteNode.value.type
-                mediaUri = remoteNode.value.mediaUri
-                detail = null
-                link = remoteNode.value.link
-                power = remoteNode.value.power
-                remoteUuid = remoteNode.value.uuid
-                checked = remoteNode.value.checked
-            }
-            this.value = nodeValue
-            //detail
-            remoteNode.value.detail?.forEach { (key, value) ->
-                this.value?.setDetail(key, value)
-            }
-            this.parent = parent
-            this.sharedId = remoteNode.sharedId
-            this.progress = remoteNode.progress
-            this.notice = remoteNode.notice
-            this.firebaseRefPath = remoteNode.path
-//            this.children = RealmList()
-//            this.removeAllChild { true }
-            remoteNode.children.forEach { (k, v) ->
-                this.addChild(RawTreeNode(v, this, realm),needUpload = false)
-            }
-        }
-    }
 
     @SuppressLint("NewApi")
     fun resetWithoutChildren(
@@ -191,7 +153,7 @@ open class RawTreeNode(
         realm: Realm?
     ) {
         if (realm == null) {
-            Log.e("realm", "no realm")
+            Log.e("realm", "no realm:${this.value.toString()}")
             return
         }
         realm!!.executeTransactionIfNotInTransaction {

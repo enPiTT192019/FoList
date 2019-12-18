@@ -82,12 +82,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         resources.updateConfiguration(config,resources.displayMetrics)
 
         //テスト用
-        // 1.この行：「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」の「//」を消して、ビルド・実行する（データを全削除のため）
-        // 2.「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」、「testButton.isVisible=false」をコメントアウト、ビルド・実行する
+        //1.下のこの行：「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」の「//」を消して、ビルド・実行する（データを全削除のため）
+        // 2.「NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))」と「testButton.isVisible=false」をコメントアウト、ビルド・実行する
         // 3.メニューにある「新規タスク作成」で適当なタイトル（例えば１２３）のノードを作る
         // 4.目立つボタンを押す
         // 5.「testButton.isVisible=false」の「//」を消す
         // 6.ビルド・実行する、先ほど作った適当ノード（例えば１２３）を削除
+        // 7.この後協力ノードをクリックするとアプリが落ちるかもしれないので、一度クリックしてください。次起動すると落ちないと思います
         // 7.I　HATE　REALM
         //NodeUtils().clearAllNodesForTest(AppUtils().getRealm(this))
         testButton.isVisible=false
@@ -97,6 +98,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedModel= ViewModelProviders.of(this).get(SharedViewModel::class.java)
         sharedModel.realm.value=AppUtils().getRealm(this)
         sharedModel.root.value=NodeUtils().getRoot(sharedModel.realm.value!!)
+
+        fun checkRealm(n:RawTreeNode){
+            if(n.mRealm==null)n.mRealm=AppUtils().getRealm(this)
+            n.children.forEach { checkRealm(it) }
+        }
+        checkRealm(sharedModel.root.value!!)
         sharedModel.seedRoot.value=NodeUtils().getSeedRoot(sharedModel.realm.value!!)
         sharedModel.algolia.value=AppUtils().getAlgolia()
         sharedModel.seedsIndex.value=sharedModel.algolia.value?.initIndex(IndexName("seeds"))
