@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation.findNavController
@@ -951,17 +952,25 @@ class TreeAdapter(private val indentation: Int, private val recyclerView: Single
             bindNodeToggle(viewNode)
             //TODO:if link is not blank,...
 
-            itemView.nodeTitle.text = viewNode.value.toString()
-            itemView.nodeTitle.setTextColor(
-                if (viewNode.rawReference!!.children.size >= 1) Color.rgb(
-                    100,
-                    100,
-                    100
-                ) else Color.rgb(0, 0, 0)
-            )
-            itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
-            itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
+            //tnk12/18
+            val light = AppUtils().getSetting(recyclerView.context as AppCompatActivity, "light")=="dark"
 
+            if(light){
+                itemView.nodeTitle.text = viewNode.value.toString()
+                itemView.nodeTitle.setTextColor(
+                    if (viewNode.rawReference!!.children.size >= 1) Color.rgb(200, 200, 200)
+                    else Color.rgb(255, 255, 255)
+                )
+            }else {
+                itemView.nodeTitle.text = viewNode.value.toString()
+                itemView.nodeTitle.setTextColor(
+                    if (viewNode.rawReference!!.children.size >= 1) Color.rgb(100, 100, 100)
+                    else Color.rgb(0, 0, 0)
+                )
+                itemView.nodeSharedIcon.isVisible = viewNode.rawReference!!.sharedId != null
+                itemView.nodeNoticeIcon.isVisible = viewNode.rawReference!!.notice != null
+            }
+            //tnk12/18
 
             itemView.middleView.setOnClickListener {
                 if (viewNode.children.size <= 1) {//only leaves can be adjusted

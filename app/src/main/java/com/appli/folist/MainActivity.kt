@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
@@ -61,6 +62,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setNavigationViewListener()
+
+        //tnk12/18
+        //色の固定設定
+        val light=AppUtils().getSetting(this,"light") == "dark"
+        if(light){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            AppUtils().setSetting(this, "light", "dark")
+        }
+        //tnk12/18
 
         //言語設定
         val lang=AppUtils().getSetting(this,"lang")
